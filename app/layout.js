@@ -1,4 +1,5 @@
 import Link from "next/link";
+import React from "react";
 import "./globals.css";
 
 export const metadata = {
@@ -7,13 +8,15 @@ export const metadata = {
 }
 export default function RootLayout({ children }) {
   return (
+    
     <html lang="en">
      
       <body>
         <div className="navbar">
           <Link href="/">Home</Link>
-          <Link href="/connect4">Connect 4</Link>
+          <Link href="/connect4">ConnectFour</Link>
           <Link href="/tictactoe">Tic Tac Toe</Link>
+          <Link href="/chess">Chess</Link>
           <Link href="/about">About</Link>
         </div>
         <div className="page-content">{children}</div>

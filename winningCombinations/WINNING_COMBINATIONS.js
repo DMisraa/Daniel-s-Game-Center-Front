@@ -1,6 +1,5 @@
 const winningCombinations = [];
 
-// Horizontal Wins
 for (let row = 0; row < 6; row++) {
   for (let col = 0; col < 4; col++) {
     winningCombinations.push([
@@ -12,7 +11,6 @@ for (let row = 0; row < 6; row++) {
   }
 }
 
-// Vertical Wins
 for (let col = 0; col < 7; col++) {
   for (let row = 0; row < 3; row++) {
     winningCombinations.push([
@@ -24,7 +22,6 @@ for (let col = 0; col < 7; col++) {
   }
 }
 
-// Diagonal Wins (Bottom-left to Top-right)
 for (let row = 3; row < 6; row++) {
   for (let col = 0; col < 4; col++) {
     winningCombinations.push([
@@ -36,7 +33,6 @@ for (let row = 3; row < 6; row++) {
   }
 }
 
-// Diagonal Wins (Top-left to Bottom-right)
 for (let row = 0; row < 3; row++) {
   for (let col = 0; col < 4; col++) {
     winningCombinations.push([

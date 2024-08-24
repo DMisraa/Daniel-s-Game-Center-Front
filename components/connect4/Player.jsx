@@ -1,10 +1,10 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, forwardRef } from "react";
 import './player.css'
 
 
 
-function Player({ isEditing, handlePlayerName, handleEdit, name, isYellowActive, isRedActive }) {
-  const inputRef = useRef(null);
+const Player = forwardRef(function Player({ isEditing, handlePlayerName, handleEdit, name, isYellowActive, isRedActive }, ref )  {
+  
 
   let playerCSS 
 
@@ -15,8 +15,8 @@ function Player({ isEditing, handlePlayerName, handleEdit, name, isYellowActive,
   }
 
   useEffect(() => {
-    if (isEditing && inputRef.current) {
-      inputRef.current.focus();
+    if (isEditing && ref.current) {
+      ref.current.focus();
     }
   }, [isEditing]);
 
@@ -24,6 +24,7 @@ function Player({ isEditing, handlePlayerName, handleEdit, name, isYellowActive,
     if (event.key === "Enter") {
       handleEdit();
     }
+    
   }
 
   return (
@@ -33,18 +34,19 @@ function Player({ isEditing, handlePlayerName, handleEdit, name, isYellowActive,
           <span className="player-name"> {name} </span>
         ) : (
           <input
-            ref={inputRef}
+            ref={ref}
             placeholder={name}
             required
             type="text"
             onChange={handlePlayerName}
             onKeyPress={handleKeyPress}
+            autoFocus
           />
         )}
       </span>
       <button onClick={handleEdit}> {isEditing ? "Save" : "Edit"} </button>
     </li>
   );
-}
+})
 
 export default Player;

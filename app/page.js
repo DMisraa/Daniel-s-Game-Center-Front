@@ -12,6 +12,9 @@ export default function Home() {
         <Link className="game-button" href="/tictactoe">
           Tic Tac Toe
         </Link>
+        <Link className="game-button" href="/chess">
+        Chess
+        </Link>
       </div>
     </div>
   );

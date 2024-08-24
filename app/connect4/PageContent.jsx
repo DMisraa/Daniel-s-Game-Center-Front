@@ -1,12 +1,17 @@
 "use client";
 
-import classes from "./pageContent.module.css";
-import { useEffect, useState } from "react";
-import GameBoard from "../../components/GameBoard";
-import Player from "../../components/Player";
-import winningCombinations from "../../WINNING_COMBINATIONS";
+import { useEffect, useRef, useState } from "react";
 
-const initialBoard = Array.from({ length: 6 }, () => Array(7).fill(null));
+import { fetchData, updateBoard, fetchPlayerName } from "../server";
+import classes from "./pageContent.module.css";
+import GameBoard from "../../components/connect4/GameBoard";
+import Player from "../../components/connect4/Player";
+import winningCombinations from "../../winningCombinations/WINNING_COMBINATIONS";
+import AllTimeScore from "@/components/AllTimeScore";
+
+export const initialBoard = Array.from({ length: 6 }, () =>
+  Array(7).fill(null)
+);
 
 const PLAYERS = {
   red: "Red Player",
@@ -28,49 +33,98 @@ export default function PageContent() {
   const [hasDraw, setHasDraw] = useState(false);
   const [allTimeGameScore, setAllTimeGameScore] = useState({});
 
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await fetch("http://localhost:4000/gameboard");
-        const data = await response.json();
-        setBoard(data.board);
-        setCurrentPlayer(data.currentPlayer);
-        setWinner(data.winner);
-        setHasDraw(data.hasDraw);
-        setAllTimeGameScore(data.allTimeWinners);
+  const player = useRef({
+    redPlayer: redPlayerName,
+    yellowPlayer: yellowPlayerName,
+  });
 
-        // Check if there are moves in play
-        if (data.board.some(row => row.some(cell => cell !== null))) {
+  useEffect(() => {
+    async function getData() {
+      try {
+        const data = await fetchData();
+        if (data) {
+          setBoard(data.board);
+          setCurrentPlayer(data.currentPlayer);
+          setWinner(data.winner);
+          setHasDraw(data.hasDraw);
+          setAllTimeGameScore(data.allTimeWinners);
+          setRedPlayerName(data.playerNames.redPlayer);
+          setYellowPlayerName(data.playerNames.yellowPlayer);
+        } else {
+          return;
+        }
+
+        if (data.board.some((row) => row.some((cell) => cell !== null))) {
           setStartGame(true);
         }
+        if (winner || hasDraw) {
+          setWinner(null);
+          setHasDraw(false);
+          setBoard(initialBoard);
+        }
+        console.log("Component mounted");
       } catch (error) {
         console.log("error fetching the gameboard", error);
       }
     }
 
-    fetchData();
+    getData();
+    return () => {
+      console.log("Component unmounted");
+    };
   }, []);
 
-
   function handleRedChange(event) {
-    setRedPlayerName(event.target.value);
+    const value = event.target.value;
+    setRedPlayerName(value);
+    player.current.redPlayer = value;
   }
 
   function handleYellowChange(event) {
-    setYellowPlayerName(event.target.value);
+    const value = event.target.value;
+    setYellowPlayerName(value);
+    player.current.yellowPlayer = value;
   }
 
   function handleRedEditClick() {
     setIsRedEditing((editing) => !editing);
+    if (isRedEditing) {
+      const updatedPlayersName = {
+        yellowPlayer: yellowPlayerName,
+        redPlayer: player.current.redPlayer,
+      };
+
+      fetchPlayerName(updatedPlayersName);
+    }
   }
 
   function handleYellowEditClick() {
     setIsYellowEditing((editing) => !editing);
+    if (isYellowEditing) {
+      const updatedPlayersName = {
+        yellowPlayer: player.current.yellowPlayer,
+        redPlayer: redPlayerName,
+      };
+
+      fetchPlayerName(updatedPlayersName);
+    }
   }
 
-  function handleStartGame() {
+  async function handleStartGame() {
     setStartGame(true);
-    setCurrentPlayer("red");
+    setWinner(null);
+    turnsLength = 0;
+    setHasDraw(false);
+    if (currentPlayer === "") {
+      setCurrentPlayer("red");
+    }
+  }
+
+  function handleNewGame() {
+    setBoard(initialBoard);
+    setWinner(null);
+    turnsLength = 0;
+    setHasDraw(false);
   }
 
   async function handleMove(column) {
@@ -80,10 +134,10 @@ export default function PageContent() {
     turnsLength++;
 
     if (turnsLength === 42 && !winner) {
-      setAllTimeGameScore(prevState => ({
+      setAllTimeGameScore((prevState) => ({
         ...prevState,
-        draw: allTimeGameScore.draw + 1
-      }))
+        draw: allTimeGameScore.draw + 1,
+      }));
       setHasDraw(true);
     }
 
@@ -95,51 +149,17 @@ export default function PageContent() {
       }
     }
     setBoard(newBoard);
+
     const winningPlayer = checkForWinner(newBoard);
     if (winningPlayer) {
+      turnsLength = 0;
+      console.log(currentPlayer, "Winning player - handleMove Fn");
       setWinner(winningPlayer);
     } else {
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
-      
     }
 
-    try {
-      const response = await fetch("http://localhost:4000/move", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ column: parseInt(column) }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        console.error("Error making a move:", error);
-        return;
-      }
-    } catch (error) {
-      console.error("Error making a move:", error);
-    }
-  }
-
-  async function handleNewGame() {
-    setBoard(initialBoard);
-    setWinner(null);
-    turnsLength = 0;
-    setHasDraw(false);
-
-    //     try {
-    //         const response = await fetch('http://localhost:4000/gameboard', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         console.log(response)
-
-    //       } catch (error) {
-    //         console.error('Error starting a new game:', error);
-    //       }
+    updateBoard(column);
   }
 
   function checkForWinner(board) {
@@ -154,17 +174,17 @@ export default function PageContent() {
       ) {
         let winningPlayer;
         if (player === "red") {
-          setAllTimeGameScore(prevState => ({
+          setAllTimeGameScore((prevState) => ({
             ...prevState,
-            redPlayer: allTimeGameScore.redPlayer + 1
-          }))
+            redPlayer: allTimeGameScore.redPlayer + 1,
+          }));
           winningPlayer = redPlayerName;
           return winningPlayer;
         } else if (player === "yellow") {
-          setAllTimeGameScore(prevState => ({
+          setAllTimeGameScore((prevState) => ({
             ...prevState,
-            yellowPlayer: allTimeGameScore.yellowPlayer + 1
-          }))
+            yellowPlayer: allTimeGameScore.yellowPlayer + 1,
+          }));
           winningPlayer = yellowPlayerName;
           return winningPlayer;
         }
@@ -172,8 +192,6 @@ export default function PageContent() {
     }
     return null;
   }
-
-  
 
   return (
     <>
@@ -183,14 +201,16 @@ export default function PageContent() {
           isEditing={isRedEditing}
           handlePlayerName={handleRedChange}
           handleEdit={handleRedEditClick}
-          isRedActive={currentPlayer === "red"}
+          isRedActive={startGame && currentPlayer === "red"}
+          ref={player}
         />
         <Player
           name={yellowPlayerName}
           isEditing={isYellowEditing}
           handlePlayerName={handleYellowChange}
           handleEdit={handleYellowEditClick}
-          isYellowActive={currentPlayer === "yellow"}
+          isYellowActive={startGame && currentPlayer === "yellow"}
+          ref={player}
         />
       </ol>
       <div className={classes.container}>
@@ -199,7 +219,7 @@ export default function PageContent() {
             onClick={handleStartGame}
             className={classes["start-game-button"]}
           >
-            Start Game!
+            Start Game !
           </button>
         )}
       </div>
@@ -214,18 +234,13 @@ export default function PageContent() {
           board={board}
         />
       )}
-      <div className={classes.scoreboard}>
-        <h2>All Time Score!</h2>
-        <h3>
-          Yellow Player: <span>{allTimeGameScore.yellowPlayer}</span>
-        </h3>
-        <h3>
-          Draw: <span>{allTimeGameScore.draw}</span>
-        </h3>
-        <h3>
-          Red Player: <span>{allTimeGameScore.redPlayer}</span>
-        </h3>
-      </div>
+      <AllTimeScore
+        allTimeGameScoreDraw={allTimeGameScore.draw}
+        allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
+        allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
+        playerOne={'Red Player'}
+        playerTwo={'Yellow Player'}
+      />
     </>
   );
 }
