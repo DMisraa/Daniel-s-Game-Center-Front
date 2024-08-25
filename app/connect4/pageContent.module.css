@@ -32,6 +32,21 @@
   background-color: #45a049;
 }
 
+.challenge-friend {
+  padding: 15px 30px;
+  background-color: #4CAF40;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.challenge-friend:hover {
+  background-color: #45a039;
+}
+
 .scoreboard {
   margin-top: 20px;
   text-align: center;
@@ -55,3 +70,4 @@
   font-weight: bold;
   color: #0070f3;
 }
+

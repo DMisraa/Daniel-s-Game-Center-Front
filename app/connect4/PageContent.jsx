@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { fetchData, updateBoard, fetchPlayerName } from "../server";
 import classes from "./pageContent.module.css";
 import GameBoard from "../../components/connect4/GameBoard";
+import Modal from "@/components/Modal";
 import Player from "../../components/connect4/Player";
 import winningCombinations from "../../winningCombinations/WINNING_COMBINATIONS";
 import AllTimeScore from "@/components/AllTimeScore";
@@ -32,6 +33,7 @@ export default function PageContent() {
   const [winner, setWinner] = useState(null);
   const [hasDraw, setHasDraw] = useState(false);
   const [allTimeGameScore, setAllTimeGameScore] = useState({});
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const player = useRef({
     redPlayer: redPlayerName,
@@ -73,6 +75,15 @@ export default function PageContent() {
       console.log("Component unmounted");
     };
   }, []);
+
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+  }
+  
 
   function handleRedChange(event) {
     const value = event.target.value;
@@ -214,13 +225,17 @@ export default function PageContent() {
         />
       </ol>
       <div className={classes.container}>
-        {!startGame && (
+        {!startGame && ( 
+          <>
           <button
             onClick={handleStartGame}
             className={classes["start-game-button"]}
           >
             Start Game !
           </button>
+          <button className={classes['challenge-friend']} onClick={openModal} > Challenge A Friend ! </button>
+          <Modal isOpen={isModalOpen} onClose={closeModal} />
+          </>
         )}
       </div>
       {startGame && (
