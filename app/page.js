@@ -6,10 +6,10 @@ export default function Home() {
       <h1>Welcome to Daniel&apos;s Game Center!</h1>
       <p>Choose a game to play:</p>
       <div className="game-buttons">
-        <Link className="game-button" href="/connect4">
+        <Link className="game-button" href="/connectFour">
          Connect 4
         </Link>
-        <Link className="game-button" href="/tictactoe">
+        <Link className="game-button" href="/ticTacToe">
           Tic Tac Toe
         </Link>
         <Link className="game-button" href="/chess">

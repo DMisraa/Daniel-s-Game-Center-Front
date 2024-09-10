@@ -1,6 +1,22 @@
 export async function fetchData() {
   try {
-    const response = await fetch("http://localhost:4000/connectFour/gameboard");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/gameboard`);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+
+    
+
+    return data;
+  } catch (error) {
+    console.log("error fetching the gameboard", error);
+  }
+}
+
+export async function fetchOnlineMatch(gameId) {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}`);
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -14,7 +30,7 @@ export async function fetchData() {
 
 export async function updateBoard(column) {
   try {
-    const response = await fetch("http://localhost:4000/connectFour/move", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/move`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -32,9 +48,54 @@ export async function updateBoard(column) {
   }
 }
 
+export async function updateOnlineBoard(column, gameId) {
+  const userToken = localStorage.getItem("gameToken:" + gameId)
+  console.log(userToken, 'userToken, updateOnlineBoard Fn')
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}/move`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${userToken}`
+      },
+      body: JSON.stringify({ column: parseInt(column) }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("Error making a move:", error);
+      return;
+    }
+  } catch (error) {
+    console.error("Error making a move:", error);
+  }
+}
+
+export async function OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName) {
+  console.log(gameId, redPlayerName, yellowPlayerName , 'data sent to server startover req')
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}/startOver`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ gameId, redPlayerName, yellowPlayerName})
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error("Error in starting a new match:", error);
+      return;
+    }
+  } catch (error) {
+    console.error("Error in starting a new match:", error);
+  }
+}
+
+
 export async function getCurrentPlayer() {
   try {
-    const response = await fetch("http://localhost:4000/connectFour/gameboard");
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/gameboard`);
     if (!response.ok) {
       throw new Error("Failed to fetch Currect Player");
     }
@@ -49,7 +110,7 @@ export async function getCurrentPlayer() {
 export async function fetchPlayerName(playerNames) {
   console.log(playerNames, 'player names updating Fn')
   try {
-    const response = await fetch("http://localhost:4000/connectFour/player", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/player`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -65,21 +126,45 @@ export async function fetchPlayerName(playerNames) {
   }
 }
 
-// export async function startFirstGame() {
-//   try {
-//       const response = await fetch("http://localhost:4000/gameboard", {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({ player: "red" }),
-//       });
-//       if (!response.ok) {
-//         const error = await response.json();
-//         console.error("Error starting a game:", error);
-//         return;
-//       }
-//     } catch (error) {
-//       console.error("Error starting a game:", error);
-//     }
-// }
+export async function gameInvite(formData, gameType) {     // used for both ticTacToe and connectFour
+try {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${gameType}/game`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
+
+  console.log(gameType, 'game invitation game type')
+
+  if (response.ok) {
+    alert("Invitation sent!");
+  } else {
+    alert("Failed to send invitation.");
+  }
+} catch (error) {
+  console.error("Error sending invitation:", error);
+  alert("There was an error sending the invitation.");
+}}
+
+export async function rematchReq(playerId, gameId, gameType) {  // used for both games 
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${gameType}/game/${gameId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ playerChallenged: playerId }),
+    });
+  
+    if (!response.ok) {
+      throw new Error("Failed to send a rematch Invite");
+    }
+
+  } catch (error) {
+    console.error("Error sending the rematch invitation:", error);
+    alert("There was an error sending the rematch invitation.");
+  }}
+
+

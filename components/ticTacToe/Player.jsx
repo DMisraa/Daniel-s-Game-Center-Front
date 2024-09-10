@@ -7,6 +7,7 @@ import classes from './player.module.css'
 export default function Player({ name, symbol, isActive, newPlayerName }) {
 const [playerName, setPlayerName] = useState(name)
 const [isEditing, setIsEditing] = useState(false);
+console.log(playerName, 'player name Player component')
 
 
 function handleEditClick() {
@@ -32,14 +33,14 @@ function handleKeyPress(event) {
 
 
   return (
-    <li className={isActive ? 'classes.active' : undefined } >
-      <span className="player">
+    <li className={isActive ? `${classes.active}` : undefined } >
+      <span className={classes.player}>
         {!isEditing ? <span className={classes['player-name']}>{name}</span> : 
         <input type='text' required placeholder={name} onChange={handleChange} onKeyPress={handleKeyPress} autoFocus ></input>}
         
-         <span className="player-symbol">{symbol}</span>
+         <span className={classes["player-symbol"]}>{symbol}</span>
       </span>
-      <button onClick={handleEditClick} >{isEditing ? 'Save' : 'Edit'}</button>
+       {newPlayerName && <button onClick={handleEditClick} >{isEditing ? 'Save' : 'Edit'}</button>} 
     </li>
   );
 }

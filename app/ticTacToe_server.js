@@ -1,13 +1,27 @@
-export async function updateBoard(gameboard) {
+export async function updateBoard(gameBoard, gameId, playerNames) {
+  const userToken = localStorage.getItem("gameToken:" + gameId)
+  let method
+  let sentData
+  if (gameId) {
+    method = 'PATCH'
+    sentData = { gameBoard, playerNames }
+  } else {
+    method = 'PUT'
+    sentData = gameBoard
+  }
     try {
-      const response = await fetch("http://localhost:4000/ticTacToe/move", {
-        method: "PUT",
+      const url = gameId
+      ? `${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/${gameId}/move`
+      : `${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/move`;
+
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
+        'Authorization': `Bearer ${userToken}`
         },
-        body: JSON.stringify( gameboard ),
+        body: JSON.stringify( sentData),
       });
-      console.log(gameboard, 'gameBoard sent to server, server code')
   
       if (!response.ok) {
         const error = await response.json();
@@ -21,7 +35,7 @@ export async function updateBoard(gameboard) {
 
   export async function updatePlayerName(playerName, symbol) {
     try {
-      const response = await fetch("http://localhost:4000/ticTacToe/player", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/player`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -39,9 +53,9 @@ export async function updateBoard(gameboard) {
     }
   }
   
-  export async function fetchData() {
+  export async function fetchData(gameRoute) {
     try {
-      const response = await fetch("http://localhost:4000/ticTacToe/gameData");
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/${gameRoute}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -50,5 +64,26 @@ export async function updateBoard(gameboard) {
       return data;
     } catch (error) {
       console.log("error fetching the gameboard", error);
+    }
+  }
+
+  export async function OnlineMatchStartOver(gameId, players) {
+    console.log(gameId, players , 'data sent to server startover req')
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/${gameId}/startOver`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ gameId, players })
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error in starting a new match:", error);
+        return;
+      }
+    } catch (error) {
+      console.error("Error in starting a new match:", error);
     }
   }

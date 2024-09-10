@@ -34,12 +34,12 @@
     color: #e1dec7;
   }
 
-  /* li.active {
+  .active {
     border-color: #f6e35a;
     animation: pulse 2s infinite ease-in-out;
   }
   
-  li.active .player-name,
-  li.active .player-symbol {
+  .active .player-name,
+  .active .player-symbol {
     color: #f6e35a;
-  } */
+  }

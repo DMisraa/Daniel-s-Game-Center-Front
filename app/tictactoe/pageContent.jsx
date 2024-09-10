@@ -8,6 +8,7 @@ import GameOver from "@/components/ticTacToe/GameOver.jsx";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
 import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
 import AllTimeScore from "@/components/AllTimeScore";
+import Modal from "@/components/Modal";
 
 const PLAYERS = {
   X: "Player 1",
@@ -79,13 +80,17 @@ function PageContent() {
   const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
   const [startGame, setStartGame] = useState(false);
-  const [board, setBoard] = useState(initialGameBoard)
+  const [isModalOpen, setModalOpen] = useState(false);
+  
 
   const activePlayer = deriveActivePlayer(gameTurns);
+  console.log(activePlayer, 'active player, pagecontent')
   const gameBoard = deriveGameTurns(gameTurns);
   let winner = deriveWinner(players, gameBoard);
 
   const hasDraw = gameTurns.length === 9 && !winner;
+  console.log(gameTurns.length)
+
   console.log('component mountened')
   console.log(gameTurns, 'gameTurns pageContent component')
 
@@ -105,14 +110,15 @@ function PageContent() {
   useEffect(() => {
     async function getData() {
       try {
-        const data = await fetchData();
+        const data = await fetchData('gameData');
         console.log(data, 'data arrived from server');
 
         if (data) {
           allTimeScore = data.allTimeScore;
           setPlayers(data.playerNames);
 
-          const derivedGameBoard = data.board;
+          const derivedGameBoard = data.gameBoard;
+          console.log(derivedGameBoard, 'board, useEffect')
           const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
             row.map((playerSymbol, colIndex) =>
               playerSymbol
@@ -132,24 +138,34 @@ function PageContent() {
         }
       } catch (error) {
         console.log("Error fetching the game data", error);
-      }
+      } 
     }
 
     getData();
   }, []);
 
+  function openModal() {
+    setModalOpen(true);
+  }
 
+  function closeModal() {
+    setModalOpen(false);
+  }
 
 function handleActivePlayer(rowIndex, colIndex) {
   setGameTurns((prevTurns) => {
-    console.log(prevTurns, 'gameTurns prevTurns')
-    const currentPlayer = deriveActivePlayer(prevTurns);
+    let currentPlayer = deriveActivePlayer(prevTurns);
+    if (gameTurns.length % 2 === 0) {
+       currentPlayer = 'X'
+    } else {
+      currentPlayer = 'O'
+    }
 
     let updatedGameBoard = deriveGameTurns(prevTurns);
 
     updatedGameBoard[rowIndex][colIndex] = currentPlayer;
+    console.log(currentPlayer, 'handleActivePlayer currectPlayer')
 
-    // setBoard(updatedGameBoard)
     updateBoard(updatedGameBoard);
     console.log(updatedGameBoard, 'updatedGameBoard in handleActivePlayer')
     
@@ -164,7 +180,6 @@ function handleActivePlayer(rowIndex, colIndex) {
 
   function handelNewGameClick() {
     setGameTurns([]);
-    // setBoard(initialGameBoard)
   }
 
   function handleNewName(symbol, newName) {
@@ -185,12 +200,16 @@ function handleActivePlayer(rowIndex, colIndex) {
   return (
     <main>
       {!startGame && (
+        <>
         <button
           onClick={handleStartGame}
           className={classes["start-game-button"]}
         >
           Start Game !
         </button>
+        <button className={classes['challenge-friend']} onClick={openModal} > Challenge A Friend ! </button>
+          <Modal isOpen={isModalOpen} onClose={closeModal} gameType={'ticTacToe'} />
+          </>
       )}
       <div id={classes["game-container"]}>
         <ol id={classes.players}>

@@ -1,9 +1,9 @@
-import "./allTimeScore.css";
+import classes from "./allTimeScore.module.css";
 
 function AllTimeScore({ allTimeGameScoreDraw, allTimeGameScorePlayerOne, allTimeGameScorePlayerTwo, playerOne, playerTwo }) {
   
   return (
-    <div className={"scoreboard"}>
+    <div className={classes.scoreboard}>
       <h2>All Time Score!</h2>
       <h3>
         {playerOne} : <span>{allTimeGameScorePlayerOne}</span>

@@ -18,7 +18,7 @@ const Player = forwardRef(function Player({ isEditing, handlePlayerName, handleE
     if (isEditing && ref.current) {
       ref.current.focus();
     }
-  }, [isEditing]);
+  }, [isEditing], ref);
 
   function handleKeyPress(event) {
     if (event.key === "Enter") {
@@ -44,7 +44,7 @@ const Player = forwardRef(function Player({ isEditing, handlePlayerName, handleE
           />
         )}
       </span>
-      <button onClick={handleEdit}> {isEditing ? "Save" : "Edit"} </button>
+      {handleEdit && <button onClick={handleEdit}> {isEditing ? "Save" : "Edit"} </button>}
     </li>
   );
 })

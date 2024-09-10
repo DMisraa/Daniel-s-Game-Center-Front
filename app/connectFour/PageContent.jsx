@@ -21,6 +21,12 @@ const PLAYERS = {
 
 let turnsLength = 0;
 
+let allTimeScoreBoard = {
+  yellowPlayer: 0,
+  redPlayer: 0,
+  draw: 0
+}
+
 export default function PageContent() {
   const [startGame, setStartGame] = useState(false);
   const [redPlayerName, setRedPlayerName] = useState(PLAYERS.red);
@@ -32,8 +38,10 @@ export default function PageContent() {
   const [currentPlayer, setCurrentPlayer] = useState("");
   const [winner, setWinner] = useState(null);
   const [hasDraw, setHasDraw] = useState(false);
-  const [allTimeGameScore, setAllTimeGameScore] = useState({});
+  const [allTimeGameScore, setAllTimeGameScore] = useState(allTimeScoreBoard);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  console.log(isLoading, 'isLoading state')
 
   const player = useRef({
     redPlayer: redPlayerName,
@@ -45,6 +53,8 @@ export default function PageContent() {
       try {
         const data = await fetchData();
         if (data) {
+          console.log(data.turnLength, 'turnLength data recieved')
+          turnsLength = data.turnLength
           setBoard(data.board);
           setCurrentPlayer(data.currentPlayer);
           setWinner(data.winner);
@@ -55,6 +65,7 @@ export default function PageContent() {
         } else {
           return;
         }
+        console.log(data.turnLength, 'turnLength use Effect hook')
 
         if (data.board.some((row) => row.some((cell) => cell !== null))) {
           setStartGame(true);
@@ -67,6 +78,8 @@ export default function PageContent() {
         console.log("Component mounted");
       } catch (error) {
         console.log("error fetching the gameboard", error);
+      } finally {
+        setIsLoading(false);
       }
     }
 
@@ -77,6 +90,7 @@ export default function PageContent() {
   }, []);
 
   function openModal() {
+    console.log("Open Modal Clicked");
     setModalOpen(true);
   }
 
@@ -139,10 +153,12 @@ export default function PageContent() {
   }
 
   async function handleMove(column) {
-    if (winner || hasDraw) return;
+    console.log(hasDraw)
+    if (winner || hasDraw || isLoading) return;
     if (board[0][column]) return;
 
     turnsLength++;
+    console.log(turnsLength)
 
     if (turnsLength === 42 && !winner) {
       setAllTimeGameScore((prevState) => ({
@@ -170,7 +186,8 @@ export default function PageContent() {
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
     }
 
-    updateBoard(column);
+    await updateBoard(column);
+    setIsLoading(false)
   }
 
   function checkForWinner(board) {
@@ -234,16 +251,14 @@ export default function PageContent() {
             Start Game !
           </button>
           <button className={classes['challenge-friend']} onClick={openModal} > Challenge A Friend ! </button>
-          <Modal isOpen={isModalOpen} onClose={closeModal} />
+          <Modal isOpen={isModalOpen} onClose={closeModal} gameType={'connectFour'} />
           </>
         )}
       </div>
       {startGame && (
         <GameBoard
-          yellowPlayer={yellowPlayerName}
-          redPlayer={redPlayerName}
           winner={winner}
-          handleNewGame={handleNewGame}
+          handleNewGameReq={handleNewGame}
           handleMove={handleMove}
           hasDraw={hasDraw}
           board={board}
@@ -253,8 +268,8 @@ export default function PageContent() {
         allTimeGameScoreDraw={allTimeGameScore.draw}
         allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
         allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-        playerOne={'Red Player'}
-        playerTwo={'Yellow Player'}
+        playerOne={'Red Player'} // add name fram invetation form
+        playerTwo={'Yellow Player'}// add name fram invetation form
       />
     </>
   );

@@ -1,28 +1,57 @@
 import "./gameBoard.css";
 
-function GameBoard({ winner, handleNewGame, handleMove, board, hasDraw }) {
+function GameBoard({ winner, handleNewGame, handleMove, board, hasDraw, playerChallenged, playerId, handleNewGameReq, newGameChallenge }) {
+
   if (winner === "Red Player") {
     winner = "the Red Player";
   } else if (winner === "Yellow Player") {
     winner = "the Yellow Player";
   }
 
+  console.log(newGameChallenge, 'newGameChallenge gameBoard Component')
+  console.log(playerChallenged, 'playerChallenged gameBoard Component')
+  console.log(playerId, 'playerId gameBoard Component')
+
   return (
     <div className="game-container">
       {winner && (
         <div className="winner-announcement">
           The winner is {winner}!
-          <button className="rematch-button" onClick={handleNewGame}>
-            Rematch
-          </button>
+          {!newGameChallenge ? (
+            <button className="rematch-button" onClick={handleNewGameReq}>
+              Rematch
+            </button>
+          ) : (
+            playerChallenged !== playerId ? (
+              <div>
+                <p>You have been challenged for a rematch!</p>
+                <button onClick={handleNewGame}>Accept</button>
+                <button>Not up for another one</button>
+              </div>
+            ) : (
+              <p>Waiting for an answer...</p>
+            )
+          )}
         </div>
       )}
       {hasDraw && (
         <div className="winner-announcement">
           It&apos;s a Draw !
-          <button className="rematch-button" onClick={handleNewGame}>
-            Rematch
-          </button>
+          {!newGameChallenge ? (
+            <button className="rematch-button" onClick={handleNewGameReq}>
+              Rematch
+            </button>
+          ) : (
+            playerChallenged !== playerId ? (
+              <div>
+                <p>You have been challenged for a rematch!</p>
+                <button onClick={handleNewGame}>Accept</button>
+                <button>Not up for another one</button>
+              </div>
+            ) : (
+              <p>Waiting for an answer...</p>
+            )
+          )}
         </div>
       )}
       <div className="game-board">
