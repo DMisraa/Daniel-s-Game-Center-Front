@@ -74,7 +74,7 @@ function deriveWinner(players, gameBoard) {
     ) {
       winner = players[firstSquareSymbole];
       winnerSymbol = firstSquareSymbole;
-      console.log(winner, "winner name, derive winner Fn");
+      console.log(winner, "winner name, derive winner ");
     }
   }
   return winner, winnerSymbol;
@@ -91,7 +91,7 @@ function Home() {
   console.log(isLoading, 'isLoading state')
   console.log(currentPlayer, 'currentPlayer state')
   const { gameId } = useParams();
-  console.log(gameId, "gameId");
+  console.log(gameId, "gameID");
 
   const activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameTurns(gameTurns);
