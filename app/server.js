@@ -15,6 +15,7 @@ export async function fetchData() {
 }
 
 export async function fetchOnlineMatch(gameId) {
+  console.log(gameId, 'gameId fetchOnlineMatch Fn')
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}`);
     if (!response.ok) {
@@ -139,7 +140,10 @@ try {
   console.log(gameType, 'game invitation game type')
 
   if (response.ok) {
+    const result = await response.json();
     alert("Invitation sent!");
+    console.log(result.gameId, 'gameId from server, gameInvite Fn');
+    return result.gameId
   } else {
     alert("Failed to send invitation.");
   }
