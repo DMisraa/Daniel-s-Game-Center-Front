@@ -72,7 +72,7 @@ export default function Modal({ isOpen, onClose, gameType }) {
       data = await fetchData(gameId)
       console.log(data, 'data, whatsApp Invite')
       gameLink = data.gameLinksWithTokens.InvitedPlayer
-      message = `Hey ! Lets play ticTacToe ! Join me here: ${gameLink}  https://www.google.com`
+      message = `Hey ! Lets play ticTacToe ! Join me here: ${gameLink}`
     } else if (gameType === 'connectFour') {
       data = await fetchOnlineMatch(gameId)
       console.log(data, 'data, whatsApp Invite')
