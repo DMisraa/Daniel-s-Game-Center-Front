@@ -83,9 +83,19 @@ export default function Modal({ isOpen, onClose, gameType }) {
     const encodedMessage = encodeURIComponent(message)
     const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}` 
     console.log(gameLink, 'gameLink', encodedMessage, 'encodedMessage', whatsAppUrl, 'whatsAppUrl')
+
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const androidWhatsAppUrl = `intent://send/?phone=${phoneNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end;`;
+
+    // const finalUrl = isAndroid ? androidWhatsAppUrl : whatsAppUrl;
+
     setTimeout(() => {
-      window.open(whatsAppUrl, '_blank');
-  }, 200);
+      if (isAndroid) {
+        window.location.href = androidWhatsAppUrl;  // Android: open WhatsApp app via intent
+      } else {
+        window.location.href = whatsAppUrl;  // iOS: open WhatsApp app via wa.me
+      }
+    }, 200);
 
     setIsLoading(false)
 
