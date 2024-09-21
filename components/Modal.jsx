@@ -59,7 +59,7 @@ export default function Modal({ isOpen, onClose, gameType }) {
     const gameId = await gameInvite(formData, gameType);
     console.log(gameId, "gameId of game Created");
     {
-      !WhatsAppInvite && setIsLoading(false), onClose();
+      !WhatsAppInvite && setIsLoading(false);
     }
 
     return { gameId, formData };
