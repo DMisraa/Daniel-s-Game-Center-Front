@@ -59,7 +59,7 @@ export default function Modal({ isOpen, onClose, gameType }) {
     const gameId = await gameInvite(formData, gameType);
     console.log(gameId, "gameId of game Created");
     {
-      !WhatsAppInvite && setIsLoading(false);
+      !WhatsAppInvite && setIsLoading(false), onClose();
     }
 
     return { gameId, formData };
@@ -71,41 +71,41 @@ export default function Modal({ isOpen, onClose, gameType }) {
 
     let data, message, gameLink;
     const phoneNumber = formData.rivalNumber;
-    
+
     if (gameType === "ticTacToe") {
       data = await fetchData(gameId);
       console.log(data, "data, whatsApp Invite");
       gameLink = data.gameLinksWithTokens.InvitedPlayer;
-      message = `Hey! Let's play Tic-Tac-Toe! Join me here: ${gameLink}`;
+      message = `Hey ! Lets play ticTacToe ! Join me here: ${gameLink}`;
     } else if (gameType === "connectFour") {
       data = await fetchOnlineMatch(gameId);
       console.log(data, "data, whatsApp Invite");
       gameLink = data.gameLinksWithTokens.InvitedPlayer;
-      message = `Hey! Let's play Connect Four! Join me here: ${gameLink}`;
+      message = `Hey ! Lets play connectFour ! Join me here: ${gameLink}`;
     }
-    
+
     const encodedMessage = encodeURIComponent(message);
     const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+    console.log(
+      gameLink,
+      "gameLink",
+      encodedMessage,
+      "encodedMessage",
+      whatsAppUrl,
+      "whatsAppUrl"
+    );
+
+    const isAndroid = /Android/i.test(navigator.userAgent);
     const androidWhatsAppUrl = `intent://send/?phone=${phoneNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end;`;
 
-      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-      const isAndroid = /Android/i.test(navigator.userAgent);
-    
-      if (isMobile) {
-        if (isAndroid) {
-          window.location.href = androidWhatsAppUrl;
-        } else {
-          window.location.href = whatsAppUrl;
-        }
-
-        setTimeout(() => {
-          if (!document.hidden) {
-            window.location.href = whatsAppUrl;
-          }
-        }, 1500); 
+    setTimeout(() => {
+      if (isAndroid) {
+        window.location.href = androidWhatsAppUrl;
       } else {
-        window.open(whatsAppUrl, "_blank");
+        window.location.href = whatsAppUrl;
       }
+    }, 20);
+
     setIsLoading(false);
   }
 
