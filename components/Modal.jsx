@@ -7,32 +7,34 @@ export default function Modal({ isOpen, onClose, gameType }) {
   const [isLoading, setIsLoading] = useState(false);
   const [WhatsAppInvite, setWhatsAppInvite] = useState(false);
   const dialogRef = useRef(null);
-  console.log(isOpen);
+  console.log(isOpen, "isOpen State");
 
   useEffect(() => {
     const dialog = dialogRef.current;
+  
     if (isOpen && dialog) {
       dialog.showModal();
+  
+      function handleOutsideClick(event) {
+        const modalContent = dialog.querySelector(`.${classes['modal-content']}`);
+        
+        if (modalContent && !modalContent.contains(event.target)) {
+          onClose();
+        }
+      };
+
+      document.addEventListener("click", handleOutsideClick);
+  
+      return () => {
+        document.removeEventListener("click", handleOutsideClick);
+      };
     } else if (dialog) {
       dialog.close();
     }
-
-    // if (!isOpen) {
-    //   function handleOutsideClick(event) {
-    //   if (dialog && !dialog.contains(event.target)) {
-    //     onClose();
-    //   }
-    // }
-    // window.addEventListener("click", handleOutsideClick);
-    // }
-    // return () => {
-    //   window.removeEventListener("click", handleOutsideClick);
-    // };
-    // = funtion for closing the modal when user click outside of it
   }, [isOpen, onClose]);
 
   function handleWhatsAppCheckbox() {
-    setWhatsAppInvite(prevState => !prevState);
+    setWhatsAppInvite((prevState) => !prevState);
   }
 
   function handleClose() {
@@ -50,55 +52,61 @@ export default function Modal({ isOpen, onClose, gameType }) {
       rivalName: event.target.rivalName.value,
       ...(WhatsAppInvite && {
         userNumber: event.target.userNumber.value,
-        rivalNumber: event.target.rivalNumber.value
-      })
+        rivalNumber: event.target.rivalNumber.value,
+      }),
     };
-    
-    const gameId = await gameInvite(formData, gameType);
-    console.log(gameId, 'gameId of game Created')
-    {!WhatsAppInvite && setIsLoading(false)}
 
-    return { gameId, formData }
+    const gameId = await gameInvite(formData, gameType);
+    console.log(gameId, "gameId of game Created");
+    {
+      !WhatsAppInvite && setIsLoading(false), onClose();
+    }
+
+    return { gameId, formData };
   }
 
   async function handleWhatsAppSubmit(event) {
     event.preventDefault();
-    const { gameId, formData } =  await handleSubmit(event)
+    const { gameId, formData } = await handleSubmit(event);
 
-    let data, message, gameLink
-    const phoneNumber = formData.rivalNumber
+    let data, message, gameLink;
+    const phoneNumber = formData.rivalNumber;
     
-    if (gameType === 'ticTacToe') {
-      data = await fetchData(gameId)
-      console.log(data, 'data, whatsApp Invite')
-      gameLink = data.gameLinksWithTokens.InvitedPlayer
-      message = `Hey ! Lets play ticTacToe ! Join me here: ${gameLink}`
-    } else if (gameType === 'connectFour') {
-      data = await fetchOnlineMatch(gameId)
-      console.log(data, 'data, whatsApp Invite')
-      gameLink = data.gameLinksWithTokens.InvitedPlayer
-      message = `Hey ! Lets play connectFour ! Join me here: ${gameLink}`
+    if (gameType === "ticTacToe") {
+      data = await fetchData(gameId);
+      console.log(data, "data, whatsApp Invite");
+      gameLink = data.gameLinksWithTokens.InvitedPlayer;
+      message = `Hey! Let's play Tic-Tac-Toe! Join me here: ${gameLink}`;
+    } else if (gameType === "connectFour") {
+      data = await fetchOnlineMatch(gameId);
+      console.log(data, "data, whatsApp Invite");
+      gameLink = data.gameLinksWithTokens.InvitedPlayer;
+      message = `Hey! Let's play Connect Four! Join me here: ${gameLink}`;
     }
     
-    const encodedMessage = encodeURIComponent(message)
-    const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}` 
-    console.log(gameLink, 'gameLink', encodedMessage, 'encodedMessage', whatsAppUrl, 'whatsAppUrl')
-
-    const isAndroid = /Android/i.test(navigator.userAgent);
+    const encodedMessage = encodeURIComponent(message);
+    const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
     const androidWhatsAppUrl = `intent://send/?phone=${phoneNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end;`;
 
-    // const finalUrl = isAndroid ? androidWhatsAppUrl : whatsAppUrl;
+      const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+      const isAndroid = /Android/i.test(navigator.userAgent);
+    
+      if (isMobile) {
+        if (isAndroid) {
+          window.location.href = androidWhatsAppUrl;
+        } else {
+          window.location.href = whatsAppUrl;
+        }
 
-    setTimeout(() => {
-      if (isAndroid) {
-        window.location.href = androidWhatsAppUrl;  // Android: open WhatsApp app via intent
+        setTimeout(() => {
+          if (!document.hidden) {
+            window.location.href = whatsAppUrl;
+          }
+        }, 1500); 
       } else {
-        window.location.href = whatsAppUrl;  // iOS: open WhatsApp app via wa.me
+        window.open(whatsAppUrl, "_blank");
       }
-    }, 200);
-
-    setIsLoading(false)
-
+    setIsLoading(false);
   }
 
   return (
@@ -154,14 +162,16 @@ export default function Modal({ isOpen, onClose, gameType }) {
                   placeholder="+12345678901"
                 />
                 <div>
-                <label htmlFor="rivalNumber">Rival&apos;s Phone Number:</label>
-                <input
-                  type="tel"
-                  id="rivalNumber"
-                  name="rivalNumber"
-                  pattern="[+]{1}[0-9]{11,14}"
-                  placeholder="+12345678901"
-                />
+                  <label htmlFor="rivalNumber">
+                    Rival&apos;s Phone Number:
+                  </label>
+                  <input
+                    type="tel"
+                    id="rivalNumber"
+                    name="rivalNumber"
+                    pattern="[+]{1}[0-9]{11,14}"
+                    placeholder="+12345678901"
+                  />
                 </div>
               </div>
             )}
