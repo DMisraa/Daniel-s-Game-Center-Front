@@ -53,9 +53,9 @@ export async function updateBoard(gameBoard, gameId, playerNames) {
     }
   }
   
-  export async function fetchData(gameRoute) {
+  export async function fetchData(gameId) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/${gameRoute}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/${gameId}`);
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
