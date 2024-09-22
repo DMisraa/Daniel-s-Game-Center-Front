@@ -84,27 +84,33 @@ export default function Modal({ isOpen, onClose, gameType }) {
       message = `Hey ! Lets play connectFour ! Join me here: ${gameLink}`;
     }
 
-    const encodedMessage = encodeURIComponent(message);
+ const encodedMessage = encodeURIComponent(message);
     const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-    console.log(
-      gameLink,
-      "gameLink",
-      encodedMessage,
-      "encodedMessage",
-      whatsAppUrl,
-      "whatsAppUrl"
-    );
+    const androidWhatsAppUrl = `intent://send/?phone=${phoneNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end`;
 
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isAndroid = /Android/i.test(navigator.userAgent);
-    const androidWhatsAppUrl = `intent://send/?phone=${phoneNumber}&text=${encodedMessage}#Intent;scheme=whatsapp;package=com.whatsapp;end;`;
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent); 
+      console.log(navigator.userAgent);
 
-    setTimeout(() => {
-      if (isAndroid) {
-        window.location.href = androidWhatsAppUrl;
+    
+      if (isMobile) {
+        if (isAndroid) {
+          window.location.href = androidWhatsAppUrl;
+        } else if (isIOS) {
+          window.location.href = whatsAppUrl; 
+        } else {
+          window.location.href = whatsAppUrl; 
+        }
+
+        setTimeout(() => {
+          if (!document.hidden) {
+            window.location.href = whatsAppUrl;
+          }
+        }, 1500); 
       } else {
-        window.location.href = whatsAppUrl;
+        window.open(whatsAppUrl, "_blank");
       }
-    }, 200);
 
     setIsLoading(false);
   }
