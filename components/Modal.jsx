@@ -92,9 +92,7 @@ export default function Modal({ isOpen, onClose, gameType }) {
       const isAndroid = /Android/i.test(navigator.userAgent);
     
       if (isMobile) {
-        if (isAndroid) {
-          window.location.href = androidWhatsAppUrl;
-        } else {
+        {
           window.location.href = whatsAppUrl;
         }
 
