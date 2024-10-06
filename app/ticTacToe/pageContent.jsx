@@ -28,9 +28,11 @@ let allTimeScore = {
 };
 
 function deriveActivePlayer(gameTurns) {
-  let currentPlayer = "X";
+  let currentPlayer 
 
-  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+  if (gameTurns.length % 2 === 0) {
+    currentPlayer = "X";
+  } else {
     currentPlayer = "O";
   }
 
@@ -162,7 +164,6 @@ function handleActivePlayer(rowIndex, colIndex) {
     }
 
     let updatedGameBoard = deriveGameTurns(prevTurns);
-
     updatedGameBoard[rowIndex][colIndex] = currentPlayer;
     console.log(currentPlayer, 'handleActivePlayer currectPlayer')
 
@@ -175,8 +176,6 @@ function handleActivePlayer(rowIndex, colIndex) {
     ];
   });
 }
-
-
 
   function handelNewGameClick() {
     setGameTurns([]);
@@ -194,7 +193,6 @@ function handleActivePlayer(rowIndex, colIndex) {
   function handleStartGame() {
     setStartGame(true);
   }
-
 
 
   return (

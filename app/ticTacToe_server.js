@@ -87,3 +87,23 @@ export async function updateBoard(gameBoard, gameId, playerNames) {
       console.error("Error in starting a new match:", error);
     }
   }
+
+  export async function sendMail(playerNames, emailAdress, gameLinksWithTokens) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/ticTacToe/sendMail`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        playerNames,
+        emailAdress,
+        gameLinksWithTokens
+      }),
+    });
+  
+    if (response.ok) {
+      console.log("Email sent successfully");
+    } else {
+      console.error("Failed to send email");
+    }
+  }

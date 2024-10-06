@@ -2,7 +2,12 @@
 
 import classes from "../pageContent.module.css";
 import { useState, useEffect } from "react";
-import { updateBoard, fetchData, OnlineMatchStartOver } from "../../ticTacToe_server";
+import {
+  updateBoard,
+  fetchData,
+  OnlineMatchStartOver,
+  sendMail,
+} from "../../ticTacToe_server";
 import Player from "@/components/ticTacToe/Player.jsx";
 import GameOver from "@/components/ticTacToe/GameOver.jsx";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
@@ -11,6 +16,7 @@ import AllTimeScore from "@/components/AllTimeScore";
 import { useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { rematchReq } from "@/app/server";
+import { socket } from "../../socket";
 
 const PLAYERS = {
   X: "Player 1",
@@ -29,12 +35,14 @@ let allTimeScore = {
   O: 0,
 };
 
-let playerId;
-let playerChallenged;
+let playerId, playerChallenged;
+let emailAdress, gameLinksWithTokens;
 function deriveActivePlayer(gameTurns) {
-  let currentPlayer = "X";
+  let currentPlayer;
 
-  if (gameTurns.length > 0 && gameTurns[0].player === "X") {
+  if (gameTurns.length % 2 === 0) {
+    currentPlayer = "X";
+  } else {
     currentPlayer = "O";
   }
 
@@ -51,7 +59,6 @@ function deriveGameTurns(gameTurns) {
       gameBoard[row][col] = player;
     }
   }
-  console.log("deriveGameTurnes Fn mountened");
   return gameBoard;
 }
 
@@ -74,7 +81,6 @@ function deriveWinner(players, gameBoard) {
     ) {
       winner = players[firstSquareSymbole];
       winnerSymbol = firstSquareSymbole;
-      console.log(winner, "winner name, derive winner ");
     }
   }
   return winner, winnerSymbol;
@@ -86,10 +92,9 @@ function Home() {
   const [savedWinner, setSavedWinner] = useState(null);
   const [hasDraw, setHasDraw] = useState(false);
   const [newGameChallenge, setNewGameChallenge] = useState(false);
-  const [currentPlayer, setCurrentPlayer] = useState('X')
+  const [currentPlayer, setCurrentPlayer] = useState("X");
   const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading, 'isLoading state')
-  console.log(currentPlayer, 'currentPlayer state')
+
   const { gameId } = useParams();
   console.log(gameId, "gameID");
 
@@ -98,116 +103,131 @@ function Home() {
 
   let winner = deriveWinner(players, gameBoard);
 
-  console.log("component mountened");
-
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log(urlParams);
     const token = urlParams.get("token");
-    console.log(token);
 
     if (gameTurns.length === 9 && !winner) {
       setHasDraw(true);
     }
 
     if (activePlayer === "X" && winner) {
+      /////// Do i need this code if I work with WebSocket ?
       allTimeScore.O++;
-      console.log("player O is the winner");
       setSavedWinner(players.O);
     } else if (activePlayer === "O" && winner) {
       allTimeScore.X++;
-      console.log("player X is the winner");
       setSavedWinner(players.X);
     } else if (hasDraw) {
       allTimeScore.draw++;
-      console.log("draw");
     }
 
     if (token) {
       localStorage.setItem("gameToken:" + gameId, token);
     }
+    console.log(process.env.NEXT_PUBLIC_WS_URL, "socket Url");
   }, [hasDraw, winner]);
 
   useEffect(() => {
-    async function getData() {
-      try {
-        const data = await fetchData(gameId);
-        console.log(data, "data arrived from server");
+    let userToken
+
+    socket.emit("joinGame", gameId);
+    console.log("socket Fn next");
+    socket.on("gameUpdated", (data) => {
+      console.log("Game updated: ", data);
+      emailAdress = data.emailAdress;
+      gameLinksWithTokens = data.gameLinksWithTokens;
+      allTimeScore = data.allTimeWinners;
+      setPlayers(data.playerNames);
+      playerChallenged = data.playerChallenged;
+      setCurrentPlayer(data.currentPlayer);
+      setHasDraw(data.hasDraw);
+      setSavedWinner(data.winner);
+      const derivedGameBoard = data.board;
+      const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+        row
+          .map((playerSymbol, colIndex) =>
+            playerSymbol
+              ? {
+                  square: { row: rowIndex, col: colIndex },
+                  player: playerSymbol,
+                }
+              : null
+          )
+          .filter(Boolean)
+      );
+      setGameTurns(fetchedGameTurns);
+    });
+
+      async function getData() {
+      const data = await fetchData(gameId);
+        console.log("GET ROUTE RUNNING");
         localStorage.getItem("gameToken:" + gameId);
-        const userToken = localStorage.getItem("gameToken:" + gameId);
+        userToken = localStorage.getItem("gameToken:" + gameId);
         const decodedToken = jwtDecode(userToken);
         console.log(decodedToken, "decoded Token");
         playerId = decodedToken.playedId;
         console.log(playerId, "playerId useEffect hook");
 
-        if (data) {
-          allTimeScore = data.allTimeWinners;
-          console.log(data.allTimeWinners, "alltimeScore data Recieved")
-          setPlayers(data.playerNames);
-          playerChallenged = data.playerChallenged;
-          setCurrentPlayer(data.currentPlayer)
-          console.log(data.currentPlayer, 'currentPlayer recieved useEffect')
-          setHasDraw(data.hasDraw);
-          setSavedWinner(data.winner);
-          const derivedGameBoard = data.board;
-          const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-            row
-              .map((playerSymbol, colIndex) =>
-                playerSymbol
-                  ? {
-                      square: { row: rowIndex, col: colIndex },
-                      player: playerSymbol,
-                    }
-                  : null
-              )
-              .filter(Boolean)
-          );
+        emailAdress = data.emailAdress;
+        gameLinksWithTokens = data.gameLinksWithTokens;
+        allTimeScore = data.allTimeWinners;
+        setPlayers(data.playerNames);
+        playerChallenged = data.playerChallenged;
+        setCurrentPlayer(data.currentPlayer);
+        setHasDraw(data.hasDraw);
+        setSavedWinner(data.winner);
+        const derivedGameBoard = data.board;
+        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+          row
+            .map((playerSymbol, colIndex) =>
+              playerSymbol
+                ? {
+                    square: { row: rowIndex, col: colIndex },
+                    player: playerSymbol,
+                  }
+                : null
+            )
+            .filter(Boolean)
+        );
+        setGameTurns(fetchedGameTurns);
 
-          setGameTurns(fetchedGameTurns);
-
-          console.log(derivedGameBoard, "fetched board");
-          console.log(fetchedGameTurns, "derived game turns");
-        }
-        console.log(playerChallenged, "playerChallenged useEffect");
-        if (playerChallenged) {
-          setNewGameChallenge(true);
-        }
-      } catch (error) {
-        console.log("Error fetching the game data", error);
-      } finally {
-        setIsLoading(false)
+      console.log(playerChallenged, "playerChallenged useEffect");
+      if (playerChallenged) {
+        setNewGameChallenge(true);
       }
     }
 
-    getData();
+    if (userToken === undefined) {
+       getData();
+    }
+     
+
+    setIsLoading(false);
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
-    localStorage.getItem("gameToken:" + gameId);
-    const userToken = localStorage.getItem("gameToken:" + gameId);
+    let userToken
+    userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken);
-    console.log(decodedToken, "decoded Token");
-    console.log(decodedToken.playedId, 'token playedId')
-    console.log(currentPlayer, 'currentPlayer handleActivePlayer Fn')
     if (currentPlayer !== decodedToken.playedId) {
       alert("It's not your turn !");
-      console.log('Auth 1 running')
+      console.log("Auth 1 running");
       return;
     } else if (playerChallenged) {
-        console.log(playerChallenged, 'playerChallenge loop - handleMove Fn')
-        if (playerChallenged !== decodedToken.playedId) {
-            alert("It's not your turn !");
-            console.log('Auth 2 running')
-            return;
-        }
+      console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
+      if (playerChallenged !== decodedToken.playedId) {
+        alert("It's not your turn !");
+        console.log("Auth 2 running");
+        return;
+      }
     }
     if (hasDraw || savedWinner || isLoading) {
       return;
     }
-   
+
     setGameTurns((prevTurns) => {
-        
       let currentPlayer = deriveActivePlayer(prevTurns);
       if (gameTurns.length % 2 === 0) {
         currentPlayer = "X";
@@ -216,14 +236,26 @@ function Home() {
       }
 
       let updatedGameBoard = deriveGameTurns(prevTurns);
-
       updatedGameBoard[rowIndex][colIndex] = currentPlayer;
-      console.log(updatedGameBoard, "updatedGameBoard");
-      console.log(currentPlayer, "handleActivePlayer currectPlayer");
 
-      updateBoard(updatedGameBoard, gameId, players);
-      setIsLoading(false)
-      console.log(updatedGameBoard, "updatedGameBoard in handleActivePlayer");
+      socket.emit("make-ticTacToe-move", {
+        gameId,
+        token: userToken,
+        board: updatedGameBoard,
+        playerNames: players,
+      });
+      console.log(
+        players,
+        emailAdress,
+        gameLinksWithTokens,
+        "data sent to sendMail Fn"
+      );
+      if (gameTurns.length === 0) {
+        sendMail(players, emailAdress, gameLinksWithTokens);
+      }
+
+      // updateBoard(updatedGameBoard, gameId, players);
+      setIsLoading(false);
 
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
 
@@ -234,27 +266,20 @@ function Home() {
     });
   }
 
-  function handelNewGameClick() {
-    setGameTurns([]);
-  }
-
   function handleNewGameReq() {
     let gameType = "ticTacToe";
     playerChallenged = playerId;
     setNewGameChallenge(true);
     rematchReq(playerId, gameId, gameType);
-    console.log("handleNewGameReq running");
   }
 
   async function handleNewGame() {
-    await OnlineMatchStartOver(gameId, players)
-    setGameTurns([])
+    await OnlineMatchStartOver(gameId, players);
+    setGameTurns([]);
     setSavedWinner(null);
-    setCurrentPlayer('X')
+    setCurrentPlayer("X");
     setHasDraw(false);
   }
-
-  console.log(players, "players, state");
 
   return (
     <main>
