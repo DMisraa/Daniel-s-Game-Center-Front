@@ -86,6 +86,40 @@ function deriveWinner(players, gameBoard) {
   return winner, winnerSymbol;
 }
 
+function webSocketUpdate() {
+  socket.on("initialPageLoad", (data) => {
+    console.log("socket initial req RUNNING");
+    console.log('Derived Game Board:', data.board);
+
+    emailAdress = data.emailAdress;
+    gameLinksWithTokens = data.gameLinksWithTokens;
+    allTimeScore = data.allTimeWinners;
+    setPlayers(data.playerNames);
+    playerChallenged = data.playerChallenged;
+    setCurrentPlayer(data.currentPlayer);
+    setHasDraw(data.hasDraw);
+    setSavedWinner(data.winner);
+    const derivedGameBoard = data.board;
+
+    if (data.board) {
+      const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+      row
+        .map((playerSymbol, colIndex) =>
+          playerSymbol
+            ? {
+                square: { row: rowIndex, col: colIndex },
+                player: playerSymbol,
+              }
+            : null
+        )
+        .filter(Boolean)
+    );
+    setGameTurns(fetchedGameTurns);
+    }
+    
+  });
+}
+
 function Home() {
   const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
@@ -130,36 +164,44 @@ function Home() {
 
   useEffect(() => {
     localStorage.getItem("gameToken:" + gameId);
-        const userToken = localStorage.getItem("gameToken:" + gameId);
-        const decodedToken = jwtDecode(userToken)
-        playerId = decodedToken.playedId;
-    socket.emit("initial_GET", { gameId, });
-    
-    socket.on('initialPageLoad', (data) => {
-          emailAdress = data.emailAdress;
-          gameLinksWithTokens = data.gameLinksWithTokens;
-          allTimeScore = data.allTimeWinners;
-          setPlayers(data.playerNames);
-          playerChallenged = data.playerChallenged;
-          setCurrentPlayer(data.currentPlayer);
-          setHasDraw(data.hasDraw);
-          setSavedWinner(data.winner);
-          const derivedGameBoard = data.board;
-          const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-            row
-              .map((playerSymbol, colIndex) =>
-                playerSymbol
-                  ? {
-                      square: { row: rowIndex, col: colIndex },
-                      player: playerSymbol,
-                    }
-                  : null
-              )
-              .filter(Boolean)
-          );
-          setGameTurns(fetchedGameTurns);
+    const userToken = localStorage.getItem("gameToken:" + gameId);
+    const decodedToken = jwtDecode(userToken);
+    playerId = decodedToken.playedId;
+
+    socket.emit("joinRoom", { gameId });
+    socket.emit("initial_GET", { gameId });
+
+    socket.on("initialPageLoad", (data) => {
+      console.log("socket initial req RUNNING");
+      console.log('Derived Game Board:', data.board);
+
+      emailAdress = data.emailAdress;
+      gameLinksWithTokens = data.gameLinksWithTokens;
+      allTimeScore = data.allTimeWinners;
+      setPlayers(data.playerNames);
+      playerChallenged = data.playerChallenged;
+      setCurrentPlayer(data.currentPlayer);
+      setHasDraw(data.hasDraw);
+      setSavedWinner(data.winner);
+      const derivedGameBoard = data.board;
+
+      if (data.board) {
+        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+        row
+          .map((playerSymbol, colIndex) =>
+            playerSymbol
+              ? {
+                  square: { row: rowIndex, col: colIndex },
+                  player: playerSymbol,
+                }
+              : null
+          )
+          .filter(Boolean)
+      );
+      setGameTurns(fetchedGameTurns);
       }
-    )
+      
+    })
 
     //   async function getData() {
     //   const data = await fetchData(gameId);
@@ -198,16 +240,16 @@ function Home() {
     // if (userToken === undefined) {
     //    getData();
     // }
-     
-console.log(playerChallenged, "playerChallenged useEffect");
-      if (playerChallenged) {
-        setNewGameChallenge(true);
-      }
+
+    console.log(playerChallenged, "playerChallenged useEffect");
+    if (playerChallenged) {
+      setNewGameChallenge(true);
+    }
     setIsLoading(false);
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
-    let userToken
+    let userToken;
     userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken);
@@ -250,31 +292,7 @@ console.log(playerChallenged, "playerChallenged useEffect");
         gameLinksWithTokens,
         "data sent to sendMail Fn"
       );
-      socket.on("gameUpdated", (data) => {
-        console.log("Game updated: ", data);
-        emailAdress = data.emailAdress;
-        gameLinksWithTokens = data.gameLinksWithTokens;
-        allTimeScore = data.allTimeWinners;
-        setPlayers(data.playerNames);
-        playerChallenged = data.playerChallenged;
-        setCurrentPlayer(data.currentPlayer);
-        setHasDraw(data.hasDraw);
-        setSavedWinner(data.winner);
-        const derivedGameBoard = data.board;
-        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-          row
-            .map((playerSymbol, colIndex) =>
-              playerSymbol
-                ? {
-                    square: { row: rowIndex, col: colIndex },
-                    player: playerSymbol,
-                  }
-                : null
-            )
-            .filter(Boolean)
-        );
-        setGameTurns(fetchedGameTurns);
-      });
+      
       if (gameTurns.length === 0) {
         sendMail(players, emailAdress, gameLinksWithTokens);
       }
