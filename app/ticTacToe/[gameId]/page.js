@@ -129,80 +129,80 @@ function Home() {
   }, [hasDraw, winner]);
 
   useEffect(() => {
-    let userToken
-
-    socket.emit("joinGame", gameId);
-    console.log("socket Fn next");
-    socket.on("gameUpdated", (data) => {
-      console.log("Game updated: ", data);
-      emailAdress = data.emailAdress;
-      gameLinksWithTokens = data.gameLinksWithTokens;
-      allTimeScore = data.allTimeWinners;
-      setPlayers(data.playerNames);
-      playerChallenged = data.playerChallenged;
-      setCurrentPlayer(data.currentPlayer);
-      setHasDraw(data.hasDraw);
-      setSavedWinner(data.winner);
-      const derivedGameBoard = data.board;
-      const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-        row
-          .map((playerSymbol, colIndex) =>
-            playerSymbol
-              ? {
-                  square: { row: rowIndex, col: colIndex },
-                  player: playerSymbol,
-                }
-              : null
-          )
-          .filter(Boolean)
-      );
-      setGameTurns(fetchedGameTurns);
-    });
-
-      async function getData() {
-      const data = await fetchData(gameId);
-        console.log("GET ROUTE RUNNING");
-        localStorage.getItem("gameToken:" + gameId);
-        userToken = localStorage.getItem("gameToken:" + gameId);
-        const decodedToken = jwtDecode(userToken);
-        console.log(decodedToken, "decoded Token");
+    localStorage.getItem("gameToken:" + gameId);
+        const userToken = localStorage.getItem("gameToken:" + gameId);
+        const decodedToken = jwtDecode(userToken)
         playerId = decodedToken.playedId;
-        console.log(playerId, "playerId useEffect hook");
+    socket.emit("initial_GET", { gameId, });
+    
+    socket.on('initialPageLoad', (data) => {
+          emailAdress = data.emailAdress;
+          gameLinksWithTokens = data.gameLinksWithTokens;
+          allTimeScore = data.allTimeWinners;
+          setPlayers(data.playerNames);
+          playerChallenged = data.playerChallenged;
+          setCurrentPlayer(data.currentPlayer);
+          setHasDraw(data.hasDraw);
+          setSavedWinner(data.winner);
+          const derivedGameBoard = data.board;
+          const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+            row
+              .map((playerSymbol, colIndex) =>
+                playerSymbol
+                  ? {
+                      square: { row: rowIndex, col: colIndex },
+                      player: playerSymbol,
+                    }
+                  : null
+              )
+              .filter(Boolean)
+          );
+          setGameTurns(fetchedGameTurns);
+      }
+    )
 
-        emailAdress = data.emailAdress;
-        gameLinksWithTokens = data.gameLinksWithTokens;
-        allTimeScore = data.allTimeWinners;
-        setPlayers(data.playerNames);
-        playerChallenged = data.playerChallenged;
-        setCurrentPlayer(data.currentPlayer);
-        setHasDraw(data.hasDraw);
-        setSavedWinner(data.winner);
-        const derivedGameBoard = data.board;
-        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-          row
-            .map((playerSymbol, colIndex) =>
-              playerSymbol
-                ? {
-                    square: { row: rowIndex, col: colIndex },
-                    player: playerSymbol,
-                  }
-                : null
-            )
-            .filter(Boolean)
-        );
-        setGameTurns(fetchedGameTurns);
+    //   async function getData() {
+    //   const data = await fetchData(gameId);
+    //     console.log("GET ROUTE RUNNING");
+    //     localStorage.getItem("gameToken:" + gameId);
+    //     userToken = localStorage.getItem("gameToken:" + gameId);
+    //     const decodedToken = jwtDecode(userToken);
+    //     console.log(decodedToken, "decoded Token");
+    //     playerId = decodedToken.playedId;
+    //     console.log(playerId, "playerId useEffect hook");
 
-      console.log(playerChallenged, "playerChallenged useEffect");
+    //     emailAdress = data.emailAdress;
+    //     gameLinksWithTokens = data.gameLinksWithTokens;
+    //     allTimeScore = data.allTimeWinners;
+    //     setPlayers(data.playerNames);
+    //     playerChallenged = data.playerChallenged;
+    //     setCurrentPlayer(data.currentPlayer);
+    //     setHasDraw(data.hasDraw);
+    //     setSavedWinner(data.winner);
+    //     const derivedGameBoard = data.board;
+    //     const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+    //       row
+    //         .map((playerSymbol, colIndex) =>
+    //           playerSymbol
+    //             ? {
+    //                 square: { row: rowIndex, col: colIndex },
+    //                 player: playerSymbol,
+    //               }
+    //             : null
+    //         )
+    //         .filter(Boolean)
+    //     );
+    //     setGameTurns(fetchedGameTurns);
+    // }
+
+    // if (userToken === undefined) {
+    //    getData();
+    // }
+     
+console.log(playerChallenged, "playerChallenged useEffect");
       if (playerChallenged) {
         setNewGameChallenge(true);
       }
-    }
-
-    if (userToken === undefined) {
-       getData();
-    }
-     
-
     setIsLoading(false);
   }, [gameId]);
 
@@ -250,6 +250,31 @@ function Home() {
         gameLinksWithTokens,
         "data sent to sendMail Fn"
       );
+      socket.on("gameUpdated", (data) => {
+        console.log("Game updated: ", data);
+        emailAdress = data.emailAdress;
+        gameLinksWithTokens = data.gameLinksWithTokens;
+        allTimeScore = data.allTimeWinners;
+        setPlayers(data.playerNames);
+        playerChallenged = data.playerChallenged;
+        setCurrentPlayer(data.currentPlayer);
+        setHasDraw(data.hasDraw);
+        setSavedWinner(data.winner);
+        const derivedGameBoard = data.board;
+        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+          row
+            .map((playerSymbol, colIndex) =>
+              playerSymbol
+                ? {
+                    square: { row: rowIndex, col: colIndex },
+                    player: playerSymbol,
+                  }
+                : null
+            )
+            .filter(Boolean)
+        );
+        setGameTurns(fetchedGameTurns);
+      });
       if (gameTurns.length === 0) {
         sendMail(players, emailAdress, gameLinksWithTokens);
       }
