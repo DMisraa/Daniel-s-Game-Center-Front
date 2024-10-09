@@ -166,14 +166,14 @@ function Home() {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
     const decodedToken = jwtDecode(userToken);
+    console.log('main useEffect' ,decodedToken)
     playerId = decodedToken.playedId;
 
     socket.emit("joinRoom", { gameId });
     socket.emit("initial_GET", { gameId });
 
     socket.on("initialPageLoad", (data) => {
-      console.log("socket initial req RUNNING");
-      console.log('Derived Game Board:', data.board);
+      console.log("socket initial req RUNNING, dara:", data);
 
       emailAdress = data.emailAdress;
       gameLinksWithTokens = data.gameLinksWithTokens;
@@ -200,7 +200,19 @@ function Home() {
       );
       setGameTurns(fetchedGameTurns);
       }
-      
+      console.log(playerChallenged, "initial Socket useEffect");
+      if (playerChallenged) {
+        setNewGameChallenge(true);
+      }
+    })
+
+    socket.on('newGameChallenge', (data) => {
+      console.log('newGameChallenge Socket RUNNING, playerChallenged:', data)
+      playerChallenged = data.playerChallenged;
+      console.log(playerChallenged, "newGameChallenge Socket useEffect");
+      if (playerChallenged) {
+        setNewGameChallenge(true);
+      }
     })
 
     //   async function getData() {
@@ -241,25 +253,21 @@ function Home() {
     //    getData();
     // }
 
-    console.log(playerChallenged, "playerChallenged useEffect");
-    if (playerChallenged) {
-      setNewGameChallenge(true);
-    }
+   
     setIsLoading(false);
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
-    let userToken;
-    userToken = localStorage.getItem("gameToken:" + gameId);
+    const userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
-    const decodedToken = jwtDecode(userToken);
-    if (currentPlayer !== decodedToken.playedId) {
+    
+    if (currentPlayer !== playerId) {
       alert("It's not your turn !");
       console.log("Auth 1 running");
       return;
     } else if (playerChallenged) {
       console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
-      if (playerChallenged !== decodedToken.playedId) {
+      if (playerChallenged !== playerId) {
         alert("It's not your turn !");
         console.log("Auth 2 running");
         return;
@@ -310,14 +318,16 @@ function Home() {
   }
 
   function handleNewGameReq() {
-    let gameType = "ticTacToe";
+    // let gameType = "ticTacToe";
     playerChallenged = playerId;
     setNewGameChallenge(true);
-    rematchReq(playerId, gameId, gameType);
+    socket.emit('startOver_Req', {playerId, gameId})
+    // rematchReq(playerId, gameId, gameType);
   }
 
   async function handleNewGame() {
-    await OnlineMatchStartOver(gameId, players);
+    socket.emit('startOver', {gameId, players})
+    // await OnlineMatchStartOver(gameId, players);
     setGameTurns([]);
     setSavedWinner(null);
     setCurrentPlayer("X");
