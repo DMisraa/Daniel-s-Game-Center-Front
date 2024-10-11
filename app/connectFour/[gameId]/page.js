@@ -7,15 +7,21 @@ import Player from "@/components/connect4/Player";
 import { jwtDecode } from "jwt-decode";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { socket } from "../../socket";
 
-import { fetchOnlineMatch, updateOnlineBoard, rematchReq, OnlineMatchStartOver } from "@/app/server";
+import {
+  fetchOnlineMatch,
+  updateOnlineBoard,
+  rematchReq,
+  OnlineMatchStartOver,
+} from "@/app/server";
 import winningCombinations from "@/winningCombinations/WINNING_COMBINATIONS";
 
 const initialBoard = Array.from({ length: 6 }, () => Array(7).fill(null));
 
 let turnsLength;
-let playerChallenged
-let playerId
+let playerChallenged;
+let playerId;
 
 const PLAYERS = {
   red: "Red Player",
@@ -38,7 +44,7 @@ function Home() {
   const [currentPlayer, setCurrentPlayer] = useState("red");
   const [newGameChallenge, setNewGameChallenge] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading, 'isLoading state')
+  console.log(isLoading, "isLoading state");
 
   const { gameId } = useParams();
 
@@ -52,41 +58,74 @@ function Home() {
       localStorage.setItem("gameToken:" + gameId, token);
     }
   }, []);
-  useEffect(() => {
-    async function fetchGameData() {
-      try {
-        const data = await fetchOnlineMatch(gameId);
-        console.log(data, "get Fn");
-        localStorage.getItem("gameToken:" + gameId);
-        const userToken = localStorage.getItem("gameToken:" + gameId);
-        const decodedToken = jwtDecode(userToken);
-        console.log(decodedToken, "decoded Token");
-        playerId = decodedToken.playedId;
-        console.log(playerId, 'playerId useEffect hook')
 
-        if (data) {
-          console.log(data.allTimeWinners, "if statement in get Fn");
-          playerChallenged = data.playerChallenged; 
-          console.log(data.playerChallenged, 'data.playerChallenged')
+  useEffect(() => {
+    localStorage.getItem("gameToken:" + gameId);
+    const userToken = localStorage.getItem("gameToken:" + gameId);
+    const decodedToken = jwtDecode(userToken);
+    console.log(decodedToken, "decoded Token");
+    playerId = decodedToken.playedId;
+    console.log(playerId, "playerId useEffect hook");
+
+    socket.emit("joinRoom", { gameId });
+    socket.emit("connectFour_Initial_GET", { gameId });
+
+    socket.io("connectFour_Initial", (data) => {
+      if (typeof data === "object") {
+        console.log("socket GET data:", data);
+        playerChallenged = data.playerChallenged;
+        console.log(data.playerChallenged, "data.playerChallenged");
+        setWinner(data.winner);
+        setRedPlayerName(data.playerNames.redPlayer);
+        setYellowPlayerName(data.playerNames.yellowPlayer);
+        setCurrentPlayer(data.currentPlayer);
+        setAllTimeGameScore(data.allTimeWinners);
+        setHasDraw(data.hasDraw);
+
+        if (data.board) {
           setBoard(data.board);
-          setWinner(data.winner);
-          setRedPlayerName(data.playerNames.redPlayer);
-          setYellowPlayerName(data.playerNames.yellowPlayer);
-          setCurrentPlayer(data.currentPlayer);
-          setAllTimeGameScore(data.allTimeWinners);
-          setHasDraw(data.hasDraw);
+          turnsLength = data.gameTurns;
+        } else {
+          console.log(
+            "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
+            data
+          );
+          playerChallenged = data;
         }
-      } catch (error) {
-        console.log("error fetching the gameboard", error);
-      } finally {
-        setIsLoading(false);
       }
-      console.log(playerChallenged, 'playerChallenged useEffect')
+
       if (playerChallenged) {
-        setNewGameChallenge(true)
+        setNewGameChallenge(true);
+      } else {
+        setNewGameChallenge(false);
       }
-    }
-    fetchGameData();
+    });
+
+    // async function fetchGameData() {
+    //   const data = await fetchOnlineMatch(gameId);
+    //   console.log(data, "get Fn");
+
+    //   if (data) {
+    //     console.log(data, "if statement in get Fn");
+    //     playerChallenged = data.playerChallenged;
+    //     console.log(data.playerChallenged, "data.playerChallenged");
+    //     setBoard(data.board);
+    //     setWinner(data.winner);
+    //     setRedPlayerName(data.playerNames.redPlayer);
+    //     setYellowPlayerName(data.playerNames.yellowPlayer);
+    //     setCurrentPlayer(data.currentPlayer);
+    //     setAllTimeGameScore(data.allTimeWinners);
+    //     setHasDraw(data.hasDraw);
+    //     turnsLength = data.gameTurns
+    //   }
+    //   console.log(playerChallenged, "playerChallenged useEffect");
+    //   if (playerChallenged) {
+    //     setNewGameChallenge(true);
+    //   }
+    // }
+    // fetchGameData();
+
+    setIsLoading(false);
   }, [gameId]);
 
   function checkForWinner(board) {
@@ -121,16 +160,16 @@ function Home() {
   }
 
   function handleNewGameReq() {
-    let gameType = 'connectFour'
-    playerChallenged = playerId
+    playerChallenged = playerId;
     setNewGameChallenge(true);
-    rematchReq(playerId, gameId, gameType);
-    console.log('handleNewGameReq running')
+    // rematchReq(playerId, gameId, gameType);
+    socket.emit("ConnectFour_startOver_Req", { playerId, gameId });
+    console.log("handleNewGameReq running");
   }
 
   async function handleNewGame() {
-    console.log(redPlayerName, yellowPlayerName, 'player names')
-    await OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName)
+    // await OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName);
+    socket.emit('ConnectFour_startOver', { gameId, redPlayerName, yellowPlayerName })
     setBoard(initialBoard);
     setWinner(null);
     turnsLength = 0;
@@ -143,19 +182,20 @@ function Home() {
     console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken);
     console.log(decodedToken, "decoded Token");
-    if (currentPlayer !== decodedToken.playedId) {
-      alert("It's not your turn !");
-      return;
-    } else if (playerChallenged) {
-        console.log(playerChallenged, 'playerChallenge loop - handleMove Fn')
-        if (playerChallenged !== decodedToken.playedId) {
-            alert("It's not your turn !");
-            return;
-        }
-    }
 
     if (winner || hasDraw || isLoading) return;
     if (board[0][column]) return;
+
+    if (currentPlayer !== decodedToken.playedId) {
+      alert("It's not your turn !");
+      return;
+      // } else if (playerChallenged) {
+      //   console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
+      //   if (playerChallenged !== decodedToken.playedId) {
+      //     alert("It's not your turn !");
+      //     return;
+      //   }
+    }
 
     turnsLength++;
 
@@ -183,8 +223,9 @@ function Home() {
     } else {
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
     }
-    console.log('updateOnlineBoard running handleMove Fn')
-    await updateOnlineBoard(column, gameId);
+    console.log("updateOnlineBoard running handleMove Fn");
+    // await updateOnlineBoard(column, gameId);
+    socket.emit("ConnectFourMove", { column, gameId, token });
     setIsLoading(false);
   }
 

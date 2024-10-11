@@ -3,9 +3,6 @@
 import classes from "../pageContent.module.css";
 import { useState, useEffect } from "react";
 import {
-  updateBoard,
-  fetchData,
-  OnlineMatchStartOver,
   sendMail,
 } from "../../ticTacToe_server";
 import Player from "@/components/ticTacToe/Player.jsx";
@@ -15,7 +12,6 @@ import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
 import AllTimeScore from "@/components/AllTimeScore";
 import { useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
-import { rematchReq } from "@/app/server";
 import { socket } from "../../socket";
 
 const PLAYERS = {
@@ -265,12 +261,6 @@ function Home() {
         board: updatedGameBoard,
         playerNames: players,
       });
-      console.log(
-        players,
-        emailAdress,
-        gameLinksWithTokens,
-        "data sent to sendMail Fn"
-      );
 
       if (gameTurns.length === 0) {
         sendMail(players, emailAdress, gameLinksWithTokens);
