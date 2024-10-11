@@ -141,7 +141,7 @@ function Home() {
     socket.on("initialPageLoad", (data) => {
       
       if (typeof data === 'object') {
-        console.log("socket initial req RUNNING, dara:", data);
+        console.log("socket initial req RUNNING, data:", data);
         emailAdress = data.emailAdress;
         gameLinksWithTokens = data.gameLinksWithTokens;
         allTimeScore = data.allTimeWinners;
@@ -167,10 +167,6 @@ function Home() {
           );
           setGameTurns(fetchedGameTurns);
         }
-        if (playerChallenged) {
-          console.log(playerChallenged, "newGameChallenge set TRUE, useEffect1");
-          setNewGameChallenge(true);
-        }
       } else {
         console.log(data, "newGameChallenge Socket useEffect RUNNING");
         playerChallenged = data
@@ -180,6 +176,8 @@ function Home() {
       if (playerChallenged) {
         console.log(playerChallenged, "newGameChallenge set TRUE, useEffect2");
         setNewGameChallenge(true);
+      } else {
+        setNewGameChallenge(false)
       }
     });
 
@@ -227,6 +225,9 @@ function Home() {
   async function handleActivePlayer(rowIndex, colIndex) {
     const userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
+    const decodedToken = jwtDecode(userToken)
+    console.log("main useEffect", decodedToken);
+    playerId = decodedToken.playedId;
 
     if (currentPlayer !== playerId) {
       alert("It's not your turn !");
