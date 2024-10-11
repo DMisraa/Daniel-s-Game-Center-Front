@@ -132,7 +132,7 @@ function Home() {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
     const decodedToken = jwtDecode(userToken);
-    console.log("main useEffect", decodedToken);
+    console.log("main useEffect decoded token:", decodedToken);
     playerId = decodedToken.playedId;
 
     socket.emit("joinRoom", { gameId });
@@ -168,7 +168,7 @@ function Home() {
           setGameTurns(fetchedGameTurns);
         }
       } else {
-        console.log(data, "newGameChallenge Socket useEffect RUNNING");
+        console.log( "newGameChallenge Socket useEffect RUNNING, playerChallenged:", data);
         playerChallenged = data
       }
 
@@ -177,6 +177,7 @@ function Home() {
         console.log(playerChallenged, "newGameChallenge set TRUE, useEffect2");
         setNewGameChallenge(true);
       } else {
+        console.log(playerChallenged, "newGameChallenge set false");
         setNewGameChallenge(false)
       }
     });
@@ -226,25 +227,27 @@ function Home() {
     const userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken)
-    console.log("main useEffect", decodedToken);
+    console.log("handleActivePlayer Fn decoded token:", decodedToken);
     playerId = decodedToken.playedId;
+    console.log('playerId:', playerId)
+
+    if (hasDraw || savedWinner || isLoading) {
+      return;
+    }
 
     if (currentPlayer !== playerId) {
       alert("It's not your turn !");
       console.log("Auth 1 running");
       return;
-    } else if (playerChallenged) {
-      console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
-      if (playerChallenged !== playerId) {
-        alert("It's not your turn !");
-        console.log("Auth 2 running");
-        return;
-      }
+    // } else if (playerChallenged) {
+    //   console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
+    //   if (playerChallenged !== playerId) {
+    //     alert("It's not your turn !");
+    //     console.log("Auth 2 running");
+    //     return;
+    //   }
     }
-    if (hasDraw || savedWinner || isLoading) {
-      return;
-    }
-
+   
     setGameTurns((prevTurns) => {
       let currentPlayer = deriveActivePlayer(prevTurns);
       if (gameTurns.length % 2 === 0) {
