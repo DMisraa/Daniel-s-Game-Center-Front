@@ -299,6 +299,7 @@ function Home() {
     setSavedWinner(null);
     setCurrentPlayer("X");
     setHasDraw(false);
+    setNewGameChallenge(false);
   }
 
   return (
