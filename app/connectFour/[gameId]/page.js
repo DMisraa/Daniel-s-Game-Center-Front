@@ -70,7 +70,7 @@ function Home() {
     socket.emit("joinRoom", { gameId });
     socket.emit("connectFour_Initial_GET", { gameId });
 
-    socket.io("connectFour_Initial", (data) => {
+    socket.on("connectFour_Initial", (data) => {
       if (typeof data === "object") {
         console.log("socket GET data:", data);
         playerChallenged = data.playerChallenged;
