@@ -86,40 +86,6 @@ function deriveWinner(players, gameBoard) {
   return winner, winnerSymbol;
 }
 
-function webSocketUpdate() {
-  socket.on("initialPageLoad", (data) => {
-    console.log("socket initial req RUNNING");
-    console.log('Derived Game Board:', data.board);
-
-    emailAdress = data.emailAdress;
-    gameLinksWithTokens = data.gameLinksWithTokens;
-    allTimeScore = data.allTimeWinners;
-    setPlayers(data.playerNames);
-    playerChallenged = data.playerChallenged;
-    setCurrentPlayer(data.currentPlayer);
-    setHasDraw(data.hasDraw);
-    setSavedWinner(data.winner);
-    const derivedGameBoard = data.board;
-
-    if (data.board) {
-      const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-      row
-        .map((playerSymbol, colIndex) =>
-          playerSymbol
-            ? {
-                square: { row: rowIndex, col: colIndex },
-                player: playerSymbol,
-              }
-            : null
-        )
-        .filter(Boolean)
-    );
-    setGameTurns(fetchedGameTurns);
-    }
-    
-  });
-}
-
 function Home() {
   const [players, setPlayers] = useState(PLAYERS);
   const [gameTurns, setGameTurns] = useState([]);
@@ -166,54 +132,56 @@ function Home() {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
     const decodedToken = jwtDecode(userToken);
-    console.log('main useEffect' ,decodedToken)
+    console.log("main useEffect", decodedToken);
     playerId = decodedToken.playedId;
 
     socket.emit("joinRoom", { gameId });
     socket.emit("initial_GET", { gameId });
 
     socket.on("initialPageLoad", (data) => {
-      console.log("socket initial req RUNNING, dara:", data);
+      
+      if (typeof data === 'object') {
+        console.log("socket initial req RUNNING, dara:", data);
+        emailAdress = data.emailAdress;
+        gameLinksWithTokens = data.gameLinksWithTokens;
+        allTimeScore = data.allTimeWinners;
+        setPlayers(data.playerNames);
+        playerChallenged = data.playerChallenged;
+        setCurrentPlayer(data.currentPlayer);
+        setHasDraw(data.hasDraw);
+        setSavedWinner(data.winner);
+        const derivedGameBoard = data.board;
 
-      emailAdress = data.emailAdress;
-      gameLinksWithTokens = data.gameLinksWithTokens;
-      allTimeScore = data.allTimeWinners;
-      setPlayers(data.playerNames);
-      playerChallenged = data.playerChallenged;
-      setCurrentPlayer(data.currentPlayer);
-      setHasDraw(data.hasDraw);
-      setSavedWinner(data.winner);
-      const derivedGameBoard = data.board;
-
-      if (data.board) {
-        const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-        row
-          .map((playerSymbol, colIndex) =>
-            playerSymbol
-              ? {
-                  square: { row: rowIndex, col: colIndex },
-                  player: playerSymbol,
-                }
-              : null
-          )
-          .filter(Boolean)
-      );
-      setGameTurns(fetchedGameTurns);
+        if (data.board) {
+          const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
+            row
+              .map((playerSymbol, colIndex) =>
+                playerSymbol
+                  ? {
+                      square: { row: rowIndex, col: colIndex },
+                      player: playerSymbol,
+                    }
+                  : null
+              )
+              .filter(Boolean)
+          );
+          setGameTurns(fetchedGameTurns);
+        }
+        if (playerChallenged) {
+          console.log(playerChallenged, "newGameChallenge set TRUE, useEffect1");
+          setNewGameChallenge(true);
+        }
+      } else {
+        console.log(data, "newGameChallenge Socket useEffect RUNNING");
+        playerChallenged = data
       }
-      console.log(playerChallenged, "initial Socket useEffect");
+
+      
       if (playerChallenged) {
+        console.log(playerChallenged, "newGameChallenge set TRUE, useEffect2");
         setNewGameChallenge(true);
       }
-    })
-
-    socket.on('newGameChallenge', (data) => {
-      console.log('newGameChallenge Socket RUNNING, playerChallenged:', data)
-      playerChallenged = data.playerChallenged;
-      console.log(playerChallenged, "newGameChallenge Socket useEffect");
-      if (playerChallenged) {
-        setNewGameChallenge(true);
-      }
-    })
+    });
 
     //   async function getData() {
     //   const data = await fetchData(gameId);
@@ -253,14 +221,13 @@ function Home() {
     //    getData();
     // }
 
-   
     setIsLoading(false);
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
     const userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
-    
+
     if (currentPlayer !== playerId) {
       alert("It's not your turn !");
       console.log("Auth 1 running");
@@ -300,7 +267,7 @@ function Home() {
         gameLinksWithTokens,
         "data sent to sendMail Fn"
       );
-      
+
       if (gameTurns.length === 0) {
         sendMail(players, emailAdress, gameLinksWithTokens);
       }
@@ -321,12 +288,12 @@ function Home() {
     // let gameType = "ticTacToe";
     playerChallenged = playerId;
     setNewGameChallenge(true);
-    socket.emit('startOver_Req', {playerId, gameId})
+    socket.emit("startOver_Req", { playerId, gameId });
     // rematchReq(playerId, gameId, gameType);
   }
 
   async function handleNewGame() {
-    socket.emit('startOver', {gameId, players})
+    socket.emit("startOver", { gameId, players });
     // await OnlineMatchStartOver(gameId, players);
     setGameTurns([]);
     setSavedWinner(null);
