@@ -203,6 +203,7 @@ function Home() {
         ...prevState,
         draw: allTimeGameScore.draw + 1,
       }));
+      setHasDraw(true);
     }
 
     const newBoard = board.map((row) => [...row]);
