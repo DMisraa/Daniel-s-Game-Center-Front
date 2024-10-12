@@ -71,10 +71,9 @@ function Home() {
     socket.emit("connectFour_Initial_GET", { gameId });
 
     socket.on("connectFour_Initial", (data) => {
+      console.log("socket GET data:", data);
       if (typeof data === "object") {
-        console.log("socket GET data:", data);
         playerChallenged = data.playerChallenged;
-        console.log(data.playerChallenged, "data.playerChallenged");
         setWinner(data.winner);
         setRedPlayerName(data.playerNames.redPlayer);
         setYellowPlayerName(data.playerNames.yellowPlayer);
@@ -85,14 +84,14 @@ function Home() {
         if (data.board) {
           setBoard(data.board);
           turnsLength = data.gameTurns;
-        } else {
-          console.log(
-            "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
-            data
-          );
-          playerChallenged = data;
-        }
-      }
+        } 
+      }  else {
+        console.log(
+        "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
+        data
+      );
+      playerChallenged = data;
+      } 
 
       if (playerChallenged) {
         setNewGameChallenge(true);
@@ -169,7 +168,7 @@ function Home() {
 
   async function handleNewGame() {
     // await OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName);
-    socket.emit('ConnectFour_startOver', { gameId, redPlayerName, yellowPlayerName })
+    socket.emit('ConnectFour_startOver', { gameId, redPlayerName, yellowPlayerName, allTimeWinners: allTimeGameScore })
     setBoard(initialBoard);
     setWinner(null);
     turnsLength = 0;
@@ -225,7 +224,7 @@ function Home() {
     }
     console.log("updateOnlineBoard running handleMove Fn");
     // await updateOnlineBoard(column, gameId);
-    socket.emit("ConnectFourMove", { column, gameId, token });
+    socket.emit("ConnectFourMove", { column, gameId, token: userToken });
     setIsLoading(false);
   }
 
