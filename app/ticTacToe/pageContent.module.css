@@ -1,81 +1,127 @@
-#game-container {
-  max-width: 45rem;
-  margin: 3rem auto;
-  padding: 2rem;
-  border-radius: 6px;
-  background: linear-gradient(#383624, #282617);
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
-  position: relative;
-  width: 100%;
-}
-
-#game-container ol {
-  list-style: none;
-}
-
-#players {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0;
+.container {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 2rem;
+  flex-direction: column; 
+  padding: 72px 40px 49px 40px;
+  gap: 39px;
+  border-radius: 18px;
+  background: #F8F8F8;
+  position: relative;
+  max-width: 1100px;
+  width: 100%; 
+  margin: 0 auto;
 }
 
-#players li {
+
+
+.board_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #FFCB45;
+  padding: 15px;
+  border-radius: 30px;
+  border: 2px solid #000000
+}
+
+.game_outcome {
+  display: flex;
+  justify-content: center;
+    width: 900px;
+    height: 500px;
+    padding: 16px;
+    border-radius: 18px;
+    background: #FFBD12;
+}
+
+.game_text {
   display: flex;
   align-items: center;
-  width: 50%;
-  border: 2px solid transparent;
-}
-
-#players.highlight-player li.active {
-  border-color: #f6e35a;
-  animation: pulse 2s infinite ease-in-out;
-}
-
-#players.highlight-player li.active .player-name,
-#players.highlight-player li.active .player-symbol {
-  color: #f6e35a;
-}
-
-#players button {
-  width: 3rem;
-  border: none;
-  background: none;
-  color: #c3ba78;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: color 0.2s;
-  padding: 0.5rem 0.25rem 0.25rem 0.25rem;
+  font-size: 7rem;
+  font-weight: 600;
   text-align: center;
+  margin-bottom: 100px;
+  height: 30vh;
+  color: #848484;
 }
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding: 16px;
+  border-radius: 18px;
+  background: #2b2b2b;
+}
+
+#players {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 83%;
+}
+
+.player_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+}
+
+.playerOne {
+  background: #B487FD;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 130px;
+  border-radius: 18px;
+}
+
+.playerTwo {
+  background: #87FDCC;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 130px;
+  border-radius: 18px;
+}
+
 
 #players button:hover {
   color: #f8ca31;
 }
 
+.buttons_container {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  align-items: center; /* Add some space between buttons and text */
+  position: absolute;
+}
+
 .start-game-button {
-  padding: 15px 30px;
-  background-color: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 18px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 12px 20px;
+  margin: 10px 0;
+  background-color: #ffbd12;
+  border: 3px solid #1a1a1a;
+  border-radius: 15px;
+  font-weight: 600;
+}
+
+.start-game-button:hover {
+  background-color: #45a039;
 }
 
 .challenge-friend {
-  padding: 15px 30px;
-  background-color: #4CAF40;
-  color: white;
-  border: none;
-  border-radius: 18px;
-  font-size: 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+  padding: 12px 20px;
+  margin: 10px 0;
+  background-color: #87fdcc;
+  border: 2.91px solid #1a1a1a;
+  border-radius: 15px;
+  font-weight: 600;
 }
 
 .challenge-friend:hover {

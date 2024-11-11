@@ -1,46 +1,70 @@
-'use client'
+"use client";
 
-import { updatePlayerName } from '../../app/ticTacToe_server'
+import { updatePlayerName } from "../../app/ticTacToe_server";
 import { useState } from "react";
-import classes from './player.module.css'
+import classes from "./player.module.css";
 
-export default function Player({ name, symbol, isActive, newPlayerName }) {
-const [playerName, setPlayerName] = useState(name)
-const [isEditing, setIsEditing] = useState(false);
-console.log(playerName, 'player name Player component')
+export default function Player({
+  name,
+  symbol,
+  isActive,
+  newPlayerName,
+  player,
+  score
+}) {
+  const [playerName, setPlayerName] = useState(name);
+  const [isEditing, setIsEditing] = useState(false);
+  console.log(playerName, "player name Player component");
 
+  function handleEditClick() {
+    setIsEditing((editing) => !editing);
 
-function handleEditClick() {
-  setIsEditing((editing) => !editing)
-
-  if (isEditing) {
-    newPlayerName(symbol, playerName)
-    updatePlayerName(playerName, symbol)
+    if (isEditing) {
+      newPlayerName(symbol, playerName);
+      updatePlayerName(playerName, symbol);
+    }
   }
-}
 
-function handleChange(event) {
-  name = event.target.value
-  setPlayerName(event.target.value)
-}
+  function handleChange(event) {
+    name = event.target.value;
+    setPlayerName(event.target.value);
+  }
 
-function handleKeyPress(event) {
-  if (event.key === "Enter") {
-    handleEditClick();
-  } 
-}
-
-
+  function handleKeyPress(event) {
+    if (event.key === "Enter") {
+      handleEditClick();
+    }
+  }
 
   return (
-    <li className={isActive ? `${classes.active}` : undefined } >
+    <div className={`${isActive ? classes.active : ""} ${classes.container}`}>
       <span className={classes.player}>
-        {!isEditing ? <span className={classes['player-name']}>{name}</span> : 
-        <input type='text' required placeholder={name} onChange={handleChange} onKeyPress={handleKeyPress} autoFocus ></input>}
-        
-         <span className={classes["player-symbol"]}>{symbol}</span>
+        <h4> {player} </h4>
+        {!isEditing ? (
+          <h2 className={classes["player-name"]}>{name}</h2>
+        ) : (
+          <input
+            type="text"
+            required
+            placeholder={name}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+            autoFocus
+            maxLength={9}
+          />
+        )}
+        {newPlayerName && (
+          <button onClick={handleEditClick}>
+            {isEditing ? "Save" : "Edit"}
+          </button>
+        )}
       </span>
-       {newPlayerName && <button onClick={handleEditClick} >{isEditing ? 'Save' : 'Edit'}</button>} 
-    </li>
+      <div className={classes.score}>
+        <h4> Score </h4>
+        <h2> {score} </h2>
+      </div>
+    </div>
   );
 }
+
+// <span className={classes["player-symbol"]}>{symbol}</span> //

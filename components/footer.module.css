@@ -1,0 +1,119 @@
+.display_container {
+  display: flex;
+  width: 80%; /* Adjust width to take only part of the outer div */
+  margin: 50px auto 0; /* Centers horizontally and adds 50px top margin */
+  height: 230px;
+  flex-direction: row;
+}
+
+.logo {
+  width: 50%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+}
+
+.content p {
+  line-height: 22px;
+}
+
+.user_contact_input {
+    width: 65%;
+}
+
+.user_contact_input input {
+width: 77%;
+height: 15px;
+padding: 12px 0px;
+border-radius: 15px;
+border: 1.5px solid #1A1A1A;
+opacity: 1;
+color: #1A1A1A;
+margin-bottom: 10px;
+padding-left: 40px;
+}
+
+.user_contact_input input::placeholder {
+  size: 14px;
+  line-height: 22px;
+  color: #323738;
+}
+
+.name_icon {
+  position: absolute;
+
+  top: 19%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.email_icon {
+  position: absolute;
+  top: 70%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.contact_wrapper {
+  display: flex;
+  flex-direction: column; /* Stack contact and button_row vertically */
+}
+
+.contact {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.user_message {
+  position: relative;
+  width: 50%;
+}
+
+.user_message textarea {
+  width: 150%;
+  height: 71px;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: 1.5px solid #1A1A1A;
+  color: #1A1A1A;
+  }
+
+  .user_message textarea::placeholder {
+    size: 16px;
+    color: #323738;
+  }
+
+  .submit {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .submit p {
+    width: 100%;
+  }
+
+  .submit button {
+    display: flex;
+    transform: translateX(105%);
+    width: 30%;
+    height: 45px;
+    background: #ffbd12;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid black;
+    font-size: 18px;
+    margin-top: 5px;
+  }
+
+  .rights {
+    display: flex;
+   
+    
+    margin-top: 30px;
+  }
+
+  

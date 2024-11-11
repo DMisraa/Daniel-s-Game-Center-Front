@@ -4,9 +4,7 @@ import "./header.css";
 function Header() {
   return (
     <div className="header-container">
-    <Image className="logo" src='/game_logo.png' alt="Game Logo" width={150} height={130} priority></Image>
-   
-      <h1 className="title"> 4 in a row board game !</h1>
+    <Image src='/4InARaw_page_logo.png' alt="4 In A Raw page_logo" width={540} height={180} />
     </div>
   );
 }

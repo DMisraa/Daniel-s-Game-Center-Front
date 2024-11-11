@@ -1,0 +1,67 @@
+.declaration_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin-top: 10px;
+  width: 600px;
+  height: 350px;
+  gap: 40px;
+}
+
+.winner_name {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 350px;
+  height: 200px;
+  margin-top: 30px
+}
+
+.winner_name h4 {
+  font-size: 21px;
+  font-weight: 600;
+  line-height: 42px;
+  margin: 0
+}
+
+.winner_name h3 {
+  font-size: 32px;
+  font-weight: 588;
+  line-height: 42px;
+  margin: 0
+}
+
+.winner_name h2 {
+  font-size: 85px;
+  font-weight: 800;
+  line-height: 100px;
+  margin: 0
+}
+
+.buttons_container {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Add some space between buttons and text */
+    position: absolute;
+    margin-top: 40%;
+  }
+
+  .start-game-button {
+    padding: 12px 20px;
+    margin: 10px 0;
+    background-color: #FFFFFF;
+    border: 3px solid #1a1a1a;
+    border-radius: 15px;
+    font-weight: 600;
+  }
+
+  .challenge-friend {
+    padding: 12px 20px;
+    margin: 10px 0;
+    background-color: #87fdcc;
+    border: 2.91px solid #1a1a1a;
+    border-radius: 15px;
+    font-weight: 600;
+    margin: 0;
+  }

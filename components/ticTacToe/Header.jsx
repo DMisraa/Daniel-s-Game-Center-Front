@@ -1,12 +1,11 @@
-import classes from './header.module.css'
 import Image from "next/image";
+import classes from './header.module.css'
 
 function Header() {
   return (
-    <header id='header' >
-      <Image src={"/tiTacToe-game-logo.png"} alt="game-logo" width={150} height={150} priority />
-      <h1 id='headline' > Tic Tac Toe </h1>
-    </header>
+    <div className={classes.header_container}>
+      <Image src="/TicTacToe_page_logo.png" alt="Tic Tac Toe game-logo" width={570} height={160} />
+    </div>
   );
 }
 

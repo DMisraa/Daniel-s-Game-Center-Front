@@ -9,6 +9,8 @@ import Modal from "@/components/Modal";
 import Player from "../../components/connect4/Player";
 import winningCombinations from "../../winningCombinations/WINNING_COMBINATIONS";
 import AllTimeScore from "@/components/AllTimeScore";
+import Image from "next/image";
+import Winner from "@/components/Winner";
 
 export const initialBoard = Array.from({ length: 6 }, () =>
   Array(7).fill(null)
@@ -16,7 +18,7 @@ export const initialBoard = Array.from({ length: 6 }, () =>
 
 const PLAYERS = {
   red: "Red Player",
-  yellow: "Yellow Player",
+  yellow: "Blue Player",
 };
 
 let turnsLength = 0;
@@ -24,8 +26,8 @@ let turnsLength = 0;
 let allTimeScoreBoard = {
   yellowPlayer: 0,
   redPlayer: 0,
-  draw: 0
-}
+  draw: 0,
+};
 
 export default function PageContent() {
   const [startGame, setStartGame] = useState(false);
@@ -40,8 +42,8 @@ export default function PageContent() {
   const [hasDraw, setHasDraw] = useState(false);
   const [allTimeGameScore, setAllTimeGameScore] = useState(allTimeScoreBoard);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading, 'isLoading state')
+  // const [isLoading, setIsLoading] = useState(true);
+  // console.log(isLoading, "isLoading state");
 
   const player = useRef({
     redPlayer: redPlayerName,
@@ -53,8 +55,8 @@ export default function PageContent() {
       try {
         const data = await fetchData();
         if (data) {
-          console.log(data.turnLength, 'turnLength data recieved')
-          turnsLength = data.turnLength
+          console.log(data.turnLength, "turnLength data recieved");
+          turnsLength = data.turnLength;
           setBoard(data.board);
           setCurrentPlayer(data.currentPlayer);
           setWinner(data.winner);
@@ -65,7 +67,7 @@ export default function PageContent() {
         } else {
           return;
         }
-        console.log(data.turnLength, 'turnLength use Effect hook')
+        console.log(data.turnLength, "turnLength use Effect hook");
 
         if (data.board.some((row) => row.some((cell) => cell !== null))) {
           setStartGame(true);
@@ -78,8 +80,6 @@ export default function PageContent() {
         console.log("Component mounted");
       } catch (error) {
         console.log("error fetching the gameboard", error);
-      } finally {
-        setIsLoading(false);
       }
     }
 
@@ -97,7 +97,6 @@ export default function PageContent() {
   function closeModal() {
     setModalOpen(false);
   }
-  
 
   function handleRedChange(event) {
     const value = event.target.value;
@@ -153,12 +152,10 @@ export default function PageContent() {
   }
 
   async function handleMove(column) {
-    console.log(hasDraw)
-    if (winner || hasDraw || isLoading) return;
+    if (winner || hasDraw) return;
     if (board[0][column]) return;
-
     turnsLength++;
-    console.log(turnsLength)
+    console.log("turnLength:", turnsLength);
 
     if (turnsLength === 42 && !winner) {
       setAllTimeGameScore((prevState) => ({
@@ -167,6 +164,7 @@ export default function PageContent() {
       }));
       setHasDraw(true);
     }
+    console.log("handleMove 4 ");
 
     const newBoard = board.map((row) => [...row]);
     for (let i = board.length - 1; i >= 0; i--) {
@@ -187,7 +185,6 @@ export default function PageContent() {
     }
 
     await updateBoard(column);
-    setIsLoading(false)
   }
 
   function checkForWinner(board) {
@@ -223,54 +220,146 @@ export default function PageContent() {
 
   return (
     <>
-      <ol id={classes.players} className={classes["highlight-player"]}>
-        <Player
-          name={redPlayerName}
-          isEditing={isRedEditing}
-          handlePlayerName={handleRedChange}
-          handleEdit={handleRedEditClick}
-          isRedActive={startGame && currentPlayer === "red"}
-          ref={player}
-        />
-        <Player
-          name={yellowPlayerName}
-          isEditing={isYellowEditing}
-          handlePlayerName={handleYellowChange}
-          handleEdit={handleYellowEditClick}
-          isYellowActive={startGame && currentPlayer === "yellow"}
-          ref={player}
-        />
-      </ol>
-      <div className={classes.container}>
-        {!startGame && ( 
-          <>
-          <button
-            onClick={handleStartGame}
-            className={classes["start-game-button"]}
-          >
-            Start Game !
-          </button>
-          <button className={classes['challenge-friend']} onClick={openModal} > Challenge A Friend ! </button>
-          <Modal isOpen={isModalOpen} onClose={closeModal} gameType={'connectFour'} />
-          </>
+    
+    {startGame && (
+      <div className={classes.gameboard_container}>
+      <>
+        {(winner || hasDraw) ? (
+          <div className={classes.game_outcome}>
+            <Winner 
+              name={winner} 
+              player={currentPlayer === "yellow" ? 'Player 1' : 'Player 2'} 
+              handleStartGame={handleNewGame} 
+            />
+          </div>
+        ) : (
+          <GameBoard
+            winner={winner}
+            handleNewGameReq={handleNewGame}
+            handleMove={handleMove}
+            hasDraw={hasDraw}
+            board={board}
+          />
         )}
-      </div>
-      {startGame && (
-        <GameBoard
-          winner={winner}
-          handleNewGameReq={handleNewGame}
-          handleMove={handleMove}
-          hasDraw={hasDraw}
-          board={board}
-        />
+  
+        <div id={classes.players} className={classes["highlight-player"]}>
+          <div className={classes.player_container}>
+            <Image
+              src="/red_token.png"
+              alt={"red player token"}
+              width={60}
+              height={60}
+            />
+            <div className={classes.playerOne}>
+              <Player
+                player={"Player 1"}
+                name={redPlayerName}
+                isEditing={isRedEditing}
+                handlePlayerName={handleRedChange}
+                handleEdit={handleRedEditClick}
+                isRedActive={currentPlayer === "red"}
+                ref={player}
+                score={allTimeGameScore.redPlayer}
+              />
+            </div>
+          </div>
+          
+          <div className={classes.player_container}>
+            <Image
+              src="/blue_token.png"
+              alt={"blue player token"}
+              width={60}
+              height={60}
+            />
+            <div className={classes.playerTwo}>
+              <Player
+                player={"Player 2"}
+                name={yellowPlayerName}
+                isEditing={isYellowEditing}
+                handlePlayerName={handleYellowChange}
+                handleEdit={handleYellowEditClick}
+                isYellowActive={currentPlayer === "yellow"}
+                ref={player}
+                score={allTimeGameScore.yellowPlayer}
+              />
+            </div>
+          </div>
+        </div>
+      </>
+       </div>
+    )}
+ 
+  
+      
+
+      {!startGame && (
+        <>
+          <div className={classes.container}>
+            <div className={classes.game_container}>
+              <h2 className={classes.game_text}> Game area </h2>
+              <div className={classes.buttons_container}>
+                <button
+                  className={classes["start-game-button"]}
+                  onClick={handleStartGame}
+                >
+                  Start to play !
+                </button>
+                <button className={classes["challenge-friend"]}>
+                  Challenge A Friend !
+                </button>
+              </div>
+            </div>
+            <div id={classes.players} className={classes["highlight-player"]}>
+              <div className={classes.playerOne}>
+                <Player
+                  player={"Player 1"}
+                  name={redPlayerName}
+                  isEditing={isRedEditing}
+                  handlePlayerName={handleRedChange}
+                  handleEdit={handleRedEditClick}
+                  isRedActive={startGame && currentPlayer === "red"}
+                  ref={player}
+                  score={allTimeGameScore.redPlayer}
+                />
+              </div>
+              <div className={classes.playerTwo}>
+                <Player
+                  player={"Player 2"}
+                  name={yellowPlayerName}
+                  isEditing={isYellowEditing}
+                  handlePlayerName={handleYellowChange}
+                  handleEdit={handleYellowEditClick}
+                  isYellowActive={startGame && currentPlayer === "yellow"}
+                  ref={player}
+                  score={allTimeGameScore.yellowPlayer}
+                />
+              </div>
+            </div>
+          </div>
+        </>
       )}
-      <AllTimeScore
-        allTimeGameScoreDraw={allTimeGameScore.draw}
-        allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
-        allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-        playerOne={'Red Player'} // add name fram invetation form
-        playerTwo={'Yellow Player'}// add name fram invetation form
-      />
     </>
   );
 }
+
+// <AllTimeScore
+// allTimeGameScoreDraw={allTimeGameScore.draw}
+// allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
+// allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
+// playerOne={"Red Player"} // add name fram invetation form
+// playerTwo={"Yellow Player"} // add name fram invetation form
+// />
+
+// <Modal
+// isOpen={isModalOpen}
+// onClose={closeModal}
+// gameType={"connectFour"}
+// />
+
+//               Start Game !
+
+// onClick function for start game
+//
+
+// onclick function for creating an online game
+// onClick={openModal}

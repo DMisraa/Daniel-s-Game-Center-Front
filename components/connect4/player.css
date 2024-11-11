@@ -1,13 +1,67 @@
-.player {
+.container {
   display: flex;
-  align-items: center;
-  margin: 10px;
+  flex-direction: row;
 }
 
+.player {
+  display: flex;
+  margin: 10px;
+  flex-direction: column;
+  width: 100%;
+  }
+
 .player-name {
-  margin-right: 10px;
+  
   font-weight: bold;
 }
+
+.player h4, .player h2, .player button {
+  margin: 0; /* Remove the default margin */
+}
+
+.player h4 {
+  margin-top: 8px;
+  margin-bottom: 10px; /* Adjust margin between h4 and the next element */
+}
+
+.player h2 {
+  margin-bottom: 10px; 
+  font-size: xx-large; /* Adjust margin between h2 and the button */
+}
+
+.player button {
+width: 50px;
+height:  20px;
+margin-top: 85px;
+background-color: transparent;
+border-radius: 15px;
+position: absolute;
+}
+
+
+.score {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  
+}
+
+.score h4 {
+font-size: 19px;
+font-weight: 600;
+line-height: 2px;
+margin-left: 20px;
+
+}
+
+.score h2 {
+font-size: 60px;
+font-weight: 600;
+margin: 15px;
+margin-right: 20px;
+line-height: 10px;
+}
+
 
 /* button {
   padding: 5px 10px;
@@ -39,7 +93,7 @@ button:focus {
   transition: background-color 0.3s ease, border-left 0.3s ease;
 }
 
-.active .player-name {
+.active  {
   color: #4CAF50;
 }
 
