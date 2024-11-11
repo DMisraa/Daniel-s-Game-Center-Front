@@ -10,8 +10,10 @@ This front-end, built in Next.js, is the interactive layer of our game center, c
 
 **🚀 Features**
 
-Real-Time Action: Moves update instantly with WebSockets – no page refresh required.
-Invite Friends: Send game invitations via WhatsApp links for quick multiplayer access.
-Token-Based Security: Ensures each player’s moves are authenticated.
-Modern, Responsive UI: Built with Figma-inspired design, accessible on desktop and mobile.
-Easy Navigation: Choose your game and start playing in seconds.
+<ol>
+<li> Real-Time Action: Moves update instantly with WebSockets – no page refresh required. </li>
+<li> Invite Friends: Send game invitations via WhatsApp links for quick multiplayer access. </li>
+<li> Token-Based Security: Ensures each player’s moves are authenticated. </li>
+<li> Modern, Responsive UI: Built with Figma-inspired design, accessible on desktop and mobile. </li>
+<li> Easy Navigation: Choose your game and start playing in seconds. </li>
+</ol>
