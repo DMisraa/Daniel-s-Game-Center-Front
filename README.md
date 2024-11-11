@@ -17,3 +17,10 @@ This front-end, built in Next.js, is the interactive layer of our game center, c
 <li> Modern, Responsive UI: Built with Figma-inspired design, accessible on desktop and mobile. </li>
 <li> Easy Navigation: Choose your game and start playing in seconds. </li>
 </ul>
+
+<h2> 🏗️ Usage </h2>
+<ul>
+<li> Choose a Game: Select from Tic-Tac-Toe or Connect Four. </li>
+<li> Invite Friends: Share a link on WhatsApp for multiplayer. </li>
+<li> Play in Real Time: Moves update instantly, thanks to WebSocket integration. </li>
+</ul>
