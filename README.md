@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+🎮 Game Center Front-End
+Welcome to the Game Center Front-End! This interactive app lets you dive into classic games like Tic-Tac-Toe and Connect Four with real-time multiplayer, sleek design, and easy-to-use game invites. Ready to play? Check it out live here! 🚀
 
-## Getting Started
+📋 Table of Contents
+🎮 About the Project
+🚀 Features
+📦 Installation
+🏗️ Usage
+🌐 Environment Variables
+👾 Tech Stack
+📝 License
+🎮 About the Project
+This front-end, built in Next.js, is the interactive layer of our game center, communicating with a Node.js and MongoDB back-end to deliver an immersive gaming experience. Each move is powered by WebSockets for real-time action, while the UI is designed to be both engaging and responsive, thanks to custom styles inspired by a Figma design.
 
-First, run the development server:
+Live Demo: Play Now! 🌐
 
-```bash
+🚀 Features
+Real-Time Action: Moves update instantly with WebSockets – no page refresh required.
+Invite Friends: Send game invitations via WhatsApp links for quick multiplayer access.
+Token-Based Security: Ensures each player’s moves are authenticated.
+Modern, Responsive UI: Built with Figma-inspired design, accessible on desktop and mobile.
+Easy Navigation: Choose your game and start playing in seconds.
+📦 Installation
+Get started locally with these steps:
+
+Clone the Repository:
+
+bash
+Copy code
+git clone https://github.com/your-username/game-center-front.git
+cd game-center-front
+Install Dependencies:
+
+bash
+Copy code
+npm install
+Start the Development Server:
+
+bash
+Copy code
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Visit the App: Open http://localhost:3000 in your browser.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🏗️ Usage
+Choose a Game: Select from Tic-Tac-Toe or Connect Four.
+Invite Friends: Share a link on WhatsApp for multiplayer.
+Play in Real Time: Moves update instantly, thanks to WebSocket integration.
+🌐 Environment Variables
+To set up the environment variables, create a .env.local file in the root directory and add the following:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+plaintext
+Copy code
+NEXT_PUBLIC_BASE_URL=your-backend-url
+NEXT_PUBLIC_WS_URL=your-websocket-url
+Tip: Make sure these URLs match your deployed backend and WebSocket servers.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+👾 Tech Stack
+Framework: Next.js, React
+Styling: CSS with Figma-inspired design
+Real-Time: WebSockets
+Backend Integration: Node.js and MongoDB (find back-end repo here)
+📝 License
+This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Enjoy the game, and thank you for stopping by! 🎉 Jump in and play now! 🚀
