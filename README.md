@@ -31,5 +31,5 @@ This front-end, built in Next.js, is the interactive layer of our game center, c
 <li> Framework: Next.js, React </li>
 <li> Styling: CSS with Figma-inspired design </li>
 <li> Real-Time: WebSockets </li>
-<li> Backend Integration: Node.js and MongoDB (find back-end repo here) </li>
+<li> Backend Integration: Node.js and MongoDB (find back-end repo <a href='https://github.com/DMisraa/Daniel-s-Game-Center-Server'> here </a>) </li>
 </ul>
