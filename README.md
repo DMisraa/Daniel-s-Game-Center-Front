@@ -19,8 +19,17 @@ This front-end, built in Next.js, is the interactive layer of our game center, c
 </ul>
 
 <h2> 🏗️ Usage </h2>
+
 <ul>
 <li> Choose a Game: Select from Tic-Tac-Toe or Connect Four. </li>
 <li> Invite Friends: Share a link on WhatsApp for multiplayer. </li>
 <li> Play in Real Time: Moves update instantly, thanks to WebSocket integration. </li>
+</ul>
+
+<h2> 👾 Tech Stack </h2>
+<ul>
+<li> Framework: Next.js, React </li>
+<li> Styling: CSS with Figma-inspired design </li>
+<li> Real-Time: WebSockets </li>
+<li> Backend Integration: Node.js and MongoDB (find back-end repo here) </li>
 </ul>
