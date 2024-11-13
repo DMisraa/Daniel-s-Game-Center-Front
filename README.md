@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<h2> 🎮 Game Center Front-End </h2>
 
-## Getting Started
+Welcome to the Game Center Front-End! This interactive app lets you dive into classic games like Tic-Tac-Toe and Connect Four with real-time multiplayer, sleek design, and easy-to-use game invites. Ready to play? <a href='https://daniel-s-game-center-front-aom5r360g-daniels-projects-d3ae3bde.vercel.app/ticTacToe'> Check it out live here! </a> 🚀
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+<h2> 🎮 About the Project </h2>
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+This front-end, built in Next.js, is the interactive layer of our game center, communicating with a Node.js and MongoDB back-end to deliver an immersive gaming experience. Each move is powered by WebSockets for real-time action, while the UI is designed to be both engaging and responsive, thanks to custom styles inspired by a Figma design.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+<h2> 🚀 Features </h2>
 
-## Learn More
+<ul>
+<li> Real-Time Action: Moves update instantly with WebSockets – no page refresh required. </li>
+<li> Invite Friends: Send game invitations via WhatsApp links for quick multiplayer access. </li>
+<li> Token-Based Security: Ensures each player’s moves are authenticated. </li>
+<li> Modern, Responsive UI: Built with Figma-inspired design, accessible on desktop and mobile. </li>
+<li> Easy Navigation: Choose your game and start playing in seconds. </li>
+</ul>
 
-To learn more about Next.js, take a look at the following resources:
+<h2> 🏗️ Usage </h2>
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+<ul>
+<li> Choose a Game: Select from Tic-Tac-Toe or Connect Four. </li>
+<li> Invite Friends: Share a link on WhatsApp for multiplayer. </li>
+<li> Play in Real Time: Moves update instantly, thanks to WebSocket integration. </li>
+</ul>
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+<h2> 👾 Tech Stack </h2>
+<ul>
+<li> Framework: Next.js, React </li>
+<li> Styling: CSS with Figma-inspired design </li>
+<li> Real-Time: WebSockets </li>
+<li> Backend Integration: Node.js and MongoDB (find back-end repo <a href='https://github.com/DMisraa/Daniel-s-Game-Center-Server'> here</a>) </li>
+</ul>
