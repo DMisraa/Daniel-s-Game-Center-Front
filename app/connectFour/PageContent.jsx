@@ -220,77 +220,73 @@ export default function PageContent() {
 
   return (
     <>
-    
-    {startGame && (
-      <div className={classes.gameboard_container}>
-      <>
-        {(winner || hasDraw) ? (
-          <div className={classes.game_outcome}>
-            <Winner 
-              name={winner} 
-              player={currentPlayer === "yellow" ? 'Player 1' : 'Player 2'} 
-              handleStartGame={handleNewGame} 
-            />
-          </div>
-        ) : (
-          <GameBoard
-            winner={winner}
-            handleNewGameReq={handleNewGame}
-            handleMove={handleMove}
-            hasDraw={hasDraw}
-            board={board}
-          />
-        )}
-  
-        <div id={classes.players} className={classes["highlight-player"]}>
-          <div className={classes.player_container}>
-            <Image
-              src="/red_token.png"
-              alt={"red player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerOne}>
-              <Player
-                player={"Player 1"}
-                name={redPlayerName}
-                isEditing={isRedEditing}
-                handlePlayerName={handleRedChange}
-                handleEdit={handleRedEditClick}
-                isRedActive={currentPlayer === "red"}
-                ref={player}
-                score={allTimeGameScore.redPlayer}
+      {startGame && (
+        <div className={classes.gameboard_container}>
+          <>
+            {winner || hasDraw ? (
+              <div className={classes.game_outcome}>
+                <Winner
+                  name={winner}
+                  player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+                  handleStartGame={handleNewGame}
+                />
+              </div>
+            ) : (
+              <GameBoard
+                winner={winner}
+                handleNewGameReq={handleNewGame}
+                handleMove={handleMove}
+                hasDraw={hasDraw}
+                board={board}
               />
+            )}
+
+            <div id={classes.players} className={classes["highlight-player"]}>
+              <div className={classes.player_container}>
+                <Image
+                  src="/red_token.png"
+                  alt={"red player token"}
+                  width={60}
+                  height={60}
+                />
+                <div className={classes.playerOne}>
+                  <Player
+                    player={"Player 1"}
+                    name={redPlayerName}
+                    isEditing={isRedEditing}
+                    handlePlayerName={handleRedChange}
+                    handleEdit={handleRedEditClick}
+                    isRedActive={currentPlayer === "red"}
+                    ref={player}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </div>
+              </div>
+
+              <div className={classes.player_container}>
+                <Image
+                  src="/blue_token.png"
+                  alt={"blue player token"}
+                  width={60}
+                  height={60}
+                />
+                <div className={classes.playerTwo}>
+                  <Player
+                    player={"Player 2"}
+                    name={yellowPlayerName}
+                    isEditing={isYellowEditing}
+                    handlePlayerName={handleYellowChange}
+                    handleEdit={handleYellowEditClick}
+                    isYellowActive={currentPlayer === "yellow"}
+                    ref={player}
+                    score={allTimeGameScore.yellowPlayer}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          
-          <div className={classes.player_container}>
-            <Image
-              src="/blue_token.png"
-              alt={"blue player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerTwo}>
-              <Player
-                player={"Player 2"}
-                name={yellowPlayerName}
-                isEditing={isYellowEditing}
-                handlePlayerName={handleYellowChange}
-                handleEdit={handleYellowEditClick}
-                isYellowActive={currentPlayer === "yellow"}
-                ref={player}
-                score={allTimeGameScore.yellowPlayer}
-              />
-            </div>
-          </div>
+          </>
         </div>
-      </>
-       </div>
-    )}
- 
-  
-      
+      )}
 
       {!startGame && (
         <>
@@ -304,7 +300,10 @@ export default function PageContent() {
                 >
                   Start to play !
                 </button>
-                <button className={classes["challenge-friend"]}>
+                <button
+                  className={classes["challenge-friend"]}
+                  onClick={openModal}
+                >
                   Challenge A Friend !
                 </button>
               </div>
@@ -338,6 +337,11 @@ export default function PageContent() {
           </div>
         </>
       )}
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        gameType={"connectFour"}
+      />
     </>
   );
 }
@@ -350,16 +354,10 @@ export default function PageContent() {
 // playerTwo={"Yellow Player"} // add name fram invetation form
 // />
 
-// <Modal
-// isOpen={isModalOpen}
-// onClose={closeModal}
-// gameType={"connectFour"}
-// />
-
 //               Start Game !
 
 // onClick function for start game
 //
 
 // onclick function for creating an online game
-// onClick={openModal}
+//

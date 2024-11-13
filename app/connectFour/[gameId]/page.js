@@ -1,13 +1,14 @@
 "use client";
 
 import GameBoard from "@/components/connect4/GameBoard";
-import AllTimeScore from "@/components/AllTimeScore";
 import classes from "../pageContent.module.css";
 import Player from "@/components/connect4/Player";
+import Winner from "@/components/Winner";
 import { jwtDecode } from "jwt-decode";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { socket } from "../../socket";
+import Image from "next/image";
 
 import {
   fetchOnlineMatch,
@@ -16,6 +17,7 @@ import {
   OnlineMatchStartOver,
 } from "@/app/server";
 import winningCombinations from "@/winningCombinations/WINNING_COMBINATIONS";
+import Header from "@/components/connect4/Header";
 
 const initialBoard = Array.from({ length: 6 }, () => Array(7).fill(null));
 
@@ -84,14 +86,14 @@ function Home() {
         if (data.board) {
           setBoard(data.board);
           turnsLength = data.gameTurns;
-        } 
-      }  else {
+        }
+      } else {
         console.log(
-        "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
-        data
-      );
-      playerChallenged = data;
-      } 
+          "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
+          data
+        );
+        playerChallenged = data;
+      }
 
       if (playerChallenged) {
         setNewGameChallenge(true);
@@ -168,7 +170,12 @@ function Home() {
 
   async function handleNewGame() {
     // await OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName);
-    socket.emit('ConnectFour_startOver', { gameId, redPlayerName, yellowPlayerName, allTimeWinners: allTimeGameScore })
+    socket.emit("ConnectFour_startOver", {
+      gameId,
+      redPlayerName,
+      yellowPlayerName,
+      allTimeWinners: allTimeGameScore,
+    });
     setBoard(initialBoard);
     setWinner(null);
     turnsLength = 0;
@@ -230,37 +237,76 @@ function Home() {
   }
 
   return (
-    <>
-      <ol id={classes.players} className={classes["highlight-player"]}>
-        <Player name={redPlayerName} isRedActive={currentPlayer === "red"} />
-        <Player
-          name={yellowPlayerName}
-          isYellowActive={currentPlayer === "yellow"}
-        />
-      </ol>
-      <div>
-        <h1>Welcome to game {gameId}!</h1>
-        <GameBoard
-          board={board}
-          winner={winner}
-          hasDraw={hasDraw}
-          handleMove={handleMove}
-          handleNewGame={handleNewGame}
-          handleNewGameReq={handleNewGameReq}
-          newGameChallenge={newGameChallenge}
-          playerId={playerId}
-          playerChallenged={playerChallenged}
-        />
-      </div>
-      <AllTimeScore
-        allTimeGameScoreDraw={allTimeGameScore.draw}
-        allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
-        allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-        playerOne={redPlayerName} // add name fram invetation form
-        playerTwo={yellowPlayerName} // add name fram invetation form
-      />
-    </>
+    <div className={classes.online_game_container}>
+      <Header />
+      <div className={classes.gameboard_container}>
+          {winner || hasDraw ? (
+            <div className={classes.game_outcome}>
+              <Winner
+                name={winner}
+                player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+                handleStartGame={handleNewGame}
+              />
+            </div>
+          ) : (
+            <GameBoard
+              board={board}
+              winner={winner}
+              hasDraw={hasDraw}
+              handleMove={handleMove}
+              handleNewGame={handleNewGame}
+              handleNewGameReq={handleNewGameReq}
+              newGameChallenge={newGameChallenge}
+              playerId={playerId}
+              playerChallenged={playerChallenged}
+            />
+          )}
+        </div>
+          <div id={classes.players} className={classes["highlight-player"]}>
+            <div className={classes.online_game_player_container}>
+              <Image
+                src="/red_token.png"
+                alt={"red player token"}
+                width={60}
+                height={60}
+              />
+              <div className={classes.playerOne}>
+                <Player
+                  player={"Player 1"}
+                  name={redPlayerName}
+                  isRedActive={currentPlayer === "red"}
+                />
+              </div>
+            </div>
+
+            <div className={classes.online_game_player_container}>
+              <Image
+                src="/blue_token.png"
+                alt={"blue player token"}
+                width={60}
+                height={60}
+              />
+              <div className={classes.playerTwo}>
+                <Player
+                  player={"Player 2"}
+                  name={yellowPlayerName}
+                  isYellowActive={currentPlayer === "yellow"}
+                />
+              </div>
+            </div>
+          </div>
+        
+    
+    </div>
   );
 }
 
 export default Home;
+
+// <AllTimeScore
+// allTimeGameScoreDraw={allTimeGameScore.draw}
+// allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
+// allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
+// playerOne={redPlayerName} // add name fram invetation form
+// playerTwo={yellowPlayerName} // add name fram invetation form
+// />

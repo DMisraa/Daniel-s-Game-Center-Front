@@ -1,15 +1,14 @@
 "use client";
 
-import classes from "../pageContent.module.css";
-import { useState, useEffect } from "react";
-import {
-  sendMail,
-} from "../../ticTacToe_server";
 import Player from "@/components/ticTacToe/Player.jsx";
 import GameOver from "@/components/ticTacToe/GameOver.jsx";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
+import Winner from "@/components/Winner";
+import Image from "next/image";
 import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
-import AllTimeScore from "@/components/AllTimeScore";
+import classes from "../pageContent.module.css";
+import { useState, useEffect } from "react";
+import { sendMail } from "../../ticTacToe_server";
 import { useParams } from "next/navigation";
 import { jwtDecode } from "jwt-decode";
 import { socket } from "../../socket";
@@ -93,6 +92,7 @@ function Home() {
 
   const { gameId } = useParams();
   console.log(gameId, "gameID");
+  console.log('playerNames: ' + players)
 
   const activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameTurns(gameTurns);
@@ -135,8 +135,7 @@ function Home() {
     socket.emit("initial_GET", { gameId });
 
     socket.on("initialPageLoad", (data) => {
-      
-      if (typeof data === 'object') {
+      if (typeof data === "object") {
         console.log("socket initial req RUNNING, data:", data);
         emailAdress = data.emailAdress;
         gameLinksWithTokens = data.gameLinksWithTokens;
@@ -164,68 +163,31 @@ function Home() {
           setGameTurns(fetchedGameTurns);
         }
       } else {
-        console.log( "newGameChallenge Socket useEffect RUNNING, playerChallenged:", data);
-        playerChallenged = data
+        console.log(
+          "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
+          data
+        );
+        playerChallenged = data;
       }
 
-      
       if (playerChallenged) {
         console.log(playerChallenged, "newGameChallenge set TRUE, useEffect2");
         setNewGameChallenge(true);
       } else {
         console.log(playerChallenged, "newGameChallenge set false");
-        setNewGameChallenge(false)
+        setNewGameChallenge(false);
       }
     });
-
-    //   async function getData() {
-    //   const data = await fetchData(gameId);
-    //     console.log("GET ROUTE RUNNING");
-    //     localStorage.getItem("gameToken:" + gameId);
-    //     userToken = localStorage.getItem("gameToken:" + gameId);
-    //     const decodedToken = jwtDecode(userToken);
-    //     console.log(decodedToken, "decoded Token");
-    //     playerId = decodedToken.playedId;
-    //     console.log(playerId, "playerId useEffect hook");
-
-    //     emailAdress = data.emailAdress;
-    //     gameLinksWithTokens = data.gameLinksWithTokens;
-    //     allTimeScore = data.allTimeWinners;
-    //     setPlayers(data.playerNames);
-    //     playerChallenged = data.playerChallenged;
-    //     setCurrentPlayer(data.currentPlayer);
-    //     setHasDraw(data.hasDraw);
-    //     setSavedWinner(data.winner);
-    //     const derivedGameBoard = data.board;
-    //     const fetchedGameTurns = derivedGameBoard.flatMap((row, rowIndex) =>
-    //       row
-    //         .map((playerSymbol, colIndex) =>
-    //           playerSymbol
-    //             ? {
-    //                 square: { row: rowIndex, col: colIndex },
-    //                 player: playerSymbol,
-    //               }
-    //             : null
-    //         )
-    //         .filter(Boolean)
-    //     );
-    //     setGameTurns(fetchedGameTurns);
-    // }
-
-    // if (userToken === undefined) {
-    //    getData();
-    // }
-
     setIsLoading(false);
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
     const userToken = localStorage.getItem("gameToken:" + gameId);
     console.log(userToken, "userToken");
-    const decodedToken = jwtDecode(userToken)
+    const decodedToken = jwtDecode(userToken);
     console.log("handleActivePlayer Fn decoded token:", decodedToken);
     playerId = decodedToken.playedId;
-    console.log('playerId:', playerId)
+    console.log("playerId:", playerId);
 
     if (hasDraw || savedWinner || isLoading) {
       return;
@@ -235,15 +197,15 @@ function Home() {
       alert("It's not your turn !");
       console.log("Auth 1 running");
       return;
-    // } else if (playerChallenged) {
-    //   console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
-    //   if (playerChallenged !== playerId) {
-    //     alert("It's not your turn !");
-    //     console.log("Auth 2 running");
-    //     return;
-    //   }
+      // } else if (playerChallenged) {
+      //   console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
+      //   if (playerChallenged !== playerId) {
+      //     alert("It's not your turn !");
+      //     console.log("Auth 2 running");
+      //     return;
+      //   }
     }
-   
+
     setGameTurns((prevTurns) => {
       let currentPlayer = deriveActivePlayer(prevTurns);
       if (gameTurns.length % 2 === 0) {
@@ -297,38 +259,63 @@ function Home() {
   }
 
   return (
-    <main>
-      <h1>Welcome to game {gameId}!</h1>
-      <div id={classes["game-container"]}>
-        <ol id={classes.players}>
-          <Player name={players.X} symbol="X" isActive={activePlayer === "X"} />
-          <Player name={players.O} symbol="O" isActive={activePlayer === "O"} />
-        </ol>
-        {(savedWinner || hasDraw) && (
-          <GameOver
-            winner={savedWinner}
-            newGame={handleNewGameReq}
-            playerId={playerId}
-            playerChallenged={playerChallenged}
-            newGameChallenge={newGameChallenge}
-            handleNewGame={handleNewGame}
-          />
+    <>
+      <div className={classes.container}>
+        {winner || hasDraw ? (
+          <div className={classes.game_outcome}>
+            <Winner
+              name={winner}
+              player={activePlayer === "O" ? "Player 1" : "Player 2"}
+              handleStartGame={handleNewGame}
+            />
+          </div>
+        ) : (
+          <div className={classes.board_container}>
+            <GameBoard
+              selectedPlayer={handleActivePlayer}
+              activePlayerSymbol={activePlayer}
+              board={gameBoard}
+              newGameChallenge={newGameChallenge}
+            />
+          </div>
         )}
-        <GameBoard
-          selectedPlayer={handleActivePlayer}
-          activePlayerSymbol={activePlayer}
-          board={gameBoard}
-          newGameChallenge={newGameChallenge}
-        />
+        <div id={classes.players}>
+          <div className={classes.player_container}>
+            <Image
+              src="/player_X.png"
+              alt={"player X token"}
+              width={60}
+              height={60}
+            />
+
+            <div className={classes.playerOne}>
+              <Player
+                player={"Player 1"}
+                name={players.X}
+                symbol="X"
+                isActive={activePlayer === "X"} 
+              />
+            </div>
+          </div>
+          <div className={classes.player_container}>
+            <Image
+              src="/player_O.png"
+              alt={"player O token"}
+              width={60}
+              height={60}
+            />
+            <div className={classes.playerTwo}>
+              <Player
+                player={"Player 2"}
+                name={players.O}
+                symbol="O"
+                isActive={activePlayer === "O"}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <AllTimeScore
-        playerOne={"X"}
-        playerTwo={"O"}
-        allTimeGameScorePlayerOne={allTimeScore.X}
-        allTimeGameScorePlayerTwo={allTimeScore.O}
-        allTimeGameScoreDraw={allTimeScore.draw}
-      />
-    </main>
+    </>
   );
 }
 

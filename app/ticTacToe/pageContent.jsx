@@ -228,7 +228,7 @@ function PageContent() {
               >
                 Start to play !
               </button>
-              <button className={classes["challenge-friend"]}>
+              <button className={classes["challenge-friend"]} onClick={openModal}>
                 Challenge A Friend !
               </button>
             </div>
@@ -317,7 +317,7 @@ export default PageContent;
 // />
 
 // challenge friend onClick Function
-// onClick={openModal}
+// 
 
 // start game onclick function
 //  <GameOver winner={winner} newGame={handelNewGameClick} />
