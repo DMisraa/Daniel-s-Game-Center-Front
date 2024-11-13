@@ -1,4 +1,4 @@
-<h2> 🎮 Game Center Front-End </h2>
+<h1> 🎮 Game Center Front-End </h1>
 
 Welcome to the Game Center Front-End! This interactive app lets you dive into classic games like Tic-Tac-Toe and Connect Four with real-time multiplayer, sleek design, and easy-to-use game invites. Ready to play? <a href='https://daniel-s-game-center-front-aom5r360g-daniels-projects-d3ae3bde.vercel.app/ticTacToe'> Check it out live here! </a> 🚀
 
