@@ -1,9 +1,11 @@
 "use client";
 
 import Player from "@/components/ticTacToe/Player.jsx";
-import GameOver from "@/components/ticTacToe/GameOver.jsx";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
 import Winner from "@/components/Winner";
+import Draw from "@/components/Draw";
+import Modal from "@/components/Modal";
+
 import Image from "next/image";
 import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
 import classes from "../pageContent.module.css";
@@ -89,14 +91,11 @@ function Home() {
   const [newGameChallenge, setNewGameChallenge] = useState(false);
   const [currentPlayer, setCurrentPlayer] = useState("X");
   const [isLoading, setIsLoading] = useState(true);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const { gameId } = useParams();
-  console.log(gameId, "gameID");
-  console.log('playerNames: ' + players)
-
   const activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameTurns(gameTurns);
-
   let winner = deriveWinner(players, gameBoard);
 
   useEffect(() => {
@@ -107,28 +106,15 @@ function Home() {
       setHasDraw(true);
     }
 
-    if (activePlayer === "X" && winner) {
-      /////// Do i need this code if I work with WebSocket ?
-      allTimeScore.O++;
-      setSavedWinner(players.O);
-    } else if (activePlayer === "O" && winner) {
-      allTimeScore.X++;
-      setSavedWinner(players.X);
-    } else if (hasDraw) {
-      allTimeScore.draw++;
-    }
-
     if (token) {
       localStorage.setItem("gameToken:" + gameId, token);
     }
-    console.log(process.env.NEXT_PUBLIC_WS_URL, "socket Url");
   }, [hasDraw, winner]);
 
   useEffect(() => {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
     const decodedToken = jwtDecode(userToken);
-    console.log("main useEffect decoded token:", decodedToken);
     playerId = decodedToken.playedId;
 
     socket.emit("joinRoom", { gameId });
@@ -136,14 +122,13 @@ function Home() {
 
     socket.on("initialPageLoad", (data) => {
       if (typeof data === "object") {
-        console.log("socket initial req RUNNING, data:", data);
         emailAdress = data.emailAdress;
         gameLinksWithTokens = data.gameLinksWithTokens;
         allTimeScore = data.allTimeWinners;
         setPlayers(data.playerNames);
         playerChallenged = data.playerChallenged;
         setCurrentPlayer(data.currentPlayer);
-        setHasDraw(data.hasDraw);
+        setHasDraw(false);
         setSavedWinner(data.winner);
         const derivedGameBoard = data.board;
 
@@ -163,31 +148,25 @@ function Home() {
           setGameTurns(fetchedGameTurns);
         }
       } else {
-        console.log(
-          "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
-          data
-        );
         playerChallenged = data;
       }
 
       if (playerChallenged) {
-        console.log(playerChallenged, "newGameChallenge set TRUE, useEffect2");
         setNewGameChallenge(true);
       } else {
-        console.log(playerChallenged, "newGameChallenge set false");
         setNewGameChallenge(false);
       }
+      setIsLoading(false);
     });
-    setIsLoading(false);
+    return () => {
+      socket.off("initialPageLoad");
+    };
   }, [gameId]);
 
   async function handleActivePlayer(rowIndex, colIndex) {
     const userToken = localStorage.getItem("gameToken:" + gameId);
-    console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken);
-    console.log("handleActivePlayer Fn decoded token:", decodedToken);
     playerId = decodedToken.playedId;
-    console.log("playerId:", playerId);
 
     if (hasDraw || savedWinner || isLoading) {
       return;
@@ -195,7 +174,6 @@ function Home() {
 
     if (currentPlayer !== playerId) {
       alert("It's not your turn !");
-      console.log("Auth 1 running");
       return;
       // } else if (playerChallenged) {
       //   console.log(playerChallenged, "playerChallenge loop - handleMove Fn");
@@ -227,8 +205,6 @@ function Home() {
       if (gameTurns.length === 0) {
         sendMail(players, emailAdress, gameLinksWithTokens);
       }
-
-      // updateBoard(updatedGameBoard, gameId, players);
       setIsLoading(false);
 
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
@@ -238,6 +214,14 @@ function Home() {
         ...prevTurns,
       ];
     });
+  }
+
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
   }
 
   function handleNewGameReq() {
@@ -250,7 +234,6 @@ function Home() {
 
   async function handleNewGame() {
     socket.emit("startOver", { gameId, players });
-    // await OnlineMatchStartOver(gameId, players);
     setGameTurns([]);
     setSavedWinner(null);
     setCurrentPlayer("X");
@@ -261,13 +244,23 @@ function Home() {
   return (
     <>
       <div className={classes.container}>
-        {winner || hasDraw ? (
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          gameType={"ticTacToe"}
+        />
+        {winner ? (
           <div className={classes.game_outcome}>
             <Winner
               name={winner}
               player={activePlayer === "O" ? "Player 1" : "Player 2"}
               handleStartGame={handleNewGame}
+              newChallenge={openModal}
             />
+          </div>
+        ) : hasDraw ? (
+          <div className={classes.game_outcome}>
+            <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
           </div>
         ) : (
           <div className={classes.board_container}>
@@ -279,6 +272,7 @@ function Home() {
             />
           </div>
         )}
+
         <div id={classes.players}>
           <div className={classes.player_container}>
             <Image
@@ -293,7 +287,7 @@ function Home() {
                 player={"Player 1"}
                 name={players.X}
                 symbol="X"
-                isActive={activePlayer === "X"} 
+                isActive={activePlayer === "X"}
               />
             </div>
           </div>

@@ -1,23 +1,19 @@
 "use client";
 
+import Header from "@/components/connect4/Header";
 import GameBoard from "@/components/connect4/GameBoard";
 import classes from "../pageContent.module.css";
 import Player from "@/components/connect4/Player";
 import Winner from "@/components/Winner";
+import Draw from "@/components/Draw";
+import Modal from "@/components/Modal";
+
 import { jwtDecode } from "jwt-decode";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { socket } from "../../socket";
 import Image from "next/image";
-
-import {
-  fetchOnlineMatch,
-  updateOnlineBoard,
-  rematchReq,
-  OnlineMatchStartOver,
-} from "@/app/server";
 import winningCombinations from "@/winningCombinations/WINNING_COMBINATIONS";
-import Header from "@/components/connect4/Header";
 
 const initialBoard = Array.from({ length: 6 }, () => Array(7).fill(null));
 
@@ -46,15 +42,13 @@ function Home() {
   const [currentPlayer, setCurrentPlayer] = useState("red");
   const [newGameChallenge, setNewGameChallenge] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading, "isLoading state");
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const { gameId } = useParams();
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
-    console.log(urlParams);
     const token = urlParams.get("token");
-    console.log(token);
 
     if (token) {
       localStorage.setItem("gameToken:" + gameId, token);
@@ -65,15 +59,12 @@ function Home() {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
     const decodedToken = jwtDecode(userToken);
-    console.log(decodedToken, "decoded Token");
     playerId = decodedToken.playedId;
-    console.log(playerId, "playerId useEffect hook");
 
     socket.emit("joinRoom", { gameId });
     socket.emit("connectFour_Initial_GET", { gameId });
 
     socket.on("connectFour_Initial", (data) => {
-      console.log("socket GET data:", data);
       if (typeof data === "object") {
         playerChallenged = data.playerChallenged;
         setWinner(data.winner);
@@ -88,10 +79,6 @@ function Home() {
           turnsLength = data.gameTurns;
         }
       } else {
-        console.log(
-          "newGameChallenge Socket useEffect RUNNING, playerChallenged:",
-          data
-        );
         playerChallenged = data;
       }
 
@@ -100,33 +87,8 @@ function Home() {
       } else {
         setNewGameChallenge(false);
       }
+      setIsLoading(false);
     });
-
-    // async function fetchGameData() {
-    //   const data = await fetchOnlineMatch(gameId);
-    //   console.log(data, "get Fn");
-
-    //   if (data) {
-    //     console.log(data, "if statement in get Fn");
-    //     playerChallenged = data.playerChallenged;
-    //     console.log(data.playerChallenged, "data.playerChallenged");
-    //     setBoard(data.board);
-    //     setWinner(data.winner);
-    //     setRedPlayerName(data.playerNames.redPlayer);
-    //     setYellowPlayerName(data.playerNames.yellowPlayer);
-    //     setCurrentPlayer(data.currentPlayer);
-    //     setAllTimeGameScore(data.allTimeWinners);
-    //     setHasDraw(data.hasDraw);
-    //     turnsLength = data.gameTurns
-    //   }
-    //   console.log(playerChallenged, "playerChallenged useEffect");
-    //   if (playerChallenged) {
-    //     setNewGameChallenge(true);
-    //   }
-    // }
-    // fetchGameData();
-
-    setIsLoading(false);
   }, [gameId]);
 
   function checkForWinner(board) {
@@ -163,13 +125,10 @@ function Home() {
   function handleNewGameReq() {
     playerChallenged = playerId;
     setNewGameChallenge(true);
-    // rematchReq(playerId, gameId, gameType);
     socket.emit("ConnectFour_startOver_Req", { playerId, gameId });
-    console.log("handleNewGameReq running");
   }
 
   async function handleNewGame() {
-    // await OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName);
     socket.emit("ConnectFour_startOver", {
       gameId,
       redPlayerName,
@@ -185,10 +144,7 @@ function Home() {
   async function handleMove(column) {
     localStorage.getItem("gameToken:" + gameId);
     const userToken = localStorage.getItem("gameToken:" + gameId);
-    console.log(userToken, "userToken");
     const decodedToken = jwtDecode(userToken);
-    console.log(decodedToken, "decoded Token");
-
     if (winner || hasDraw || isLoading) return;
     if (board[0][column]) return;
 
@@ -225,88 +181,93 @@ function Home() {
     const winningPlayer = checkForWinner(newBoard);
     if (winningPlayer) {
       turnsLength = 0;
-      console.log(currentPlayer, "Winning player - handleMove Fn");
       setWinner(winningPlayer);
     } else {
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
     }
-    console.log("updateOnlineBoard running handleMove Fn");
-    // await updateOnlineBoard(column, gameId);
     socket.emit("ConnectFourMove", { column, gameId, token: userToken });
     setIsLoading(false);
   }
 
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+  }
+
   return (
     <div className={classes.online_game_container}>
+      <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        gameType={"connectFour"}
+      />
       <Header />
       <div className={classes.gameboard_container}>
-          {winner || hasDraw ? (
-            <div className={classes.game_outcome}>
-              <Winner
-                name={winner}
-                player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
-                handleStartGame={handleNewGame}
-              />
-            </div>
-          ) : (
-            <GameBoard
-              board={board}
-              winner={winner}
-              hasDraw={hasDraw}
-              handleMove={handleMove}
-              handleNewGame={handleNewGame}
-              handleNewGameReq={handleNewGameReq}
-              newGameChallenge={newGameChallenge}
-              playerId={playerId}
-              playerChallenged={playerChallenged}
+        {winner ? (
+          <div className={classes.winner}>
+            <Winner
+              name={winner}
+              player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+              handleStartGame={handleNewGame}
+              newChallenge={openModal}
             />
-          )}
-        </div>
-          <div id={classes.players} className={classes["highlight-player"]}>
-            <div className={classes.online_game_player_container}>
-              <Image
-                src="/red_token.png"
-                alt={"red player token"}
-                width={60}
-                height={60}
-              />
-              <div className={classes.playerOne}>
-                <Player
-                  player={"Player 1"}
-                  name={redPlayerName}
-                  isRedActive={currentPlayer === "red"}
-                />
-              </div>
-            </div>
-
-            <div className={classes.online_game_player_container}>
-              <Image
-                src="/blue_token.png"
-                alt={"blue player token"}
-                width={60}
-                height={60}
-              />
-              <div className={classes.playerTwo}>
-                <Player
-                  player={"Player 2"}
-                  name={yellowPlayerName}
-                  isYellowActive={currentPlayer === "yellow"}
-                />
-              </div>
-            </div>
           </div>
-        
-    
+        ) : hasDraw ? (
+          <div className={classes.draw}>
+            <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
+          </div>
+        ) : (
+          <GameBoard
+            board={board}
+            winner={winner}
+            hasDraw={hasDraw}
+            handleMove={handleMove}
+            handleNewGame={handleNewGame}
+            handleNewGameReq={handleNewGameReq}
+            newGameChallenge={newGameChallenge}
+            playerId={playerId}
+            playerChallenged={playerChallenged}
+          />
+        )}
+      </div>
+      <div id={classes.players} className={classes["highlight-player"]}>
+        <div className={classes.online_game_player_container}>
+          <Image
+            src="/red_token.png"
+            alt={"red player token"}
+            width={60}
+            height={60}
+          />
+          <div className={classes.playerOne}>
+            <Player
+              player={"Player 1"}
+              name={redPlayerName}
+              isRedActive={currentPlayer === "red"}
+            />
+          </div>
+        </div>
+
+        <div className={classes.online_game_player_container}>
+          <Image
+            src="/blue_token.png"
+            alt={"blue player token"}
+            width={60}
+            height={60}
+          />
+          <div className={classes.playerTwo}>
+            <Player
+              player={"Player 2"}
+              name={yellowPlayerName}
+              isYellowActive={currentPlayer === "yellow"}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 export default Home;
-
-// <AllTimeScore
-// allTimeGameScoreDraw={allTimeGameScore.draw}
-// allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
-// allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-// playerOne={redPlayerName} // add name fram invetation form
-// playerTwo={yellowPlayerName} // add name fram invetation form
-// />

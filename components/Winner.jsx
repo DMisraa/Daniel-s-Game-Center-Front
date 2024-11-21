@@ -1,7 +1,7 @@
 import classes from "./winner.module.css";
 import Image from "next/image";
 
-function Winner({ player, name, handleStartGame }) {
+function Winner({ player, name, handleStartGame, newChallenge }) {
   return (
     <>
       <div className={classes.declaration_container}>
@@ -25,7 +25,7 @@ function Winner({ player, name, handleStartGame }) {
         >
           Start to play !
         </button>
-        <button className={classes["challenge-friend"]}>
+        <button className={classes["challenge-friend"]} onClick={newChallenge}>
           Challenge A Friend !
         </button>
       </div>

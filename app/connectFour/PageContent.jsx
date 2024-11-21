@@ -1,16 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-
-import { fetchData, updateBoard, fetchPlayerName } from "../server";
-import classes from "./pageContent.module.css";
 import GameBoard from "../../components/connect4/GameBoard";
 import Modal from "@/components/Modal";
-import Player from "../../components/connect4/Player";
-import winningCombinations from "../../winningCombinations/WINNING_COMBINATIONS";
-import AllTimeScore from "@/components/AllTimeScore";
-import Image from "next/image";
 import Winner from "@/components/Winner";
+import Draw from "@/components/Draw";
+import Player from "../../components/connect4/Player";
+
+import winningCombinations from "../../winningCombinations/WINNING_COMBINATIONS";
+import { useEffect, useRef, useState } from "react";
+import { fetchData, updateBoard, fetchPlayerName } from "../server";
+import classes from "./pageContent.module.css";
+import Image from "next/image";
+
 
 export const initialBoard = Array.from({ length: 6 }, () =>
   Array(7).fill(null)
@@ -42,8 +43,7 @@ export default function PageContent() {
   const [hasDraw, setHasDraw] = useState(false);
   const [allTimeGameScore, setAllTimeGameScore] = useState(allTimeScoreBoard);
   const [isModalOpen, setModalOpen] = useState(false);
-  // const [isLoading, setIsLoading] = useState(true);
-  // console.log(isLoading, "isLoading state");
+  const [isLoading, setIsLoading] = useState(true);
 
   const player = useRef({
     redPlayer: redPlayerName,
@@ -55,7 +55,6 @@ export default function PageContent() {
       try {
         const data = await fetchData();
         if (data) {
-          console.log(data.turnLength, "turnLength data recieved");
           turnsLength = data.turnLength;
           setBoard(data.board);
           setCurrentPlayer(data.currentPlayer);
@@ -67,8 +66,6 @@ export default function PageContent() {
         } else {
           return;
         }
-        console.log(data.turnLength, "turnLength use Effect hook");
-
         if (data.board.some((row) => row.some((cell) => cell !== null))) {
           setStartGame(true);
         }
@@ -77,20 +74,19 @@ export default function PageContent() {
           setHasDraw(false);
           setBoard(initialBoard);
         }
-        console.log("Component mounted");
       } catch (error) {
         console.log("error fetching the gameboard", error);
+      } finally {
+        setIsLoading(false)
       }
     }
 
     getData();
     return () => {
-      console.log("Component unmounted");
     };
   }, []);
 
   function openModal() {
-    console.log("Open Modal Clicked");
     setModalOpen(true);
   }
 
@@ -152,7 +148,7 @@ export default function PageContent() {
   }
 
   async function handleMove(column) {
-    if (winner || hasDraw) return;
+    if (winner || hasDraw || isLoading) return;
     if (board[0][column]) return;
     turnsLength++;
     console.log("turnLength:", turnsLength);
@@ -164,8 +160,6 @@ export default function PageContent() {
       }));
       setHasDraw(true);
     }
-    console.log("handleMove 4 ");
-
     const newBoard = board.map((row) => [...row]);
     for (let i = board.length - 1; i >= 0; i--) {
       if (!newBoard[i][column]) {
@@ -178,7 +172,6 @@ export default function PageContent() {
     const winningPlayer = checkForWinner(newBoard);
     if (winningPlayer) {
       turnsLength = 0;
-      console.log(currentPlayer, "Winning player - handleMove Fn");
       setWinner(winningPlayer);
     } else {
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
@@ -223,23 +216,28 @@ export default function PageContent() {
       {startGame && (
         <div className={classes.gameboard_container}>
           <>
-            {winner || hasDraw ? (
-              <div className={classes.game_outcome}>
-                <Winner
-                  name={winner}
-                  player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
-                  handleStartGame={handleNewGame}
-                />
-              </div>
-            ) : (
-              <GameBoard
-                winner={winner}
-                handleNewGameReq={handleNewGame}
-                handleMove={handleMove}
-                hasDraw={hasDraw}
-                board={board}
+          {winner ? (
+            <div className={classes.winner}>
+              <Winner
+                name={winner}
+                player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+                handleStartGame={handleNewGame}
+                newChallenge={openModal}
               />
-            )}
+            </div>
+          ) : hasDraw ? (
+            <div className={classes.draw}>
+              <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
+            </div>
+          ) : (
+            <GameBoard
+              winner={winner}
+              handleNewGameReq={handleNewGame}
+              handleMove={handleMove}
+              hasDraw={hasDraw}
+              board={board}
+            />
+          )}
 
             <div id={classes.players} className={classes["highlight-player"]}>
               <div className={classes.player_container}>

@@ -18,10 +18,6 @@ function GameBoard({
     winner = "the Yellow Player";
   }
 
-  console.log(newGameChallenge, "newGameChallenge gameBoard Component");
-  console.log(playerChallenged, "playerChallenged gameBoard Component");
-  console.log(playerId, "playerId gameBoard Component");
-
   return (
     <div className="game-container">
       {winner && (

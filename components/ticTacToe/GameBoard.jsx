@@ -2,7 +2,6 @@ import classes from "./gameBoard.module.css";
 import Image from "next/image";
 
 export default function GameBoard({ selectedPlayer, board }) {
-  console.log(board, "board, GameBoard Component");
 
   return (
     <div className={classes.board_container}>
@@ -39,7 +38,6 @@ export default function GameBoard({ selectedPlayer, board }) {
         <div className={classes.horizontal_line1}></div>
         <div className={classes.horizontal_line2}></div>
 
-        {/* Vertical Lines */}
         <div className={classes.vertical_line1}></div>
         <div className={classes.vertical_line2}></div>
       </div>

@@ -15,7 +15,6 @@ export async function fetchData() {
 }
 
 export async function fetchOnlineMatch(gameId) {
-  console.log(gameId, 'gameId fetchOnlineMatch Fn')
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}`);
     if (!response.ok) {
@@ -51,7 +50,6 @@ export async function updateBoard(column) {
 
 export async function updateOnlineBoard(column, gameId) {
   const userToken = localStorage.getItem("gameToken:" + gameId)
-  console.log(userToken, 'userToken, updateOnlineBoard Fn')
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}/move`, {
       method: "PUT",
@@ -73,7 +71,6 @@ export async function updateOnlineBoard(column, gameId) {
 }
 
 export async function OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerName) {
-  console.log(gameId, redPlayerName, yellowPlayerName , 'data sent to server startover req')
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/${gameId}/startOver`, {
       method: "PATCH",
@@ -95,6 +92,7 @@ export async function OnlineMatchStartOver(gameId, redPlayerName, yellowPlayerNa
 
 
 export async function getCurrentPlayer() {
+  
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/gameboard`);
     if (!response.ok) {
@@ -109,7 +107,7 @@ export async function getCurrentPlayer() {
 }
 
 export async function fetchPlayerName(playerNames) {
-  console.log(playerNames, 'player names updating Fn')
+
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/connectFour/player`, {
       method: "PUT",
@@ -137,12 +135,9 @@ try {
     body: JSON.stringify(formData),
   });
 
-  console.log(gameType, 'game invitation game type')
-
   if (response.ok) {
     const result = await response.json();
-    alert("Invitation sent!");
-    console.log(result.gameId, 'gameId from server, gameInvite Fn');
+    alert("Invitation sent!\n\your game link will be wating for you in your mail box once your opponent accepts your challenge");
     return result.gameId
   } else {
     alert("Failed to send invitation.");
@@ -151,6 +146,20 @@ try {
   console.error("Error sending invitation:", error);
   alert("There was an error sending the invitation.");
 }}
+
+export async function handleFooterFormSubmit(formData) {
+   try {
+    await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/footerContact`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+   } catch (error) {
+    console.error("Error sending message via Footer:", error);
+   }
+}
 
 export async function rematchReq(playerId, gameId, gameType) {  // used for both games 
   try {

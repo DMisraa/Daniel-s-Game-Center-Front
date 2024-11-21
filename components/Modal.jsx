@@ -57,7 +57,6 @@ export default function Modal({ isOpen, onClose, gameType }) {
     };
 
     const gameId = await gameInvite(formData, gameType);
-    console.log(gameId, "gameId of game Created");
     {
       !WhatsAppInvite && setIsLoading(false), onClose();
     }
@@ -74,14 +73,12 @@ export default function Modal({ isOpen, onClose, gameType }) {
 
     if (gameType === "ticTacToe") {
       data = await fetchData(gameId);
-      console.log(data, "data, whatsApp Invite");
       gameLink = data.gameLinksWithTokens.InvitedPlayer;
-      message = `Hey ! Lets play ticTacToe ! Join me here: ${gameLink}`;
+      message = `Hey ! Lets play ticTacToe ! Click the link to join me: ${gameLink}`;
     } else if (gameType === "connectFour") {
       data = await fetchOnlineMatch(gameId);
-      console.log(data, "data, whatsApp Invite");
       gameLink = data.gameLinksWithTokens.InvitedPlayer;
-      message = `Hey ! Lets play connectFour ! Join me here: ${gameLink}`;
+      message =  `Hey! Let's play Connect Four! Click the link to join me: ${gameLink}`;
     }
 
  const encodedMessage = encodeURIComponent(message);

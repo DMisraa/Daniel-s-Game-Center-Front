@@ -14,7 +14,6 @@ export default function Player({
 }) {
   const [playerName, setPlayerName] = useState(name);
   const [isEditing, setIsEditing] = useState(false);
-  console.log(playerName, "player name Player component");
 
   function handleEditClick() {
     setIsEditing((editing) => !editing);
@@ -66,5 +65,3 @@ export default function Player({
     </div>
   );
 }
-
-// <span className={classes["player-symbol"]}>{symbol}</span> //
