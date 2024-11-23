@@ -53,6 +53,7 @@ export default function PageContent() {
   useEffect(() => {
     async function getData() {
       try {
+        console.log('NEXT_PUBLIC_BASE_URL:', NEXT_PUBLIC_BASE_URL)
         const data = await fetchData();
         if (data) {
           turnsLength = data.turnLength;

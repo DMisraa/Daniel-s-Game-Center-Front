@@ -196,11 +196,7 @@ function PageContent() {
 
   return (
     <div className={classes.container}>
-    <Modal
-    isOpen={isModalOpen}
-    onClose={closeModal}
-    gameType={"ticTacToe"}
-  />
+      <Modal isOpen={isModalOpen} onClose={closeModal} gameType={"ticTacToe"} />
       {!startGame && (
         <>
           <div id={classes["game-container"]}>
@@ -219,7 +215,6 @@ function PageContent() {
                 Challenge A Friend !
               </button>
             </div>
-           
           </div>
         </>
       )}
