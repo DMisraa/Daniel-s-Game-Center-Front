@@ -1,7 +1,10 @@
+import Modal from "./Modal/Modal";
+
 import classes from "./winner.module.css";
 import Image from "next/image";
 
-function Draw({ handleStartGame, newChallenge }) {
+function Draw({ handleStartGame, newChallengeModal, gameType, isModalOpen, closeModal }) {
+
   return (
     <>
       <div className={classes.declaration_container}>
@@ -27,10 +30,15 @@ function Draw({ handleStartGame, newChallenge }) {
           >
             Start to play !
           </button>
-          <button className={classes["challenge-friend"]} onClick={newChallenge}>
+          <button className={classes["challenge-friend"]} onClick={newChallengeModal}>
             Challenge A Friend !
           </button>
         </div>
+        <Modal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        gameType={gameType}
+      />
       </div>
     </>
   );

@@ -42,16 +42,29 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  transition: transform 0.3s ease;
-  
+  transition: transform 0.3s ease; 
   background-color: #D9D9D9;
   cursor: pointer;
+}
+
+.cell.inactive {
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); 
+  opacity: 0.8; 
+}
+
+.cell.disabled {
+    pointer-events: none; 
+  opacity: 0.5; 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.3); 
+  transform: scale(1.05); 
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .cell:hover {
   background-color: #ddd;
   cursor: pointer;
 }
+
 
 .token {
   width: 55px;

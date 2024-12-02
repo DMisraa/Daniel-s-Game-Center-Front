@@ -1,0 +1,99 @@
+.container {
+  width: 320px;
+  height: 443px;
+  background: #ffffff;
+}
+
+.container p {
+  display: flex;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+  text-align: center;
+  width: 80%;
+  transform: translateX(32px);
+}
+
+.closePage_container {
+    width: 400px;
+    height: 315px;
+    background: #FFFFFF;
+}
+
+.button_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.button_container img {
+  cursor: pointer;
+}
+
+.input_container {
+  display: flex;
+  flex-direction: row;
+  width: 250px;
+  height: 40px;
+  gap: 8px;
+  transform: translateX(30px);
+}
+
+.input_container input {
+  width: 200px;
+  height: 35px;
+  border-radius: 8px;
+  border: 2px solid #e9e9e9;
+  padding-left: 12px;
+}
+
+.input_container input[type="number"]::-webkit-inner-spin-button,
+.input_container input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.submit_button {
+  margin-top: 30px;
+}
+
+.names_inputs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  transform: translateX(-13px);
+}
+
+.name_input {
+  width: 36%;
+  transform: translateX(21px);
+}
+
+.name_input img {
+  position: absolute;
+  left: 10px;
+  transform: translateY(9px);
+}
+
+.rivalName_input {
+  width: 36%;
+  transform: translateX(-5px);
+}
+
+.rivalName_input img {
+  position: absolute;
+  transform: translateY(9px);
+  left: 10px;
+}
+
+.inputs_wrapper {
+  position: relative;
+}
+
+.inputs_wrapper input {
+  width: 80%;
+  height: 30px;
+  border-radius: 8px;
+  border: 2px solid #e9e9e9;
+  padding-left: 30px;
+  margin-bottom: 8px;
+}

@@ -4,7 +4,7 @@ import Player from "@/components/ticTacToe/Player.jsx";
 import Draw from "@/components/Draw";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
 import Winner from "@/components/Winner";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 
 import classes from "./pageContent.module.css";
 import { useState, useEffect } from "react";
@@ -196,57 +196,58 @@ function PageContent() {
 
   return (
     <div className={classes.container}>
-      <Modal isOpen={isModalOpen} onClose={closeModal} gameType={"ticTacToe"} />
-      {!startGame && (
-        <>
-          <div id={classes["game-container"]}>
-            <h2 className={classes.game_text}> Game area </h2>
-            <div className={classes.buttons_container}>
-              <button
-                onClick={handleStartGame}
-                className={classes["start-game-button"]}
-              >
-                Start to play !
-              </button>
-              <button
-                className={classes["challenge-friend"]}
-                onClick={openModal}
-              >
-                Challenge A Friend !
-              </button>
-            </div>
+      
+      <>
+        {winner ? (
+          <div className={classes.winner}>
+            <Winner
+              name={winner}
+              player={activePlayer === "O" ? "Player 1" : "Player 2"}
+              handleStartGame={handelNewGameClick}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"ticTacToe"}
+            />
           </div>
-        </>
-      )}
-      {startGame && (
-        <>
-          {winner ? (
-            <div className={classes.winner}>
-              <Winner
-                name={winner}
-                player={activePlayer === "O" ? "Player 1" : "Player 2"}
-                handleStartGame={handelNewGameClick}
-                newChallenge={openModal}
-              />
-            </div>
-          ) : hasDraw ? (
-            <div className={classes.draw}>
-              <Draw
-                handleStartGame={handelNewGameClick}
-                newChallenge={openModal}
-              />
-            </div>
-          ) : (
-            <div className={classes.board_container}>
-              <GameBoard
-                selectedPlayer={handleActivePlayer}
-                activePlayerSymbol={activePlayer}
-                board={gameBoard}
-              />
-            </div>
-          )}
-        </>
-      )}
+        ) : hasDraw ? (
+          <div className={classes.draw}>
+            <Draw
+              handleStartGame={handelNewGameClick}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"ticTacToe"}
+            />
+          </div>
+        ) : (
+          <div className={classes.board_container}>
+            <GameBoard
+              selectedPlayer={handleActivePlayer}
+              activePlayerSymbol={activePlayer}
+              board={gameBoard}
+              isGameActive={startGame}
+            />
+            {!startGame && (
+              <div className={classes.buttons_container}>
+                <button
+                  onClick={handleStartGame}
+                  className={classes["start-game-button"]}
+                >
+                  Start to play !
+                </button>
+                <button
+                  className={classes["challenge-friend"]}
+                  onClick={openModal}
+                >
+                  Challenge A Friend !
+                </button>
+              </div>
+            )}
+            <Modal isOpen={isModalOpen} onClose={closeModal} gameType={"ticTacToe"} />
+          </div>
+        )}
+      </>
 
       <div id={classes.players}>
         <div className={classes.player_container}>

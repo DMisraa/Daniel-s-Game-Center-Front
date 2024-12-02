@@ -1,3 +1,8 @@
+.modal-dialog {
+  border-radius: 18px;
+  
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;

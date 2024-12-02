@@ -6,7 +6,7 @@ import classes from "../pageContent.module.css";
 import Player from "@/components/connect4/Player";
 import Winner from "@/components/Winner";
 import Draw from "@/components/Draw";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 
 import { jwtDecode } from "jwt-decode";
 import { useParams } from "next/navigation";
@@ -198,13 +198,14 @@ function Home() {
   }
 
   return (
+    <div>
+    <Header />
     <div className={classes.online_game_container}>
       <Modal
         isOpen={isModalOpen}
         onClose={closeModal}
         gameType={"connectFour"}
       />
-      <Header />
       <div className={classes.gameboard_container}>
         {winner ? (
           <div className={classes.winner}>
@@ -212,12 +213,21 @@ function Home() {
               name={winner}
               player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
               handleStartGame={handleNewGame}
-              newChallenge={openModal}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"connectFour"}
             />
           </div>
         ) : hasDraw ? (
           <div className={classes.draw}>
-            <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
+            <Draw
+              handleStartGame={handleNewGame}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"connectFour"}
+            />
           </div>
         ) : (
           <GameBoard
@@ -230,6 +240,7 @@ function Home() {
             newGameChallenge={newGameChallenge}
             playerId={playerId}
             playerChallenged={playerChallenged}
+            isGameActive={true}
           />
         )}
       </div>
@@ -266,6 +277,7 @@ function Home() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

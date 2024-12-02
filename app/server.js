@@ -125,20 +125,22 @@ export async function fetchPlayerName(playerNames) {
   }
 }
 
-export async function gameInvite(formData, gameType) {     // used for both ticTacToe and connectFour
+export async function gameInvite(formData, gameType, whatsappInvite) {     // used for both ticTacToe and connectFour
 try {
   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/${gameType}/game`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(formData),
+    body: JSON.stringify({
+      ...formData,
+      ...(whatsappInvite && { whatsappInvite })
+  })
   });
 
   if (response.ok) {
-    const result = await response.json();
-    alert("Invitation sent!\n\your game link will be wating for you in your mail box once your opponent accepts your challenge");
-    return result.gameId
+    const { gameCreatorLink, invitedPlayerLink } = await response.json();
+    return ({ gameCreatorLink, invitedPlayerLink })
   } else {
     alert("Failed to send invitation.");
   }

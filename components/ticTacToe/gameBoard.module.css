@@ -32,6 +32,19 @@
   height: 100%;
 }
 
+.cell.inactive {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Softer, subtle shadow */
+  opacity: 0.8; /* Slight transparency */
+}
+
+.cell.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow with a smaller spread */
+  transform: scale(1.05);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
 .cell button {
   width: 98%; /* Fill the entire cell */
   height: 98%; /* Fill the entire cell */

@@ -1,7 +1,7 @@
 "use client";
 
 import GameBoard from "../../components/connect4/GameBoard";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
 import Winner from "@/components/Winner";
 import Draw from "@/components/Draw";
 import Player from "../../components/connect4/Player";
@@ -11,7 +11,6 @@ import { useEffect, useRef, useState } from "react";
 import { fetchData, updateBoard, fetchPlayerName } from "../server";
 import classes from "./pageContent.module.css";
 import Image from "next/image";
-
 
 export const initialBoard = Array.from({ length: 6 }, () =>
   Array(7).fill(null)
@@ -53,7 +52,7 @@ export default function PageContent() {
   useEffect(() => {
     async function getData() {
       try {
-        console.log('NEXT_PUBLIC_BASE_URL:', process.env.NEXT_PUBLIC_BASE_URL)
+        console.log("NEXT_PUBLIC_BASE_URL:", process.env.NEXT_PUBLIC_BASE_URL);
         const data = await fetchData();
         if (data) {
           turnsLength = data.turnLength;
@@ -78,13 +77,12 @@ export default function PageContent() {
       } catch (error) {
         console.log("error fetching the gameboard", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
     }
 
     getData();
-    return () => {
-    };
+    return () => {};
   }, []);
 
   function openModal() {
@@ -213,85 +211,41 @@ export default function PageContent() {
   }
 
   return (
-    <>
-      {startGame && (
-        <div className={classes.gameboard_container}>
+    <div className={classes.gameboard_container}>
+      <>
+        {winner ? (
+          <div className={classes.winner}>
+            <Winner
+              name={winner}
+              player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+              handleStartGame={handleNewGame}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"connectFour"}
+            />
+          </div>
+        ) : hasDraw ? (
+          <div className={classes.draw}>
+            <Draw
+              handleStartGame={handleNewGame}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"connectFour"}
+            />
+          </div>
+        ) : (
           <>
-          {winner ? (
-            <div className={classes.winner}>
-              <Winner
-                name={winner}
-                player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
-                handleStartGame={handleNewGame}
-                newChallenge={openModal}
-              />
-            </div>
-          ) : hasDraw ? (
-            <div className={classes.draw}>
-              <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
-            </div>
-          ) : (
             <GameBoard
               winner={winner}
               handleNewGameReq={handleNewGame}
               handleMove={handleMove}
               hasDraw={hasDraw}
               board={board}
+              isGameActive={startGame}
             />
-          )}
-
-            <div id={classes.players} className={classes["highlight-player"]}>
-              <div className={classes.player_container}>
-                <Image
-                  src="/red_token.png"
-                  alt={"red player token"}
-                  width={60}
-                  height={60}
-                />
-                <div className={classes.playerOne}>
-                  <Player
-                    player={"Player 1"}
-                    name={redPlayerName}
-                    isEditing={isRedEditing}
-                    handlePlayerName={handleRedChange}
-                    handleEdit={handleRedEditClick}
-                    isRedActive={currentPlayer === "red"}
-                    ref={player}
-                    score={allTimeGameScore.redPlayer}
-                  />
-                </div>
-              </div>
-
-              <div className={classes.player_container}>
-                <Image
-                  src="/blue_token.png"
-                  alt={"blue player token"}
-                  width={60}
-                  height={60}
-                />
-                <div className={classes.playerTwo}>
-                  <Player
-                    player={"Player 2"}
-                    name={yellowPlayerName}
-                    isEditing={isYellowEditing}
-                    handlePlayerName={handleYellowChange}
-                    handleEdit={handleYellowEditClick}
-                    isYellowActive={currentPlayer === "yellow"}
-                    ref={player}
-                    score={allTimeGameScore.yellowPlayer}
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-        </div>
-      )}
-
-      {!startGame && (
-        <>
-          <div className={classes.container}>
-            <div className={classes.game_container}>
-              <h2 className={classes.game_text}> Game area </h2>
+            {!startGame && (
               <div className={classes.buttons_container}>
                 <button
                   className={classes["start-game-button"]}
@@ -306,42 +260,60 @@ export default function PageContent() {
                   Challenge A Friend !
                 </button>
               </div>
-            </div>
-            <div id={classes.players} className={classes["highlight-player"]}>
-              <div className={classes.playerOne}>
-                <Player
-                  player={"Player 1"}
-                  name={redPlayerName}
-                  isEditing={isRedEditing}
-                  handlePlayerName={handleRedChange}
-                  handleEdit={handleRedEditClick}
-                  isRedActive={startGame && currentPlayer === "red"}
-                  ref={player}
-                  score={allTimeGameScore.redPlayer}
-                />
-              </div>
-              <div className={classes.playerTwo}>
-                <Player
-                  player={"Player 2"}
-                  name={yellowPlayerName}
-                  isEditing={isYellowEditing}
-                  handlePlayerName={handleYellowChange}
-                  handleEdit={handleYellowEditClick}
-                  isYellowActive={startGame && currentPlayer === "yellow"}
-                  ref={player}
-                  score={allTimeGameScore.yellowPlayer}
-                />
-              </div>
+            )}
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              gameType={"connectFour"}
+            />
+          </>
+        )}
+
+        <div id={classes.players} className={classes["highlight-player"]}>
+          <div className={classes.player_container}>
+            <Image
+              src="/red_token.png"
+              alt={"red player token"}
+              width={60}
+              height={60}
+            />
+            <div className={classes.playerOne}>
+              <Player
+                player={"Player 1"}
+                name={redPlayerName}
+                isEditing={isRedEditing}
+                handlePlayerName={handleRedChange}
+                handleEdit={handleRedEditClick}
+                isRedActive={startGame && currentPlayer === "red"}
+                ref={player}
+                score={allTimeGameScore.redPlayer}
+              />
             </div>
           </div>
-        </>
-      )}
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        gameType={"connectFour"}
-      />
-    </>
+
+          <div className={classes.player_container}>
+            <Image
+              src="/blue_token.png"
+              alt={"blue player token"}
+              width={60}
+              height={60}
+            />
+            <div className={classes.playerTwo}>
+              <Player
+                player={"Player 2"}
+                name={yellowPlayerName}
+                isEditing={isYellowEditing}
+                handlePlayerName={handleYellowChange}
+                handleEdit={handleYellowEditClick}
+                isYellowActive={startGame && currentPlayer === "yellow"}
+                ref={player}
+                score={allTimeGameScore.yellowPlayer}
+              />
+            </div>
+          </div>
+        </div>
+      </>
+    </div>
   );
 }
 

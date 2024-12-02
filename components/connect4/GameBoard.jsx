@@ -11,6 +11,7 @@ function GameBoard({
   playerId,
   handleNewGameReq,
   newGameChallenge,
+  isGameActive
 }) {
   if (winner === "Red Player") {
     winner = "the Red Player";
@@ -56,14 +57,14 @@ function GameBoard({
           )}
         </div>
       )}
-      <div className="board_container">
+      <div className={`board_container ${!isGameActive ? '' : 'inactive'}`}>
         {board.map((row, rowIndex) => (
           <div key={rowIndex} className="row">
             {row.map((cell, columnIndex) => (
               <div
                 key={columnIndex}
-                className="cell" 
-                onClick={() => handleMove(columnIndex)}
+                className={`cell ${!isGameActive ? 'disabled' : ''}`}
+                onClick={!isGameActive ? null : () => handleMove(columnIndex)}
               >
                 {!cell && <div className={'token'} />}
                 {cell === "red" && (
@@ -73,7 +74,6 @@ function GameBoard({
                   width={60}
                   height={60}
                 />
-                
                 )}
                 {cell === "yellow" && (
                   <Image
@@ -82,7 +82,6 @@ function GameBoard({
                     width={60}
                     height={60}
                   />
-                  
                   )}
               </div>
             ))}

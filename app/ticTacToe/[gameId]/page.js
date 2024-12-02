@@ -4,7 +4,8 @@ import Player from "@/components/ticTacToe/Player.jsx";
 import GameBoard from "@/components/ticTacToe/GameBoard.jsx";
 import Winner from "@/components/Winner";
 import Draw from "@/components/Draw";
-import Modal from "@/components/Modal";
+import Modal from "@/components/Modal/Modal";
+import Header from "@/components/ticTacToe/Header";
 
 import Image from "next/image";
 import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
@@ -242,7 +243,8 @@ function Home() {
   }
 
   return (
-    <>
+    <div className={classes.header_container}>
+    <Header />
       <div className={classes.container}>
         <Modal
           isOpen={isModalOpen}
@@ -250,17 +252,26 @@ function Home() {
           gameType={"ticTacToe"}
         />
         {winner ? (
-          <div className={classes.game_outcome}>
+          <div className={classes.winner}>
             <Winner
               name={winner}
               player={activePlayer === "O" ? "Player 1" : "Player 2"}
               handleStartGame={handleNewGame}
-              newChallenge={openModal}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"ticTacToe"}
             />
           </div>
         ) : hasDraw ? (
-          <div className={classes.game_outcome}>
-            <Draw handleStartGame={handleNewGame} newChallenge={openModal} />
+          <div className={classes.draw}>
+            <Draw
+              handleStartGame={handleNewGame}
+              newChallengeModal={openModal}
+              isModalOpen={isModalOpen}
+              closeModal={closeModal}
+              gameType={"ticTacToe"}
+            />
           </div>
         ) : (
           <div className={classes.board_container}>
@@ -269,6 +280,7 @@ function Home() {
               activePlayerSymbol={activePlayer}
               board={gameBoard}
               newGameChallenge={newGameChallenge}
+              isGameActive={true}
             />
           </div>
         )}
@@ -309,7 +321,7 @@ function Home() {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
