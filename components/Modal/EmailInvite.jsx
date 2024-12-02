@@ -4,7 +4,7 @@ import ModalHeader from "./ModalHeader";
 import ModalClosePage from "./ModalClosePage";
 import ModalEmailInput from "./ModalEmailInput";
 import ModalButton from "./ModalButton";
-import NavigationButtons from "./Components/navigationButtons";
+import NavigationButtons from "./Components/NavigationButtons";
 
 import { gameInvite } from "@/app/server";
 import classes from "./emailInvite.module.css";

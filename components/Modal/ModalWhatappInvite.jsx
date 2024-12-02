@@ -1,5 +1,5 @@
 import Dropdown from "./Components/DropDown";
-import NavigationButtons from "./Components/navigationButtons";
+import NavigationButtons from "./Components/NavigationButtons";
 import ModalButton from "./ModalButton";
 import ModalHeader from "./ModalHeader";
 import ModalClosePage from "./ModalClosePage";

@@ -3,10 +3,8 @@ import ModalButton from "./ModalButton";
 import Image from "next/image";
 import classes from './modalClosePage.module.css'
 import { gameInvite } from "@/app/server";
-import { useState } from "react";
 
 function ModalClosePage({ gameType, formData, closeModal, whatsappInvite, mainText, secondaryText, gamelinkText }) {
-    const [gameCreatorGameLink, setGameCreatorGameLink] = useState('')
   async function handleWhatsAppSubmit(event) {
     event.preventDefault();
     let message, gameLink;
@@ -33,7 +31,6 @@ function ModalClosePage({ gameType, formData, closeModal, whatsappInvite, mainTe
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isAndroid = /Android/i.test(navigator.userAgent);
 
-    setGameCreatorGameLink(gameCreatorLink)
     event.target.reset();
 
     if (isMobile) {
