@@ -14,12 +14,13 @@ export const metadata = {
         <body>
         <div className="home_content">
           <div className="navbar">
-              <Image
+              <Link href='/'> <Image
                 src="/Game_Center_Logo.png"
                 alt="game center logo"
                 width={160}
                 height={60}
               />
+              </Link>
             <div className="navbar_links">
               <Link href="/">Home</Link>
               <Link href="/about">About</Link>

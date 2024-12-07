@@ -51,7 +51,7 @@ body {
   text-decoration: none;
 }
 
-.navbar a:hover {
+.navbar_links a:hover {
   background-color: #D186FD;
   color: #ffffff;
   border-radius: 8px;
@@ -95,6 +95,7 @@ body {
   .navbar_links {
     flex-direction: column;
     gap: 1rem;
+    margin-top: 20px;
   }
 
   .subscribe_button {
