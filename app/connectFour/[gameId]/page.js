@@ -199,85 +199,135 @@ function Home() {
 
   return (
     <div>
-    <Header />
-    <div className={classes.online_game_container}>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        gameType={"connectFour"}
-      />
-      <div className={classes.gameboard_container}>
-        {winner ? (
-          <div className={classes.winner}>
-            <Winner
-              name={winner}
-              player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
-              handleStartGame={handleNewGame}
-              newChallengeModal={openModal}
-              isModalOpen={isModalOpen}
-              closeModal={closeModal}
-              gameType={"connectFour"}
+      <Header />
+      <div className={classes.online_game_container}>
+        <Modal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          gameType={"connectFour"}
+        />
+        <div className={classes.gameboard_container}>
+          {winner ? (
+            <div className={classes.winner}>
+              <Winner
+                name={winner}
+                player={currentPlayer === "yellow" ? "Player 1" : "Player 2"}
+                handleStartGame={handleNewGame}
+                newChallengeModal={openModal}
+                isModalOpen={isModalOpen}
+                closeModal={closeModal}
+                gameType={"connectFour"}
+              />
+            </div>
+          ) : hasDraw ? (
+            <div className={classes.draw}>
+              <Draw
+                handleStartGame={handleNewGame}
+                newChallengeModal={openModal}
+                isModalOpen={isModalOpen}
+                closeModal={closeModal}
+                gameType={"connectFour"}
+              />
+            </div>
+          ) : (
+            <GameBoard
+              board={board}
+              winner={winner}
+              hasDraw={hasDraw}
+              handleMove={handleMove}
+              handleNewGame={handleNewGame}
+              handleNewGameReq={handleNewGameReq}
+              newGameChallenge={newGameChallenge}
+              playerId={playerId}
+              playerChallenged={playerChallenged}
+              isGameActive={true}
             />
-          </div>
-        ) : hasDraw ? (
-          <div className={classes.draw}>
-            <Draw
-              handleStartGame={handleNewGame}
-              newChallengeModal={openModal}
-              isModalOpen={isModalOpen}
-              closeModal={closeModal}
-              gameType={"connectFour"}
-            />
-          </div>
-        ) : (
-          <GameBoard
-            board={board}
-            winner={winner}
-            hasDraw={hasDraw}
-            handleMove={handleMove}
-            handleNewGame={handleNewGame}
-            handleNewGameReq={handleNewGameReq}
-            newGameChallenge={newGameChallenge}
-            playerId={playerId}
-            playerChallenged={playerChallenged}
-            isGameActive={true}
-          />
-        )}
-      </div>
-      <div id={classes.players} className={classes["highlight-player"]}>
-        <div className={classes.online_game_player_container}>
-          <Image
-            src="/red_token.png"
-            alt={"red player token"}
-            width={60}
-            height={60}
-          />
-          <div className={classes.playerOne}>
-            <Player
-              player={"Player 1"}
-              name={redPlayerName}
-              isRedActive={currentPlayer === "red"}
-            />
-          </div>
+          )}
         </div>
+        <div id={classes.players}>
+          <div className={classes.online_game_player_container}>
+            <Image
+              src="/red_token.png"
+              alt={"red player token"}
+              width={60}
+              height={60}
+            />
+            <div
+              className={
+                currentPlayer === "red"
+                  ? classes.playerOne_active
+                  : classes.playerOne
+              }
+            >
+              {currentPlayer === "red" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 1"}
+                    name={redPlayerName}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 1"}
+                  name={redPlayerName}
+                  score={allTimeGameScore.redPlayer}
+                />
+              )}
+            </div>
+          </div>
 
-        <div className={classes.online_game_player_container}>
-          <Image
-            src="/blue_token.png"
-            alt={"blue player token"}
-            width={60}
-            height={60}
-          />
-          <div className={classes.playerTwo}>
-            <Player
-              player={"Player 2"}
-              name={yellowPlayerName}
-              isYellowActive={currentPlayer === "yellow"}
+          <div className={classes.online_game_player_container}>
+            <Image
+              src="/blue_token.png"
+              alt={"blue player token"}
+              width={60}
+              height={60}
             />
+            <div
+            className={
+              currentPlayer === "yellow"
+                ? classes.playerTwo_active
+                : classes.playerTwo
+            }
+          >
+            {currentPlayer === "yellow" ? (
+              <>
+                <div className={classes.active_player_box}>
+                  <p>It&apos;s your move!</p>
+                  <Image
+                    src="/small_star.png"
+                    alt={"small star"}
+                    width={20}
+                    height={18}
+                  />
+                </div>
+                <Player
+                  player={"Player 2"}
+                  name={redPlayerName}
+                  score={allTimeGameScore.redPlayer}
+                />
+              </>
+            ) : (
+              <Player
+                player={"Player 2"}
+                name={redPlayerName}
+                score={allTimeGameScore.redPlayer}
+              />
+            )}
+          </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }

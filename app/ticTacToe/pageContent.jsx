@@ -196,7 +196,6 @@ function PageContent() {
 
   return (
     <div className={classes.container}>
-      
       <>
         {winner ? (
           <div className={classes.winner}>
@@ -244,7 +243,11 @@ function PageContent() {
                 </button>
               </div>
             )}
-            <Modal isOpen={isModalOpen} onClose={closeModal} gameType={"ticTacToe"} />
+            <Modal
+              isOpen={isModalOpen}
+              onClose={closeModal}
+              gameType={"ticTacToe"}
+            />
           </div>
         )}
       </>
@@ -259,35 +262,87 @@ function PageContent() {
               height={60}
             />
           )}
-          <div className={classes.playerOne}>
-            <Player
-              player={"Player 1"}
-              name={players.X}
-              symbol="X"
-              isActive={activePlayer === "X"}
-              newPlayerName={handleNewName}
-              score={allTimeScore.X}
-            />
+          <div
+            className={
+              !winner && !hasDraw && activePlayer === "X"
+                ? classes.playerOne_active
+                : classes.playerOne
+            }
+          >
+            {!winner && !hasDraw && activePlayer === "X" ? (
+              <>
+                <div className={classes.active_player_box}>
+                  <p>It&apos;s your move!</p>
+                  <Image
+                    src="/small_star.png"
+                    alt={"small star"}
+                    width={20}
+                    height={18}
+                  />
+                </div>
+                <Player
+                  player={"Player 1"}
+                  name={players.X}
+                  symbol="X"
+                  newPlayerName={handleNewName}
+                  score={allTimeScore.X}
+                />
+              </>
+            ) : (
+              <Player
+                player={"Player 1"}
+                name={players.X}
+                symbol="X"
+                newPlayerName={handleNewName}
+                score={allTimeScore.X}
+              />
+            )}
           </div>
         </div>
         <div className={classes.player_container}>
-          {startGame && (
-            <Image
-              src="/player_O.png"
-              alt={"player O token"}
-              width={60}
-              height={60}
-            />
-          )}
-          <div className={classes.playerTwo}>
-            <Player
-              player={"Player 2"}
-              name={players.O}
-              symbol="O"
-              isActive={activePlayer === "O"}
-              newPlayerName={handleNewName}
-              score={allTimeScore.O}
-            />
+        {startGame && (
+          <Image
+            src="/player_O.png"
+            alt={"player O token"}
+            width={60}
+            height={60}
+          />
+        )}
+          <div
+            className={
+              !winner && !hasDraw && activePlayer === "O"
+                ? classes.playerTwo_active
+                : classes.playerTwo
+            }
+          >
+            {!winner && !hasDraw && activePlayer === "O" ? (
+              <>
+                <div className={classes.active_player_box}>
+                  <p>It&apos;s your move!</p>
+                  <Image
+                    src="/small_star.png"
+                    alt={"small star"}
+                    width={20}
+                    height={18}
+                  />
+                </div>
+                <Player
+                  player={"Player 2"}
+                  name={players.O}
+                  symbol="O"
+                  newPlayerName={handleNewName}
+                  score={allTimeScore.O}
+                />
+              </>
+            ) : (
+              <Player
+                player={"Player 2"}
+                name={players.O}
+                symbol="X"
+                newPlayerName={handleNewName}
+                score={allTimeScore.O}
+              />
+            )}
           </div>
         </div>
       </div>

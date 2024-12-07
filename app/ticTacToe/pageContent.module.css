@@ -2,14 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-direction: column; 
+  flex-direction: column;
   padding: 72px 40px 49px 40px;
   gap: 39px;
   border-radius: 18px;
-  background: #F8F8F8;
+  background: #f8f8f8;
   position: relative;
   max-width: 1100px;
-  width: 100%; 
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -24,31 +24,31 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  background: #FFCB45;
+  background: #ffcb45;
   padding: 15px;
   border-radius: 30px;
-  border: 2px solid #000000
+  border: 2px solid #000000;
 }
 
 .winner {
   display: flex;
   justify-content: center;
-    width: 900px;
-    height: 500px;
-    padding: 16px;
-    border-radius: 18px;
-    background: #FFBD12;
+  width: 900px;
+  height: 500px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #ffbd12;
 }
 
 .draw {
   display: flex;
   justify-content: center;
-    width: 900px;
-    height: 500px;
-    padding: 16px;
-    border-radius: 18px;
-    background: #FFAFC8;
-    margin-bottom: 40px;
+  width: 900px;
+  height: 500px;
+  padding: 16px;
+  border-radius: 18px;
+  background: #ffafc8;
+  margin-bottom: 40px;
 }
 
 .game_text {
@@ -84,26 +84,65 @@
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-  width: auto;
+}
+
+.player_container img {
+  margin-right: 10px;
 }
 
 .playerOne {
-  background: #B487FD;
+  background: #b487fd;
   border: 2px solid #000000;
   width: 320px;
   height: 130px;
+  border-radius: 18px;
+}
+
+.playerOne_active {
+  background: #b487fd;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 160px;
   border-radius: 18px;
 }
 
 .playerTwo {
-  background: #87FDCC;
+  background: #87fdcc;
   border: 2px solid #000000;
   width: 320px;
   height: 130px;
   border-radius: 18px;
 }
 
+.playerTwo_active {
+  background: #87fdcc;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 160px;
+  border-radius: 18px;
+}
+
+.active_player_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 35px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  background: #ffcb45;
+  border-bottom: 2px solid #000000;
+}
+
+.active_player_box p {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  transform: translateX(-10px);
+}
+
+.active_player_box img {
+  margin-top: 5px;
+}
 
 #players button:hover {
   color: #f8ca31;
@@ -111,8 +150,8 @@
 
 .buttons_container {
   display: flex;
-  flex-direction: column; 
-  align-items: center; 
+  flex-direction: column;
+  align-items: center;
   position: absolute;
   z-index: 1;
 }

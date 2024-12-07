@@ -269,46 +269,106 @@ export default function PageContent() {
           </>
         )}
 
-        <div id={classes.players} className={classes["highlight-player"]}>
+        <div id={classes.players}>
           <div className={classes.player_container}>
-            <Image
-              src="/red_token.png"
-              alt={"red player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerOne}>
-              <Player
-                player={"Player 1"}
-                name={redPlayerName}
-                isEditing={isRedEditing}
-                handlePlayerName={handleRedChange}
-                handleEdit={handleRedEditClick}
-                isRedActive={startGame && currentPlayer === "red"}
-                ref={player}
-                score={allTimeGameScore.redPlayer}
+            {startGame && (
+              <Image
+                src="/red_token.png"
+                alt={"red player token"}
+                width={60}
+                height={60}
               />
+            )}
+            <div
+              className={
+                startGame && !winner && !hasDraw && currentPlayer === "red"
+                  ? classes.playerOne_active
+                  : classes.playerOne
+              }
+            >
+              {startGame && !winner && !hasDraw && currentPlayer === "red" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 1"}
+                    name={redPlayerName}
+                    isEditing={isRedEditing}
+                    handlePlayerName={handleRedChange}
+                    handleEdit={handleRedEditClick}
+                    ref={player}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 1"}
+                  name={redPlayerName}
+                  isEditing={isRedEditing}
+                  handlePlayerName={handleRedChange}
+                  handleEdit={handleRedEditClick}
+                  ref={player}
+                  score={allTimeGameScore.redPlayer}
+                />
+              )}
             </div>
           </div>
 
           <div className={classes.player_container}>
-            <Image
-              src="/blue_token.png"
-              alt={"blue player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerTwo}>
-              <Player
-                player={"Player 2"}
-                name={yellowPlayerName}
-                isEditing={isYellowEditing}
-                handlePlayerName={handleYellowChange}
-                handleEdit={handleYellowEditClick}
-                isYellowActive={startGame && currentPlayer === "yellow"}
-                ref={player}
-                score={allTimeGameScore.yellowPlayer}
+            {startGame && (
+              <Image
+                src="/blue_token.png"
+                alt={"blue player token"}
+                width={60}
+                height={60}
               />
+            )}
+            <div
+              className={
+                startGame && !winner && !hasDraw && currentPlayer === "yellow"
+                  ? classes.playerTwo_active
+                  : classes.playerTwo
+              }
+            >
+              {startGame && !winner && !hasDraw && currentPlayer === "yellow" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 2"}
+                    name={yellowPlayerName}
+                    isEditing={isYellowEditing}
+                    handlePlayerName={handleYellowChange}
+                    handleEdit={handleYellowEditClick}
+                    ref={player}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 2"}
+                  name={yellowPlayerName}
+                  isEditing={isYellowEditing}
+                  handlePlayerName={handleYellowChange}
+                  handleEdit={handleYellowEditClick}
+                  ref={player}
+                  score={allTimeGameScore.redPlayer}
+                />
+              )}
             </div>
           </div>
         </div>

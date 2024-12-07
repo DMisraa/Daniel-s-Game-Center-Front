@@ -244,7 +244,7 @@ function Home() {
 
   return (
     <div className={classes.header_container}>
-    <Header />
+      <Header />
       <div className={classes.container}>
         <Modal
           isOpen={isModalOpen}
@@ -293,14 +293,39 @@ function Home() {
               width={60}
               height={60}
             />
-
-            <div className={classes.playerOne}>
-              <Player
-                player={"Player 1"}
-                name={players.X}
-                symbol="X"
-                isActive={activePlayer === "X"}
-              />
+            <div
+              className={
+                activePlayer === "X"
+                  ? classes.playerOne_active
+                  : classes.playerOne
+              }
+            >
+              {activePlayer === "X" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 1"}
+                    name={players.X}
+                    symbol="X"
+                    score={allTimeScore.X}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 1"}
+                  name={players.X}
+                  symbol="X"
+                  score={allTimeScore.X}
+                />
+              )}
             </div>
           </div>
           <div className={classes.player_container}>
@@ -310,13 +335,39 @@ function Home() {
               width={60}
               height={60}
             />
-            <div className={classes.playerTwo}>
-              <Player
-                player={"Player 2"}
-                name={players.O}
-                symbol="O"
-                isActive={activePlayer === "O"}
-              />
+            <div
+              className={
+                activePlayer === "O"
+                  ? classes.playerTwo_active
+                  : classes.playerTwo
+              }
+            >
+              {activePlayer === "O" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 2"}
+                    name={players.O}
+                    symbol="O"
+                    score={allTimeScore.O}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 2"}
+                  name={players.O}
+                  symbol="X"
+                  score={allTimeScore.O}
+                />
+              )}
             </div>
           </div>
         </div>

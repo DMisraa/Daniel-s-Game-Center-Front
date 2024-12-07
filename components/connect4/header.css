@@ -6,6 +6,12 @@
   align-items: center; /* Optional: vertically centers content (if height is set) */
   padding: 20px 0; /* Add some padding to the top and bottom */
 }
+
+@media (max-width: 768px) {
+  .header-container img {
+    width: 80%; /* Shrinks the logo on smaller screens */
+  }
+}
   
 
 /*   
