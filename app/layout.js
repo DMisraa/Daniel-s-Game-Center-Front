@@ -26,7 +26,7 @@ export const metadata = {
               <Link href="/ticTacToe">Tic Tac Toe</Link>
               <Link href="/connectFour">4 In A Raw</Link>
               <Link href="/chess">Chess</Link>
-              <button> Subscribe </button>
+              <button className="subscribe_button"> Subscribe </button>
             </div>
           </div>
           <div className="page-content">{children}</div>
