@@ -85,7 +85,6 @@ function Footer() {
                 <p> Ready to connect? Hit submit! </p>
                 <button
                   style={isLoading ? { transform: "translateX(10%)" } : {}}
-                  className={classes.submit_button}
                   disabled={isLoading}
                 >
                   {isLoading ? "Submmiting.." : "Submit"}

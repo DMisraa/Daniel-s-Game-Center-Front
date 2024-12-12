@@ -108,6 +108,7 @@ padding-left: 40px;
     font-size: 18px;
     margin-top: 5px;
     cursor: pointer;
+    color: #1A1A1A;
   }
 
   .rights {
@@ -134,5 +135,9 @@ padding-left: 40px;
     .submit button {
       align-items: center;
       justify-content: center;
+    }
+
+    .rights {
+     justify-content: center;
     }
   }

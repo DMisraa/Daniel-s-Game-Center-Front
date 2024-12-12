@@ -12,7 +12,7 @@ export const metadata = {
     return (
       <html lang="en">
         <body>
-        <div className="home_content">
+        <div>
           <div className="navbar">
               <Link href='/'> <Image
                 src="/Game_Center_Logo.png"

@@ -112,9 +112,6 @@
   background-color: #3e8e41; 
 }
 
-.rematch-button:focus {
-
-}
 
 @media (max-width: 768px) {
   .board_container {
