@@ -71,16 +71,17 @@ function GameBoard({
                 <Image
                   src={"/red_token.png"} 
                   alt={`${cell} player token`}
-                  width={60}
-                  height={60}
+                  fill
+                  style={{ objectFit: 'contain' }}
                 />
+
                 )}
                 {cell === "yellow" && (
                   <Image
                     src={"/blue_token.png"} 
                     alt={`${cell} player token`}
-                    width={60}
-                    height={60}
+                    fill
+                  style={{ objectFit: 'contain' }}
                   />
                   )}
               </div>

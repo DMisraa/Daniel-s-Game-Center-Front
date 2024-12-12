@@ -200,12 +200,8 @@ function Home() {
   return (
     <div>
       <Header />
-      <div className={classes.online_game_container}>
-        <Modal
-          isOpen={isModalOpen}
-          onClose={closeModal}
-          gameType={"connectFour"}
-        />
+      
+    
         <div className={classes.gameboard_container}>
           {winner ? (
             <div className={classes.winner}>
@@ -230,6 +226,7 @@ function Home() {
               />
             </div>
           ) : (
+            <>
             <GameBoard
               board={board}
               winner={winner}
@@ -242,10 +239,16 @@ function Home() {
               playerChallenged={playerChallenged}
               isGameActive={true}
             />
+            <Modal
+            isOpen={isModalOpen}
+            onClose={closeModal}
+            gameType={"connectFour"}
+          />
+          </>
           )}
-        </div>
+       
         <div id={classes.players}>
-          <div className={classes.online_game_player_container}>
+          <div className={classes.player_container}>
             <Image
               src="/red_token.png"
               alt={"red player token"}
@@ -286,7 +289,7 @@ function Home() {
             </div>
           </div>
 
-          <div className={classes.online_game_player_container}>
+          <div className={classes.player_container}>
             <Image
               src="/blue_token.png"
               alt={"blue player token"}
@@ -327,7 +330,7 @@ function Home() {
           </div>
           </div>
         </div>
-      </div>
+    </div>
     </div>
   );
 }

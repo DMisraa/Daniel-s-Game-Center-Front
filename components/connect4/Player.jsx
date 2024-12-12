@@ -26,7 +26,7 @@ const Player = forwardRef(function Player(
       <span className="player">
         {!isEditing ? (
           <>
-            <h4> {player} </h4>
+            <h4 className="player-number" > {player} </h4>
             <h2 className="player-name"> {name} </h2>
           </>
         ) : (

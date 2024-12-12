@@ -11,8 +11,11 @@
   }
 
 .player-name {
-  
-  font-weight: bold;
+  display: flex;
+}
+
+.player-number {
+  display: flex;
 }
 
 .player h4, .player h2, .player button {
@@ -28,6 +31,7 @@
   margin-bottom: 10px; 
   font-size: xx-large; /* Adjust margin between h2 and the button */
 }
+
 
 .player button {
 width: 50px;

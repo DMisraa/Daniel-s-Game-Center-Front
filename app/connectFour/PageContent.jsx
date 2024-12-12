@@ -277,6 +277,7 @@ export default function PageContent() {
                 alt={"red player token"}
                 width={60}
                 height={60}
+                className={classes.active_image}
               />
             )}
             <div
@@ -328,6 +329,7 @@ export default function PageContent() {
                 alt={"blue player token"}
                 width={60}
                 height={60}
+                 className={classes.active_image}
               />
             )}
             <div
@@ -337,7 +339,7 @@ export default function PageContent() {
                   : classes.playerTwo
               }
             >
-              {startGame && !winner && !hasDraw && currentPlayer === "yellow" ? (
+              {startGame &&!winner && !hasDraw && currentPlayer === "yellow" ? (
                 <>
                   <div className={classes.active_player_box}>
                     <p>It&apos;s your move!</p>
