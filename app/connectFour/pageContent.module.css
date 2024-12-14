@@ -203,6 +203,11 @@
     gap: 15px;
     transform: translateY(-150px);
   }
+
+  .winner, .draw {
+    width: 700px;
+    height: 460px;
+  } 
 }
 
 @media (max-width: 768px) {
@@ -233,7 +238,7 @@
 
 @media (max-width: 480px) {
   .start-game-button, .challenge-friend {
-    font-size: 12px; /* Smaller text for very small screens */
+    font-size: 12px;
     padding: 8px 12px;
   }
 
@@ -248,4 +253,9 @@
     transform: none;
     margin: none;
   }
+
+  .winner, .draw {
+    width: 375px;
+    height: 540px;
+  } 
 }

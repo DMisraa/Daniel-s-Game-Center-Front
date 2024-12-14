@@ -13,11 +13,6 @@
   margin: 0 auto;
 }
 
-.header_container {
-  display: flex;
-  flex-direction: column;
-}
-
 .board_container {
   display: flex;
   flex-direction: column;

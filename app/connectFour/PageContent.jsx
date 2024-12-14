@@ -379,18 +379,3 @@ export default function PageContent() {
   );
 }
 
-// <AllTimeScore
-// allTimeGameScoreDraw={allTimeGameScore.draw}
-// allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
-// allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-// playerOne={"Red Player"} // add name fram invetation form
-// playerTwo={"Yellow Player"} // add name fram invetation form
-// />
-
-//               Start Game !
-
-// onClick function for start game
-//
-
-// onclick function for creating an online game
-//

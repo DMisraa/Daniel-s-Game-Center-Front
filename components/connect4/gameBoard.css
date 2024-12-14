@@ -112,7 +112,6 @@
   background-color: #3e8e41; 
 }
 
-
 @media (max-width: 768px) {
   .board_container {
     grid-template-columns: repeat(7, 1fr);

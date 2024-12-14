@@ -1,9 +1,9 @@
 .header_container {
-  width: 70vw; /* Takes the full width of the viewport */
+  width: 70vw; 
   background-color: #FFFFFF;
-  display: flex; /* Flexbox for centering the image */
-  justify-content: center; /* Centers the image horizontally */
-  align-items: center; /* Optional: vertically centers content (if height is set) */
-  padding: 20px 0; /* Add some padding to the top and bottom */
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  padding: 20px 0; 
   }
 

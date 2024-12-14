@@ -1,0 +1,23 @@
+.header_container {
+  width: 70vw;
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.header_container img {
+  max-width: 100%;
+  height: auto;
+  transform: translateX(50px);
+}
+
+@media (max-width: 1024px) {
+  .header_container {
+    width: 100%;
+    justify-content: center;
+  }
+
+
+}
