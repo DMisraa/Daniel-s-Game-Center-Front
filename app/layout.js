@@ -12,7 +12,7 @@ export const metadata = {
     return (
       <html lang="en">
         <body>
-        <div>
+        <div className="home_content">
           <div className="navbar">
               <Link href='/'> <Image
                 src="/Game_Center_Logo.png"
@@ -31,7 +31,9 @@ export const metadata = {
             </div>
           </div>
           <div className="page-content">{children}</div>
+          <div className="footer">
           <Footer />
+          </div>
           </div>
         </body>
        
