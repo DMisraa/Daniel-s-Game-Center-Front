@@ -17,7 +17,6 @@
   position: relative;
   width: 450px;
   height: 450px;
-  
 }
 
 .row {
@@ -107,6 +106,9 @@
   }
 
   .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 60px;
     height: 60px;
   }
