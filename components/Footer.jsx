@@ -93,10 +93,11 @@ function Footer() {
             </div>
           </form>
         </div>
+      
       </div>
       <footer className={classes.rights}>
-        <p>@{currentYear} Daniel&apos;s Game Center. All rights reserved.</p>
-      </footer>
+      <p>@{currentYear} Daniel&apos;s Game Center. All rights reserved.</p>
+    </footer>
     </>
   );
 }

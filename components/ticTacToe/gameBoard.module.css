@@ -94,3 +94,20 @@
 .game_board .vertical_line2 {
   left: 66.66%; /* Second vertical line */
 }
+
+@media (max-width: 435px) {
+  .board_container {
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .game_board {
+    width: 90%;
+    height: 90%;
+  }
+
+  .image {
+    width: 60px;
+    height: 60px;
+  }
+}

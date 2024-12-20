@@ -32,6 +32,7 @@ export default function GameBoard({ selectedPlayer, board, isGameActive }) {
                       alt={`player ${playerSymbol} token`}
                       width={80}
                       height={80}
+                      className={classes.image}
                     />
                   )}
                   {playerSymbol === "O" && (
@@ -40,6 +41,7 @@ export default function GameBoard({ selectedPlayer, board, isGameActive }) {
                       alt={`player ${playerSymbol} token`}
                       width={80}
                       height={80}
+                      className={classes.image}
                     />
                   )}
                 </button>

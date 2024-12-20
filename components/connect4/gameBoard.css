@@ -1,13 +1,13 @@
 
 .board_container {
   display: grid;
-  grid-template-columns: repeat(7, 1fr); /* 7 columns */
-  grid-template-rows: repeat(6, 1fr); /* 6 rows */
+  grid-template-columns: repeat(7, 1fr); 
+  grid-template-rows: repeat(6, 1fr); 
   gap: 4%;
   border-radius: 30px;
   position: relative;
-  width: 85%; /* Scale width */
-  max-width: 85%; /* Ensure it doesn't overflow */
+  width: 85%; 
+  max-width: 85%; 
   height: 80%;
   max-height: 80%;
   padding: 20px;
@@ -147,6 +147,7 @@
     width: 100%;
     max-width: 370px;
     height: 300px;
+    padding: 0;
   }
 
   .cell {

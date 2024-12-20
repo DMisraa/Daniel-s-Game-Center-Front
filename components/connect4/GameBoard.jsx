@@ -81,7 +81,7 @@ function GameBoard({
                     src={"/blue_token.png"} 
                     alt={`${cell} player token`}
                     fill
-                  style={{ objectFit: 'contain' }}
+                    style={{ objectFit: 'contain' }}
                   />
                   )}
               </div>

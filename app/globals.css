@@ -8,13 +8,22 @@ body {
   align-items: center;
 }
 
+.home_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
 .navbar {
   background-color: #ffffff;
-  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
   flex-wrap: wrap;
   border-bottom: 1px solid #ddd;
@@ -58,19 +67,18 @@ body {
   border-radius: 8px;
 }
 
-.page-content {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  max-width: 1100px;
+.navbar,
+.page-content,
+.footer {
+  width: 100%; 
+  max-width: 1100px; 
+  margin: 0 auto; 
 }
 
 .game_links {
   background: #87FDCC;
   border-radius: 18px;
+  width: 100%;
 }
 
 .game_links p {
@@ -86,9 +94,23 @@ body {
   justify-content: center; 
 }
 
+.image {
+  margin: 30px;
+}
+
 @media (max-width: 1024px) {
   .home_content {
     max-width: 768px;
+  }
+
+  .page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .game_links {
+    width: 95%;
   }
 
   .game_links p {
@@ -96,22 +118,15 @@ body {
   }
 
   .game_logos img {
-    max-width: 250px;
-    max-height: 250px;
+    max-width: 240px;
+    max-height: 240px;
   }
-}
 
-@media (max-width: 850px) and (min-width: 768px) {
-  .navbar img {
-    display: none;
-  }
-}
-
-@media (max-width: 768px) {
   .navbar {
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    width: 70%;
   }
 
   .navbar_links {
@@ -120,14 +135,15 @@ body {
     margin-top: 20px;
   }
 
-  .subscribe_button {
-    margin-top: 10px;
-  }
+  .image {
+    width: 768px;
+    height: 235px;
+  } 
 }
 
 @media (max-width: 435px) {
   .home_content {
-    max-width: 375px;
+    max-width: 365px;
   }
 
   .game_links p {
@@ -147,9 +163,11 @@ body {
   .footer {
     display: flex;
     flex-direction: column;
-    width: 120%;
-    transform: translateX(-40px);
   }
+
+  .image {
+    display: none;
+  } 
 }
 
 

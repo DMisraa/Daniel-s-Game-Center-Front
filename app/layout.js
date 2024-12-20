@@ -8,19 +8,20 @@ export const metadata = {
   title: "Game Center",
   description: "Daniel's game center",
 };
-  export default function RootLayout({ children }) {
-    return (
-      <html lang="en">
-        <body>
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <body>
         <div className="home_content">
           <div className="navbar">
-              <Link href='/'> <Image
+            <Link href="/">
+              <Image
                 src="/Game_Center_Logo.png"
                 alt="game center logo"
                 width={160}
                 height={60}
               />
-              </Link>
+            </Link>
             <div className="navbar_links">
               <Link href="/">Home</Link>
               <Link href="/about">About</Link>
@@ -32,11 +33,10 @@ export const metadata = {
           </div>
           <div className="page-content">{children}</div>
           <div className="footer">
-          <Footer />
+            <Footer />
           </div>
-          </div>
-        </body>
-       
-      </html>
-    );
-  }
+        </div>
+      </body>
+    </html>
+  );
+}

@@ -3,7 +3,7 @@
   width: 80%; 
   margin: 50px auto 0; 
   height: 230px;
-  flex-direction: row;
+
 }
 
 .logo {
@@ -116,6 +116,11 @@ padding-left: 40px;
     margin-top: 30px;
   }
 
+ .footer {
+  display: flex;
+  flex-direction: column;
+ }
+
   @media (max-width: 1024px) {
     .logo {
       display: none;
@@ -129,16 +134,47 @@ padding-left: 40px;
   
   @media (max-width: 435px) {
     .content {
-      width: 65%;
+      width: 70%;
     }
 
-    .submit button {
-      align-items: center;
-      justify-content: center;
+    .display_container {
+      margin-top: 90px;
     }
 
+  
     .rights {
-     justify-content: center;
+     justify-content: start;
+     margin-top: 20%;
+
     }
     
+    .contact {
+      flex-direction: column;
+    }
+
+    
+  .name_icon {
+    top: 10%;  
   }
+  
+  .email_icon {
+    top: 36%;
+  }
+
+  .submit p {
+    width: 60%;
+  }
+
+  .submit button {
+    transform: translateX(40%);
+    width: 40%;
+    margin-top: 13px;
+  }
+  }  
+
+  @media (max-width: 435px) and (min-width: 390px) {
+    .rights {
+      transform: translateX(-3%);
+    }
+  }
+

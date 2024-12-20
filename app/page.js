@@ -4,13 +4,13 @@ import Image from "next/image";
 export default function Home() {
   return (
     <div className="home_content">
-      <div className="home_page_logo">
+      <div className="">
         <Image
           src="/Game_Center_Home.png"
           alt="Home page logo"
-          layout="responsive"
-          width={1400}
-          height={440}
+          width={1100}
+          height={350}
+          className='image'
         />
       </div>
       <div className="game_links">

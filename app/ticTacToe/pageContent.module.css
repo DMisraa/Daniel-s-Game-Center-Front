@@ -3,8 +3,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 72px 40px 49px 40px;
   gap: 39px;
+  padding-top: 10px;
   border-radius: 18px;
   background: #f8f8f8;
   position: relative;
@@ -30,7 +30,6 @@
   justify-content: center;
   width: 900px;
   height: 500px;
-  padding: 16px;
   border-radius: 18px;
   background: #ffbd12;
 }
@@ -40,10 +39,8 @@
   justify-content: center;
   width: 900px;
   height: 500px;
-  padding: 16px;
   border-radius: 18px;
   background: #ffafc8;
-  margin-bottom: 40px;
 }
 
 .game_text {
@@ -72,6 +69,7 @@
   justify-content: space-between;
   align-items: center;
   width: 83%;
+  margin-bottom: 1.5em;
 }
 
 .player_container {
@@ -178,3 +176,43 @@
 .challenge-friend:hover {
   background-color: #45a039;
 }
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 768px;
+  }
+  .winner, .draw {
+    max-width: 95%;
+  }
+
+  #players {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .player_container {
+    margin: 10px;
+  }
+}
+
+@media (max-width: 435px) {
+  .container {
+    max-width: 95%;
+  }
+
+  .board_container {
+    padding: 12px;
+  }
+
+  .player_container {
+    width: 110%;
+  }
+
+  .winner, .draw {
+    width: 370px;
+    height: 540px;
+  }
+  
+}
+
