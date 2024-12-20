@@ -18,7 +18,7 @@ export const initialBoard = Array.from({ length: 6 }, () =>
 
 const PLAYERS = {
   red: "Red Player",
-  yellow: "Blue Player",
+  blue: "Blue Player",
 };
 
 let turnsLength = 0;
@@ -32,7 +32,7 @@ let allTimeScoreBoard = {
 export default function PageContent() {
   const [startGame, setStartGame] = useState(false);
   const [redPlayerName, setRedPlayerName] = useState(PLAYERS.red);
-  const [yellowPlayerName, setYellowPlayerName] = useState(PLAYERS.yellow);
+  const [yellowPlayerName, setYellowPlayerName] = useState(PLAYERS.blue);
   const [isRedEditing, setIsRedEditing] = useState(false);
   const [isYellowEditing, setIsYellowEditing] = useState(false);
 
@@ -49,6 +49,23 @@ export default function PageContent() {
     yellowPlayer: yellowPlayerName,
   });
 
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+  
+    timeoutRef.current = setTimeout(() => {
+      console.log("10 minutes passed without a move, resetting board");
+      setBoard(initialBoard);
+      setRedPlayerName(PLAYERS.red)
+      setYellowPlayerName(PLAYERS.blue)
+    }, 10 * 60 * 1000);
+  
+    return () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    };
+  }, [board, winner, hasDraw]);
+
   useEffect(() => {
     async function getData() {
       try {
@@ -62,7 +79,7 @@ export default function PageContent() {
           setHasDraw(data.hasDraw);
           setAllTimeGameScore(data.allTimeWinners);
           setRedPlayerName(data.playerNames.redPlayer);
-          setYellowPlayerName(data.playerNames.yellowPlayer);
+          setYellowPlayerName(data.playerNames.bluePlayer);
         } else {
           return;
         }
@@ -173,7 +190,7 @@ export default function PageContent() {
       turnsLength = 0;
       setWinner(winningPlayer);
     } else {
-      setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
+      setCurrentPlayer(currentPlayer === "red" ? "blue" : "red");
     }
 
     await updateBoard(column);
@@ -269,46 +286,108 @@ export default function PageContent() {
           </>
         )}
 
-        <div id={classes.players} className={classes["highlight-player"]}>
+        <div id={classes.players}>
           <div className={classes.player_container}>
-            <Image
-              src="/red_token.png"
-              alt={"red player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerOne}>
-              <Player
-                player={"Player 1"}
-                name={redPlayerName}
-                isEditing={isRedEditing}
-                handlePlayerName={handleRedChange}
-                handleEdit={handleRedEditClick}
-                isRedActive={startGame && currentPlayer === "red"}
-                ref={player}
-                score={allTimeGameScore.redPlayer}
+            {startGame && (
+              <Image
+                src="/red_token.png"
+                alt={"red player token"}
+                width={60}
+                height={60}
+                className={classes.active_image}
               />
+            )}
+            <div
+              className={
+                startGame && !winner && !hasDraw && currentPlayer === "red"
+                  ? classes.playerOne_active
+                  : classes.playerOne
+              }
+            >
+              {startGame && !winner && !hasDraw && currentPlayer === "red" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 1"}
+                    name={redPlayerName}
+                    isEditing={isRedEditing}
+                    handlePlayerName={handleRedChange}
+                    handleEdit={handleRedEditClick}
+                    ref={player}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 1"}
+                  name={redPlayerName}
+                  isEditing={isRedEditing}
+                  handlePlayerName={handleRedChange}
+                  handleEdit={handleRedEditClick}
+                  ref={player}
+                  score={allTimeGameScore.redPlayer}
+                />
+              )}
             </div>
           </div>
 
           <div className={classes.player_container}>
-            <Image
-              src="/blue_token.png"
-              alt={"blue player token"}
-              width={60}
-              height={60}
-            />
-            <div className={classes.playerTwo}>
-              <Player
-                player={"Player 2"}
-                name={yellowPlayerName}
-                isEditing={isYellowEditing}
-                handlePlayerName={handleYellowChange}
-                handleEdit={handleYellowEditClick}
-                isYellowActive={startGame && currentPlayer === "yellow"}
-                ref={player}
-                score={allTimeGameScore.yellowPlayer}
+            {startGame && (
+              <Image
+                src="/blue_token.png"
+                alt={"blue player token"}
+                width={60}
+                height={60}
+                 className={classes.active_image}
               />
+            )}
+            <div
+              className={
+                startGame && !winner && !hasDraw && currentPlayer === "yellow"
+                  ? classes.playerTwo_active
+                  : classes.playerTwo
+              }
+            >
+              {startGame &&!winner && !hasDraw && currentPlayer === "yellow" ? (
+                <>
+                  <div className={classes.active_player_box}>
+                    <p>It&apos;s your move!</p>
+                    <Image
+                      src="/small_star.png"
+                      alt={"small star"}
+                      width={20}
+                      height={18}
+                    />
+                  </div>
+                  <Player
+                    player={"Player 2"}
+                    name={yellowPlayerName}
+                    isEditing={isYellowEditing}
+                    handlePlayerName={handleYellowChange}
+                    handleEdit={handleYellowEditClick}
+                    ref={player}
+                    score={allTimeGameScore.redPlayer}
+                  />
+                </>
+              ) : (
+                <Player
+                  player={"Player 2"}
+                  name={yellowPlayerName}
+                  isEditing={isYellowEditing}
+                  handlePlayerName={handleYellowChange}
+                  handleEdit={handleYellowEditClick}
+                  ref={player}
+                  score={allTimeGameScore.redPlayer}
+                />
+              )}
             </div>
           </div>
         </div>
@@ -317,18 +396,3 @@ export default function PageContent() {
   );
 }
 
-// <AllTimeScore
-// allTimeGameScoreDraw={allTimeGameScore.draw}
-// allTimeGameScorePlayerOne={allTimeGameScore.redPlayer}
-// allTimeGameScorePlayerTwo={allTimeGameScore.yellowPlayer}
-// playerOne={"Red Player"} // add name fram invetation form
-// playerTwo={"Yellow Player"} // add name fram invetation form
-// />
-
-//               Start Game !
-
-// onClick function for start game
-//
-
-// onclick function for creating an online game
-//

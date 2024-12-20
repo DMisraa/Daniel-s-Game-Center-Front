@@ -1,5 +1,4 @@
 import Modal from "./Modal/Modal";
-
 import classes from "./winner.module.css";
 import Image from "next/image";
 
@@ -7,14 +6,16 @@ function Winner({ player, name, handleStartGame, newChallengeModal, gameType, is
   return (
     <>
       <div className={classes.declaration_container}>
+      <div className={classes.image}>
         <Image
           src="/winner_logo.png"
           alt={"man rasing cup"}
-          width={220}
-          height={360}
+          fill
+          style={{ objectFit: 'contain' }}
         />
+        </div>
         <div className={classes.winner_name}>
-          <div>
+          <div className={classes.winner_identity}>
             <h4> {player} </h4>
             <h3> {name} </h3>
           </div>

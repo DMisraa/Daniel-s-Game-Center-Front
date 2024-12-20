@@ -1,16 +1,20 @@
 .header-container {
-  width: 70vw; /* Takes the full width of the viewport */
-  background-color: #FFFFFF;
-  display: flex; /* Flexbox for centering the image */
-  justify-content: center; /* Centers the image horizontally */
-  align-items: center; /* Optional: vertically centers content (if height is set) */
-  padding: 20px 0; /* Add some padding to the top and bottom */
+  width: 70vw; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  margin: 20px; 
+}
+
+.header-container img {
+  max-width: 100%; 
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  .header-container {
+    width: 80%; 
+    justify-content: end; 
+  }
 }
   
-
-/*   
-  .title {
-    font-size: 24px;
-    color: #333;
-    text-align: center;
-  } */

@@ -8,14 +8,16 @@ function Draw({ handleStartGame, newChallengeModal, gameType, isModalOpen, close
   return (
     <>
       <div className={classes.declaration_container}>
+      <div className={classes.image}>
         <Image
           src="/draw_logo.png"
           alt={"two friends posing to the camera"}
-          width={220}
-          height={360}
+          fill
+          style={{ objectFit: 'contain' }}
         />
+        </div>
         <div className={classes.winner_name}>
-          <div>
+          <div className={classes.identity} >
             <h2> Draw! </h2>
             <h3> No Winner This Time </h3>
             <h5>
@@ -23,7 +25,7 @@ function Draw({ handleStartGame, newChallengeModal, gameType, isModalOpen, close
             </h5>
           </div>
         </div>
-        <div className={classes.buttons_container}>
+        <div className={classes.draw_buttons_container}>
           <button
             onClick={handleStartGame}
             className={classes["start-game-button"]}

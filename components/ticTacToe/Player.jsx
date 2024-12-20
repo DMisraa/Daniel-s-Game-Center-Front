@@ -36,7 +36,7 @@ export default function Player({
   }
 
   return (
-    <div className={`${isActive ? classes.active : ""} ${classes.container}`}>
+    <div className={classes.container}>
       <span className={classes.player}>
         <h4> {player} </h4>
         {!isEditing ? (

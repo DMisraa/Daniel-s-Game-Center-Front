@@ -1,9 +1,27 @@
 .header_container {
-  width: 70vw; /* Takes the full width of the viewport */
   background-color: #FFFFFF;
-  display: flex; /* Flexbox for centering the image */
-  justify-content: center; /* Centers the image horizontally */
-  align-items: center; /* Optional: vertically centers content (if height is set) */
-  padding: 20px 0; /* Add some padding to the top and bottom */
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  margin: 20px; 
   }
 
+  .header_container img {
+    height: auto;
+    display: flex ;
+    justify-content: center;
+  }
+  
+  @media (max-width: 1024px) {
+    .header_container img {
+      width: 80%; 
+    }
+  }
+
+  @media (max-width: 435px) {
+    .header_container img {
+      width: 90%;
+      margin: 10px; 
+    }
+  }
+    

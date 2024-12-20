@@ -2,26 +2,9 @@ import React, { useEffect, forwardRef } from "react";
 import "./player.css";
 
 const Player = forwardRef(function Player(
-  {
-    isEditing,
-    handlePlayerName,
-    handleEdit,
-    name,
-    isYellowActive,
-    isRedActive,
-    player,
-    score,
-  },
+  { isEditing, handlePlayerName, handleEdit, name, player, score },
   ref
 ) {
-  let playerCSS;
-
-  if (isYellowActive) {
-    playerCSS += " yellow-active active";
-  } else if (isRedActive) {
-    playerCSS += " red-active active";
-  }
-
   useEffect(
     () => {
       if (isEditing && ref.current) {
@@ -39,11 +22,11 @@ const Player = forwardRef(function Player(
   }
 
   return (
-    <div className={`${playerCSS} container`}>
+    <div className="container">
       <span className="player">
         {!isEditing ? (
           <>
-            <h4> {player} </h4>
+            <h4 className="player-number" > {player} </h4>
             <h2 className="player-name"> {name} </h2>
           </>
         ) : (

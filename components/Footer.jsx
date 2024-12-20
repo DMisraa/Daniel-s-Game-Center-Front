@@ -85,7 +85,6 @@ function Footer() {
                 <p> Ready to connect? Hit submit! </p>
                 <button
                   style={isLoading ? { transform: "translateX(10%)" } : {}}
-                  className={classes.submit_button}
                   disabled={isLoading}
                 >
                   {isLoading ? "Submmiting.." : "Submit"}
@@ -94,10 +93,11 @@ function Footer() {
             </div>
           </form>
         </div>
+      
       </div>
       <footer className={classes.rights}>
-        <p>@{currentYear} Daniel&apos;s Game Center. All rights reserved.</p>
-      </footer>
+      <p>@{currentYear} Daniel&apos;s Game Center. All rights reserved.</p>
+    </footer>
     </>
   );
 }
