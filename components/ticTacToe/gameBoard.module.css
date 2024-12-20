@@ -7,7 +7,6 @@
   display: flex;
   justify-content: center; 
   align-items: center; 
-
 }
 
 .game_board {
@@ -32,23 +31,23 @@
 }
 
 .cell.inactive {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Softer, subtle shadow */
-  opacity: 0.8; /* Slight transparency */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+  opacity: 0.8; 
 }
 
 .cell.disabled {
   pointer-events: none;
   opacity: 0.5;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 0, 0, 0.2); /* Enhanced shadow with a smaller spread */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 0, 0, 0.2); 
   transform: scale(1.05);
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .cell button {
-  width: 98%; /* Fill the entire cell */
-  height: 98%; /* Fill the entire cell */
+  width: 98%; 
+  height: 98%; 
   background-color: transparent;
-  border: 0px; /* Button border to match cell */
+  border: 0px; 
   font-size: 2rem;
   cursor: pointer;
   display: flex;
@@ -56,42 +55,42 @@
   align-items: center;
 }
 
-/* Horizontal lines */
+
 .horizontal_line1,
 .horizontal_line2 {
   position: absolute;
   background-color: #CDCDCD;
   width: 100%;
-  height: 10px; /* Line thickness */
+  height: 10px;
   z-index: 1;
   border-radius: 80px;
 }
 
 .horizontal_line1 {
-  top: 33.33%; /* First horizontal line */
+  top: 33.33%; 
 }
 
 .horizontal_line2 {
-  top: 66.66%; /* Second horizontal line */
+  top: 66.66%;
 }
 
-/* Vertical lines */
+
 .vertical_line1,
 .vertical_line2 {
   position: absolute;
   background-color: #CDCDCD;
-  width: 10px; /* Line thickness */
+  width: 10px; 
   height: 100%;
   z-index: 1;
   border-radius: 80px;
 }
 
 .game_board .vertical_line1 {
-  left: 33.33%; /* First vertical line */
+  left: 33.33%; 
 }
 
 .game_board .vertical_line2 {
-  left: 66.66%; /* Second vertical line */
+  left: 66.66%; 
 }
 
 @media (max-width: 435px) {
@@ -106,10 +105,20 @@
   }
 
   .image {
+    width: 55px;
+    height: 55px;
+  }
+
+  .cell {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60px;
-    height: 60px;
+    justify-content: end;
+    align-items: end;
+    width: 80px;
+    height: 80px;
+  }
+
+  .cell button {
+    width: 65px;
+    height: 65px;
   }
 }
