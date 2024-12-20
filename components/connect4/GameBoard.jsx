@@ -76,7 +76,7 @@ function GameBoard({
                 />
 
                 )}
-                {cell === "yellow" && (
+                {cell === "blue" && (
                   <Image
                     src={"/blue_token.png"} 
                     alt={`${cell} player token`}

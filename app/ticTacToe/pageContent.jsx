@@ -7,7 +7,7 @@ import Winner from "@/components/Winner";
 import Modal from "@/components/Modal/Modal";
 
 import classes from "./pageContent.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { updateBoard, fetchData } from "../ticTacToe_server";
 import WINNING_COMBINATIONS from "@/winningCombinations/ticTacToc_Combinations";
 import Image from "next/image";
@@ -85,6 +85,7 @@ function PageContent() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  const timeoutRef = useRef(null);
   let activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameTurns(gameTurns);
   let winner = deriveWinner(players, gameBoard);
@@ -99,6 +100,21 @@ function PageContent() {
   } else if (hasDraw) {
     allTimeScore.Draw++;
   }
+
+  useEffect(() => {
+  
+    timeoutRef.current = setTimeout(() => {
+      console.log("10 minutes passed without a move, resetting board");
+      setGameTurns([]);
+      setPlayers(PLAYERS)
+    }, 10 * 60 * 1000);
+  
+    return () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+      console.log('Timeout Activated')
+    };
+  }, [winner, hasDraw]);
 
   useEffect(() => {
     async function getData() {

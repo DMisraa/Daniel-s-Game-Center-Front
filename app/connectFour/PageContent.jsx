@@ -18,7 +18,7 @@ export const initialBoard = Array.from({ length: 6 }, () =>
 
 const PLAYERS = {
   red: "Red Player",
-  yellow: "Blue Player",
+  blue: "Blue Player",
 };
 
 let turnsLength = 0;
@@ -32,7 +32,7 @@ let allTimeScoreBoard = {
 export default function PageContent() {
   const [startGame, setStartGame] = useState(false);
   const [redPlayerName, setRedPlayerName] = useState(PLAYERS.red);
-  const [yellowPlayerName, setYellowPlayerName] = useState(PLAYERS.yellow);
+  const [yellowPlayerName, setYellowPlayerName] = useState(PLAYERS.blue);
   const [isRedEditing, setIsRedEditing] = useState(false);
   const [isYellowEditing, setIsYellowEditing] = useState(false);
 
@@ -49,6 +49,23 @@ export default function PageContent() {
     yellowPlayer: yellowPlayerName,
   });
 
+  const timeoutRef = useRef(null);
+
+  useEffect(() => {
+  
+    timeoutRef.current = setTimeout(() => {
+      console.log("10 minutes passed without a move, resetting board");
+      setBoard(initialBoard);
+      setRedPlayerName(PLAYERS.red)
+      setYellowPlayerName(PLAYERS.blue)
+    }, 10 * 60 * 1000);
+  
+    return () => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    };
+  }, [board, winner, hasDraw]);
+
   useEffect(() => {
     async function getData() {
       try {
@@ -62,7 +79,7 @@ export default function PageContent() {
           setHasDraw(data.hasDraw);
           setAllTimeGameScore(data.allTimeWinners);
           setRedPlayerName(data.playerNames.redPlayer);
-          setYellowPlayerName(data.playerNames.yellowPlayer);
+          setYellowPlayerName(data.playerNames.bluePlayer);
         } else {
           return;
         }
@@ -173,7 +190,7 @@ export default function PageContent() {
       turnsLength = 0;
       setWinner(winningPlayer);
     } else {
-      setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
+      setCurrentPlayer(currentPlayer === "red" ? "blue" : "red");
     }
 
     await updateBoard(column);

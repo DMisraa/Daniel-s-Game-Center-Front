@@ -146,6 +146,10 @@ body {
     max-width: 365px;
   }
 
+  .game_links {
+    margin: 30px;
+  }
+
   .game_links p {
     font-size: 25px;
   }

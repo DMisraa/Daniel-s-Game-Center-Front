@@ -71,6 +71,10 @@
   transform: translateX(-10px);
 }
 
+.active_player_box img {
+  margin-top: 5px;
+}
+
 .active_image {
   transform: translateX(-25px);
 }
