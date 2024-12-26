@@ -100,10 +100,8 @@ function Home() {
   let winner = deriveWinner(players, gameBoard);
   let namedWinner
   let isDraw = gameTurns.length === 9 && !winner
-  console.log('isDraw:', isDraw)
   if (winner) {
     namedWinner = players[winner];
-    console.log("Winner updated to:", namedWinner);
   }
 
   useEffect(() => {

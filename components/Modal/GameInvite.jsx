@@ -19,20 +19,20 @@ function GameInvite({ onClose, isVisible, gameType }) {
     }
   }, [isVisible]);
 
-  const slideUpAnimation = {
-    initial: { opacity: 0, y: 50 },
-    animate: { opacity: 1, y: 0 },
-    exit: { opacity: 0, y: 50 },
-    transition: { duration: 0.3, bounce: 0.5 },
-  };
+  // const slideUpAnimation = {
+  //   initial: { opacity: 0, y: 50 },
+  //   animate: { opacity: 1, y: 0 },
+  //   exit: { opacity: 0, y: 50 },
+  //   transition: { duration: 0.3, bounce: 0.5 },
+  // };
 
-  const scaleHoverAnimation = {
-    initial: { scale: 0.5 },
-    animate: { scale: 1 },
-    exit: { scale: 0.5 },
-    whileHover: { scale: 1.3, y: -10 },
-    transition: { duration: 0.3, type: "spring", stiffness: 300, damping: 10 },
-  };
+  // const scaleHoverAnimation = {
+  //   initial: { scale: 0.5 },
+  //   animate: { scale: 1 },
+  //   exit: { scale: 0.5 },
+  //   whileHover: { scale: 1.3, y: -10 },
+  //   transition: { duration: 0.3, type: "spring", stiffness: 300, damping: 10 },
+  // };
 
   function openEmailInvite() {
     setEmailGameInvite(true);
