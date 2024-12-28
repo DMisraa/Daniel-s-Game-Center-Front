@@ -44,9 +44,8 @@ function ModalClosePage({ gameType, formData, closeModal, whatsappInvite, mainTe
         if (!document.hidden) {
           window.location.href = gameCreatorLink;
         }
-      }, 3000); // Adjust delay to ensure the WhatsApp redirection completes.
+      }, 3000); 
     } else {
-      // Open WhatsApp in a new tab and redirect to the game in the current tab.
       window.open(whatsAppUrl, "_blank");
       setTimeout(() => {
         window.location.href = gameCreatorLink;
@@ -65,11 +64,9 @@ function ModalClosePage({ gameType, formData, closeModal, whatsappInvite, mainTe
         width={200}
         height={150}
       />
-     
       <h2> {mainText} </h2>
       <h5> {secondaryText} </h5>
       <h5> {gamelinkText} </h5>
-
       <form onSubmit={whatsappInvite ? handleWhatsAppSubmit : emaiiInvite}>
         <ModalButton text={"Close"} closeModal={closeModal} />
       </form>
@@ -79,4 +76,3 @@ function ModalClosePage({ gameType, formData, closeModal, whatsappInvite, mainTe
 
 export default ModalClosePage;
 
-// {whatsappInvite ?}

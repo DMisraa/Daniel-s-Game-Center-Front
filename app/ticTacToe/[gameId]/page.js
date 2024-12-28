@@ -98,14 +98,15 @@ function Home() {
   const activePlayer = deriveActivePlayer(gameTurns);
   const gameBoard = deriveGameTurns(gameTurns);
   let winner = deriveWinner(players, gameBoard);
+  let namedWinner
+  let isDraw = gameTurns.length === 9 && !winner
+  if (winner) {
+    namedWinner = players[winner];
+  }
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
-
-    if (gameTurns.length === 9 && !winner) {
-      setHasDraw(true);
-    }
 
     if (token) {
       localStorage.setItem("gameToken:" + gameId, token);
@@ -129,7 +130,6 @@ function Home() {
         setPlayers(data.playerNames);
         playerChallenged = data.playerChallenged;
         setCurrentPlayer(data.currentPlayer);
-        setHasDraw(false);
         setSavedWinner(data.winner);
         const derivedGameBoard = data.board;
 
@@ -196,11 +196,16 @@ function Home() {
       let updatedGameBoard = deriveGameTurns(prevTurns);
       updatedGameBoard[rowIndex][colIndex] = currentPlayer;
 
+      if (gameTurns.length === 9 && !winner) {
+        setHasDraw(true);
+      }
+
       socket.emit("make-ticTacToe-move", {
         gameId,
         token: userToken,
         board: updatedGameBoard,
         playerNames: players,
+        hasDraw: isDraw,
       });
 
       if (gameTurns.length === 0) {
@@ -209,6 +214,8 @@ function Home() {
       setIsLoading(false);
 
       setCurrentPlayer(currentPlayer === "red" ? "yellow" : "red");
+
+      
 
       return [
         { square: { row: rowIndex, col: colIndex }, player: currentPlayer },
@@ -237,7 +244,6 @@ function Home() {
     socket.emit("startOver", { gameId, players });
     setGameTurns([]);
     setSavedWinner(null);
-    setCurrentPlayer("X");
     setHasDraw(false);
     setNewGameChallenge(false);
   }
@@ -254,7 +260,7 @@ function Home() {
         {winner ? (
           <div className={classes.winner}>
             <Winner
-              name={winner}
+              name={namedWinner}
               player={activePlayer === "O" ? "Player 1" : "Player 2"}
               handleStartGame={handleNewGame}
               newChallengeModal={openModal}
@@ -263,7 +269,7 @@ function Home() {
               gameType={"ticTacToe"}
             />
           </div>
-        ) : hasDraw ? (
+        ) : isDraw ? (
           <div className={classes.draw}>
             <Draw
               handleStartGame={handleNewGame}
