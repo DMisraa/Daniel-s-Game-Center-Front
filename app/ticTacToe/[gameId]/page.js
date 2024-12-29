@@ -208,7 +208,7 @@ function Home() {
         hasDraw: isDraw,
       });
 
-      if (gameTurns.length === 0) {
+      if (gameTurns.length === 0 && emailAdress.invitingPlayer) {
         sendMail(players, emailAdress, gameLinksWithTokens);
       }
       setIsLoading(false);
