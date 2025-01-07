@@ -46,7 +46,7 @@ export default function PageContent() {
 
   const player = useRef({
     redPlayer: redPlayerName,
-    yellowPlayer: yellowPlayerName,
+    bluePlayer: yellowPlayerName,
   });
 
   const timeoutRef = useRef(null);
@@ -79,7 +79,7 @@ export default function PageContent() {
           setHasDraw(data.hasDraw);
           setAllTimeGameScore(data.allTimeWinners);
           setRedPlayerName(data.playerNames.redPlayer);
-          setYellowPlayerName(data.playerNames.bluePlayer);
+          setYellowPlayerName(data.playerNames.yellowPlayer);
         } else {
           return;
         }

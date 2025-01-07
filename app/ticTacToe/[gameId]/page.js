@@ -318,7 +318,7 @@ function Home() {
                     />
                   </div>
                   <Player
-                    player={"Player 1"}
+                    player={"X"}
                     name={players.X}
                     symbol="X"
                     score={allTimeScore.X}
@@ -326,7 +326,7 @@ function Home() {
                 </>
               ) : (
                 <Player
-                  player={"Player 1"}
+                  player={"X"}
                   name={players.X}
                   symbol="X"
                   score={allTimeScore.X}
@@ -360,7 +360,7 @@ function Home() {
                     />
                   </div>
                   <Player
-                    player={"Player 2"}
+                    player={"O"}
                     name={players.O}
                     symbol="O"
                     score={allTimeScore.O}
@@ -368,7 +368,7 @@ function Home() {
                 </>
               ) : (
                 <Player
-                  player={"Player 2"}
+                  player={"O"}
                   name={players.O}
                   symbol="X"
                   score={allTimeScore.O}
