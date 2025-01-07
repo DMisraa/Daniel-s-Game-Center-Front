@@ -194,6 +194,7 @@ function PageContent() {
   }
 
   function handleNewName(symbol, newName) {
+    console.log('players:', players, 'updatedSymbol:', symbol, 'newName:', newName)
     setPlayers((prevPlayers) => {
       return {
         ...prevPlayers,
@@ -297,7 +298,7 @@ function PageContent() {
                   />
                 </div>
                 <Player
-                  player={"Player 1"}
+                  player={"X"}
                   name={players.X}
                   symbol="X"
                   newPlayerName={handleNewName}
@@ -306,7 +307,7 @@ function PageContent() {
               </>
             ) : (
               <Player
-                player={"Player 1"}
+                player={"X"}
                 name={players.X}
                 symbol="X"
                 newPlayerName={handleNewName}
@@ -343,7 +344,7 @@ function PageContent() {
                   />
                 </div>
                 <Player
-                  player={"Player 2"}
+                  player={"O"}
                   name={players.O}
                   symbol="O"
                   newPlayerName={handleNewName}
@@ -352,9 +353,9 @@ function PageContent() {
               </>
             ) : (
               <Player
-                player={"Player 2"}
+                player={"O"}
                 name={players.O}
-                symbol="X"
+                symbol="O"
                 newPlayerName={handleNewName}
                 score={allTimeScore.O}
               />
