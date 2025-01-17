@@ -1,10 +1,9 @@
 .header_container {
-  width: 70vw;
   background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px 0;
+  margin: 20px;
 }
 
 .header_container img {
