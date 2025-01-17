@@ -194,7 +194,6 @@ function PageContent() {
   }
 
   function handleNewName(symbol, newName) {
-    console.log('players:', players, 'updatedSymbol:', symbol, 'newName:', newName)
     setPlayers((prevPlayers) => {
       return {
         ...prevPlayers,
