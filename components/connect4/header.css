@@ -6,8 +6,9 @@
 }
 
 .header-container img {
-  max-width: 100%; 
   height: auto;
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {

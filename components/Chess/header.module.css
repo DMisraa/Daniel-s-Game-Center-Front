@@ -1,5 +1,4 @@
 .header_container {
-  background-color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,9 +6,9 @@
 }
 
 .header_container img {
-  max-width: 100%;
   height: auto;
-  transform: translateX(50px);
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 1024px) {
