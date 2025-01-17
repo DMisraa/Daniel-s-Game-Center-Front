@@ -48,7 +48,7 @@ function About() {
       <h3>Download My Resume</h3>
       <p>
         <a href="/Daniel_Menahem-CV.pdf" download="Daniel_Menahem_Resume.pdf">
-          Click here to download my latest resume
+          Click here to download my latest resume.
         </a>
       </p>
     </div>
