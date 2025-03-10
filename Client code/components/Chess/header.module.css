@@ -1,0 +1,27 @@
+.header_container {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px;
+}
+
+.header_container img {
+  max-width: 100%;
+  height: auto;
+  transform: translateX(80px);
+}
+
+@media (max-width: 1024px) {
+  .header_container {
+    width: 100%;
+    justify-content: center;
+    transform: translateX(-30px);
+  }
+}
+
+@media (max-width: 435px) {
+  .header_container {
+    transform: translateX(-50px);
+  }
+}

@@ -1,0 +1,180 @@
+.display_container {
+  display: flex;
+  width: 80%; 
+  margin: 50px auto 0; 
+  height: 230px;
+
+}
+
+.logo {
+  width: 50%;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+   justify-content: center;
+}
+
+.content p {
+  line-height: 22px;
+}
+
+.user_contact_input {
+    width: 65%;
+}
+
+.user_contact_input input {
+width: 77%;
+height: 15px;
+padding: 12px 0px;
+border-radius: 15px;
+border: 1.5px solid #1A1A1A;
+opacity: 1;
+color: #1A1A1A;
+margin-bottom: 10px;
+padding-left: 40px;
+}
+
+.user_contact_input input::placeholder {
+  size: 14px;
+  line-height: 22px;
+  color: #323738;
+}
+
+.name_icon {
+  position: absolute;
+  top: 19%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.email_icon {
+  position: absolute;
+  top: 70%;
+  left: 10px;
+  transform: translateY(-50%);
+}
+
+.contact_wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+}
+
+.user_message {
+  position: relative;
+  width: 50%;
+}
+
+.user_message textarea {
+  width: 150%;
+  height: 71px;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: 1.5px solid #1A1A1A;
+  color: #1A1A1A;
+  }
+
+  .user_message textarea::placeholder {
+    size: 16px;
+    color: #323738;
+  }
+
+  .submit {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .submit p {
+    width: 100%;
+  }
+
+  .submit button {
+    display: flex;
+    transform: translateX(105%);
+    width: 30%;
+    height: 45px;
+    background: #ffbd12;
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid black;
+    font-size: 18px;
+    margin-top: 5px;
+    cursor: pointer;
+    color: #1A1A1A;
+  }
+
+  .rights {
+    display: flex;
+    margin-top: 30px;
+  }
+
+ .footer {
+  display: flex;
+  flex-direction: column;
+ }
+
+  @media (max-width: 1024px) {
+    .logo {
+      display: none;
+    }
+
+    .display_container {
+      justify-content: center;
+      width: 100%
+    }
+  }
+  
+  @media (max-width: 435px) {
+    .content {
+      width: 70%;
+    }
+
+    .display_container {
+      margin-top: 90px;
+    }
+
+  
+    .rights {
+     justify-content: start;
+     margin-top: 20%;
+
+    }
+    
+    .contact {
+      flex-direction: column;
+    }
+
+    
+  .name_icon {
+    top: 10%;  
+  }
+  
+  .email_icon {
+    top: 36%;
+  }
+
+  .submit p {
+    width: 60%;
+  }
+
+  .submit button {
+    transform: translateX(40%);
+    width: 40%;
+    margin-top: 13px;
+  }
+  }  
+
+  @media (max-width: 435px) and (min-width: 390px) {
+    .rights {
+      transform: translateX(-3%);
+    }
+  }
+

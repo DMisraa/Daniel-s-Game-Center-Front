@@ -1,0 +1,13 @@
+.close_icon_wrapper  {
+    display: flex;
+    justify-content: end;
+}
+
+.close_icon_wrapper img {
+    cursor: pointer;
+}
+
+.challenge_friend_icon_wrapper {
+    display: flex;
+    justify-content: center;
+}
