@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.player {
+  display: flex;
+  margin: 10px;
+  flex-direction: column;
+  width: 100%;
+  }
+
+.player-name {
+  display: flex;
+}
+
+.player-number {
+  display: flex;
+}
+
+.player h4, .player h2, .player button {
+  margin: 0; 
+}
+
+.player h4 {
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.player h2 {
+  margin-bottom: 10px; 
+  font-size: xx-large; 
+}
+
+
+.player button {
+width: 50px;
+height:  20px;
+margin-top: 85px;
+background-color: transparent;
+border-radius: 15px;
+position: absolute;
+cursor: pointer;
+}
+
+
+.score {
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  align-items: center;
+}
+
+.score h4 {
+font-size: 19px;
+font-weight: 600;
+line-height: 2px;
+}
+
+.score h2 {
+font-size: 60px;
+font-weight: 600;
+margin: 15px;
+line-height: 10px;
+}
+
+

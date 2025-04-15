@@ -1,0 +1,19 @@
+.header-container {
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  margin: 20px; 
+}
+
+.header-container img {
+  max-width: 100%; 
+  height: auto;
+}
+
+@media (max-width: 1024px) {
+  .header-container {
+    width: 80%; 
+    justify-content: end; 
+  }
+}
+  

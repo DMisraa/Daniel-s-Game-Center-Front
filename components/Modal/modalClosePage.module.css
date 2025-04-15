@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container img {
+    margin-top: 10px;
+    transform: translateX(-20px);
+}
+
+.container h2 {
+    transform: translateY(-10px);
+    line-height: 10px;
+    font-weight: 500;
+}
+
+.container h5 {
+    transform: translateY(-10px);
+    line-height: 2px;
+    font-weight: 600;
+    margin: 10px;
+}

@@ -1,0 +1,45 @@
+.inputs_wrapper {
+    position: relative;
+}
+
+.inputs_wrapper input {
+    width: 80%;
+    height: 30px;
+    border-radius: 8px;
+    border: 2px solid #E9E9E9;
+    padding-left: 40px;
+    margin-bottom: 8px;
+}
+
+.names_inputs {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    transform: translateX(-20px);
+}
+
+.name_input {
+    width: 37%;
+}
+
+.name_input img {
+    position: absolute;
+    left: 30px;
+    transform: translateY(9px); 
+}
+
+.rivalName_input {
+    width: 37%;
+}
+
+.rivalName_input img {
+    position: absolute;
+    transform: translateY(9px);
+    left: 60%;
+}
+
+.email_input img {
+    position: absolute;
+   left: 10px;
+    transform: translateY(10px); 
+}
