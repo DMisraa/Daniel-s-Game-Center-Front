@@ -29,8 +29,6 @@ let allTimeScoreBoard = {
   draw: 0,
 };
 
-//connectFour local
-
 export default function PageContent() {
   const [startGame, setStartGame] = useState(false);
   const [redPlayerName, setRedPlayerName] = useState(PLAYERS.red);
