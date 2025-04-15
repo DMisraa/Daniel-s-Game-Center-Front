@@ -1,0 +1,179 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home_content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.navbar {
+  background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #ddd;
+
+}
+
+.navbar_links {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: nowrap; 
+  align-items: center;
+}
+
+.subscribe_button {
+  background: #ffbd12;
+  padding: 10px 20px;
+  border-radius: 12px;
+  border: 2px solid black;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #1A1A1A;
+}
+
+.subscribe_button:hover {
+  transform: scale(1.05);
+}
+
+.navbar a {
+  font-size: 15px;
+  text-align: center;
+  color: #1a1a1a;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.navbar_links a:hover {
+  background-color: #D186FD;
+  color: #ffffff;
+  border-radius: 8px;
+}
+
+.navbar,
+.page-content,
+.footer {
+  width: 100%; 
+  max-width: 1100px; 
+  margin: 0 auto; 
+}
+
+.game_links {
+  background: #87FDCC;
+  border-radius: 18px;
+  width: 100%;
+}
+
+.game_links p {
+  font-size: 60px;
+  font-weight: 800;
+  line-height: 6rem;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.game_logos {
+  display: flex;
+  justify-content: center; 
+}
+
+.image {
+  margin: 30px;
+}
+
+@media (max-width: 1024px) {
+  .home_content {
+    max-width: 768px;
+  }
+
+  .page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .game_links {
+    width: 95%;
+  }
+
+  .game_links p {
+    font-size: 50px;
+  }
+
+  .game_logos img {
+    max-width: 240px;
+    max-height: 240px;
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 70%;
+  }
+
+  .navbar_links {
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 20px;
+  }
+
+  .image {
+    width: 768px;
+    height: 235px;
+  } 
+}
+
+@media (max-width: 435px) {
+  .home_content {
+    max-width: 365px;
+  }
+
+  .game_links {
+    margin: 30px;
+  }
+
+  .game_links p {
+    font-size: 25px;
+  }
+
+  .game_logos {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .game_logos img {
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .image {
+    display: none;
+  } 
+}
+
+
+
+

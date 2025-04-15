@@ -1,0 +1,218 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 39px;
+  padding-top: 10px;
+  border-radius: 18px;
+  background: #f8f8f8;
+  position: relative;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.board_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: #ffcb45;
+  padding: 15px;
+  border-radius: 30px;
+  border: 2px solid #000000;
+}
+
+.winner {
+  display: flex;
+  justify-content: center;
+  width: 900px;
+  height: 500px;
+  border-radius: 18px;
+  background: #ffbd12;
+}
+
+.draw {
+  display: flex;
+  justify-content: center;
+  width: 900px;
+  height: 500px;
+  border-radius: 18px;
+  background: #ffafc8;
+}
+
+.game_text {
+  display: flex;
+  align-items: center;
+  font-size: 7rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 100px;
+  height: 30vh;
+  color: #848484;
+}
+
+#game-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  padding: 16px;
+  border-radius: 18px;
+  background: #2b2b2b;
+}
+
+#players {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 83%;
+  margin-bottom: 1.5em;
+}
+
+.player_container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.player_container img {
+  margin-right: 10px;
+}
+
+.playerOne {
+  background: #b487fd;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 130px;
+  border-radius: 18px;
+}
+
+.playerOne_active {
+  background: #b487fd;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 160px;
+  border-radius: 18px;
+}
+
+.playerTwo {
+  background: #87fdcc;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 130px;
+  border-radius: 18px;
+}
+
+.playerTwo_active {
+  background: #87fdcc;
+  border: 2px solid #000000;
+  width: 320px;
+  height: 160px;
+  border-radius: 18px;
+}
+
+.active_player_box {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 35px;
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  background: #ffcb45;
+  border-bottom: 2px solid #000000;
+}
+
+.active_player_box p {
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+  transform: translateX(-10px);
+}
+
+.active_player_box img {
+  margin-top: 5px;
+}
+
+#players button:hover {
+  color: #f8ca31;
+}
+
+.buttons_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 1;
+}
+
+.start-game-button {
+  padding: 12px 20px;
+  margin: 10px 0;
+  background-color: #ffbd12;
+  border: 3px solid #1a1a1a;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.start-game-button:hover {
+  background-color: #45a039;
+}
+
+.challenge-friend {
+  padding: 12px 20px;
+  margin: 10px 0;
+  background-color: #87fdcc;
+  border: 2.91px solid #1a1a1a;
+  border-radius: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.challenge-friend:hover {
+  background-color: #45a039;
+}
+
+@media (max-width: 1024px) {
+  .container {
+    max-width: 768px;
+  }
+  .winner, .draw {
+    max-width: 95%;
+  }
+
+  #players {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .player_container {
+    margin: 10px;
+  }
+}
+
+@media (max-width: 435px) {
+  .container {
+    max-width: 95%;
+  }
+
+  .board_container {
+    padding: 12px;
+  }
+
+  .player_container {
+    width: 110%;
+  }
+
+  .winner, .draw {
+    width: 370px;
+    height: 540px;
+  }
+  
+}
+
